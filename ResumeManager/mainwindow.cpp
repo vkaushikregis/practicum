@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include <sstream>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -7,6 +8,8 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->tabWidgetMain->setCurrentIndex(0);
+
+    //Navigating tab widgets signal connection
     connect(ui->pushButtonWorkEx,SIGNAL(clicked(bool)),this,SLOT(setTabWidgetIndex()));
     connect(ui->pushButtonEducation,SIGNAL(clicked(bool)),this,SLOT(setTabWidgetIndex()));
     connect(ui->pushButtonBackPersonal,SIGNAL(clicked(bool)),this,SLOT(setTabWidgetIndex()));
@@ -16,6 +19,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->pushButtonAdditionalSkils,SIGNAL(clicked(bool)),this,SLOT(setTabWidgetIndex()));
     connect(ui->pushButtonBackSkills,SIGNAL(clicked(bool)),this,SLOT(setTabWidgetIndex()));
 
+    //adding/deleting skill's table rows
+    connect(ui->pushButtonAddSkill,SIGNAL(clicked(bool)),this,SLOT(addDeleteSkills()));
 }
 
 MainWindow::~MainWindow()
@@ -45,5 +50,24 @@ void MainWindow::setTabWidgetIndex()
 
 void MainWindow::addDeleteSkills()
 {
+    if ((sender()->objectName() == "pushButtonWorkEx"))
+    {
+        ui->tableWidgetSkills->setSelectionBehavior(QAbstractItemView::SelectRows);
+        int currentRow = ui->tableWidgetSkills->rowCount();
+        ui->tableWidgetSkills->setRowCount(currentRow + 1);
 
+        QHeaderView* header = ui->tableWidgetSkills->horizontalHeader();
+        header->setSectionResizeMode(QHeaderView::Stretch);
+
+        QHeaderView* vheader = ui->tableWidgetSkills->verticalHeader();
+        vheader->setSectionResizeMode(QHeaderView::Stretch);
+
+        std::stringstream temp;
+        temp << currentRow;
+        std::string label = "DEV" + temp.str();
+        ui->tableWidgetSkills->setItem(currentRow, 0, new QTableWidgetItem(""));
+        ui->tableWidgetSkills->setItem(currentRow, 1, new QTableWidgetItem(""));
+        ui->tableWidgetSkills->setItem(currentRow, 2, new QTableWidgetItem(""));
+        ui->tableWidgetSkills->update();
+    }
 }
