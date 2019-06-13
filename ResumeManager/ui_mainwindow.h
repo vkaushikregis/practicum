@@ -61,15 +61,15 @@ public:
     QLabel *label_15;
     QLabel *label_11;
     QLabel *label_10;
-    QLineEdit *lineEdit_2;
-    QLineEdit *lineEdit_4;
-    QCheckBox *checkBox;
-    QLineEdit *lineEdit_3;
+    QLineEdit *companyLineEdit;
+    QLineEdit *toWorkExLineEdit;
+    QCheckBox *checkBoxCurrentlyWorking;
+    QLineEdit *FromWorkExLineEdit;
     QLabel *label_12;
-    QLineEdit *lineEdit_5;
+    QLineEdit *titleLineEdit;
     QLabel *label_14;
     QLabel *label_13;
-    QTextEdit *textEdit;
+    QTextEdit *jobDescriptionTextEdit;
     QPushButton *pushButton;
     QPushButton *pushButtonEducation;
     QPushButton *pushButtonBackPersonal;
@@ -91,17 +91,17 @@ public:
     QLineEdit *lineEdit_10;
     QWidget *tab_4;
     QLabel *label_22;
-    QTableWidget *tableWidget;
+    QTableWidget *tableWidgetSkills;
     QPushButton *pushButtonBackEducation;
     QPushButton *pushButtonAdditionalSkils;
     QPushButton *pushButtonAddSkill;
     QPushButton *pushButtonDeleteSkill;
     QWidget *tab_5;
-    QPushButton *pushButtonAdditionalSkils_2;
+    QPushButton *pushButtonSaveInDB;
     QPushButton *pushButtonBackSkills;
-    QPushButton *pushButtonBackEducation_2;
+    QPushButton *pushButtonExportAsPDF;
     QLabel *label_24;
-    QTextEdit *textEdit_2;
+    QTextEdit *textEditAdditionalSkills;
     QLabel *label_25;
     QListWidget *listWidget;
     QLineEdit *lineEdit;
@@ -114,13 +114,13 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QStringLiteral("MainWindow"));
-        MainWindow->resize(1068, 573);
+        MainWindow->resize(1085, 581);
         MainWindow->setMaximumSize(QSize(16777215, 16777215));
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         tabWidgetMain = new QTabWidget(centralWidget);
         tabWidgetMain->setObjectName(QStringLiteral("tabWidgetMain"));
-        tabWidgetMain->setGeometry(QRect(220, 20, 831, 491));
+        tabWidgetMain->setGeometry(QRect(220, 20, 851, 491));
         tabWidgetMain->setStyleSheet(QStringLiteral("background-color: rgb(252, 255, 237);"));
         tab = new QWidget();
         tab->setObjectName(QStringLiteral("tab"));
@@ -130,25 +130,28 @@ public:
         gridLayout_2->setObjectName(QStringLiteral("gridLayout_2"));
         cityLineEdit = new QLineEdit(tab);
         cityLineEdit->setObjectName(QStringLiteral("cityLineEdit"));
-        cityLineEdit->setEchoMode(QLineEdit::PasswordEchoOnEdit);
+        cityLineEdit->setEchoMode(QLineEdit::Normal);
 
         gridLayout_2->addWidget(cityLineEdit, 6, 0, 1, 1);
 
         stateLineEdit = new QLineEdit(tab);
         stateLineEdit->setObjectName(QStringLiteral("stateLineEdit"));
-        stateLineEdit->setEchoMode(QLineEdit::PasswordEchoOnEdit);
+        stateLineEdit->setEchoMode(QLineEdit::Normal);
 
         gridLayout_2->addWidget(stateLineEdit, 6, 1, 1, 2);
 
         zipLineEdit = new QLineEdit(tab);
         zipLineEdit->setObjectName(QStringLiteral("zipLineEdit"));
-        zipLineEdit->setEchoMode(QLineEdit::PasswordEchoOnEdit);
+        zipLineEdit->setEchoMode(QLineEdit::Normal);
 
         gridLayout_2->addWidget(zipLineEdit, 6, 3, 1, 1);
 
         firstNameLineEdit = new QLineEdit(tab);
         firstNameLineEdit->setObjectName(QStringLiteral("firstNameLineEdit"));
-        firstNameLineEdit->setEchoMode(QLineEdit::PasswordEchoOnEdit);
+        QFont font;
+        font.setKerning(false);
+        firstNameLineEdit->setFont(font);
+        firstNameLineEdit->setEchoMode(QLineEdit::Normal);
 
         gridLayout_2->addWidget(firstNameLineEdit, 2, 0, 1, 2);
 
@@ -174,7 +177,7 @@ public:
 
         mobileLineEdit = new QLineEdit(tab);
         mobileLineEdit->setObjectName(QStringLiteral("mobileLineEdit"));
-        mobileLineEdit->setEchoMode(QLineEdit::PasswordEchoOnEdit);
+        mobileLineEdit->setEchoMode(QLineEdit::Normal);
 
         gridLayout_2->addWidget(mobileLineEdit, 8, 0, 1, 2);
 
@@ -211,7 +214,7 @@ public:
 
         emailLineEdit = new QLineEdit(tab);
         emailLineEdit->setObjectName(QStringLiteral("emailLineEdit"));
-        emailLineEdit->setEchoMode(QLineEdit::PasswordEchoOnEdit);
+        emailLineEdit->setEchoMode(QLineEdit::Normal);
 
         gridLayout_2->addWidget(emailLineEdit, 8, 2, 1, 2);
 
@@ -223,9 +226,9 @@ public:
 
         label_9 = new QLabel(tab);
         label_9->setObjectName(QStringLiteral("label_9"));
-        QFont font;
-        font.setFamily(QStringLiteral("Yu Gothic UI"));
-        label_9->setFont(font);
+        QFont font1;
+        font1.setFamily(QStringLiteral("Yu Gothic UI"));
+        label_9->setFont(font1);
         label_9->setStyleSheet(QStringLiteral("background-color: rgb(85, 170, 255);"));
         label_9->setFrameShadow(QFrame::Raised);
         label_9->setTextFormat(Qt::PlainText);
@@ -241,7 +244,7 @@ public:
         gridLayout->setObjectName(QStringLiteral("gridLayout"));
         label_15 = new QLabel(tab_2);
         label_15->setObjectName(QStringLiteral("label_15"));
-        label_15->setFont(font);
+        label_15->setFont(font1);
         label_15->setStyleSheet(QStringLiteral("background-color: rgb(85, 170, 255);"));
         label_15->setFrameShadow(QFrame::Raised);
         label_15->setTextFormat(Qt::PlainText);
@@ -258,35 +261,35 @@ public:
 
         gridLayout->addWidget(label_10, 1, 0, 1, 1);
 
-        lineEdit_2 = new QLineEdit(tab_2);
-        lineEdit_2->setObjectName(QStringLiteral("lineEdit_2"));
+        companyLineEdit = new QLineEdit(tab_2);
+        companyLineEdit->setObjectName(QStringLiteral("companyLineEdit"));
 
-        gridLayout->addWidget(lineEdit_2, 2, 0, 1, 3);
+        gridLayout->addWidget(companyLineEdit, 2, 0, 1, 3);
 
-        lineEdit_4 = new QLineEdit(tab_2);
-        lineEdit_4->setObjectName(QStringLiteral("lineEdit_4"));
+        toWorkExLineEdit = new QLineEdit(tab_2);
+        toWorkExLineEdit->setObjectName(QStringLiteral("toWorkExLineEdit"));
 
-        gridLayout->addWidget(lineEdit_4, 4, 1, 1, 1);
+        gridLayout->addWidget(toWorkExLineEdit, 4, 1, 1, 1);
 
-        checkBox = new QCheckBox(tab_2);
-        checkBox->setObjectName(QStringLiteral("checkBox"));
+        checkBoxCurrentlyWorking = new QCheckBox(tab_2);
+        checkBoxCurrentlyWorking->setObjectName(QStringLiteral("checkBoxCurrentlyWorking"));
 
-        gridLayout->addWidget(checkBox, 4, 2, 1, 1);
+        gridLayout->addWidget(checkBoxCurrentlyWorking, 4, 2, 1, 1);
 
-        lineEdit_3 = new QLineEdit(tab_2);
-        lineEdit_3->setObjectName(QStringLiteral("lineEdit_3"));
+        FromWorkExLineEdit = new QLineEdit(tab_2);
+        FromWorkExLineEdit->setObjectName(QStringLiteral("FromWorkExLineEdit"));
 
-        gridLayout->addWidget(lineEdit_3, 4, 0, 1, 1);
+        gridLayout->addWidget(FromWorkExLineEdit, 4, 0, 1, 1);
 
         label_12 = new QLabel(tab_2);
         label_12->setObjectName(QStringLiteral("label_12"));
 
         gridLayout->addWidget(label_12, 3, 1, 1, 1);
 
-        lineEdit_5 = new QLineEdit(tab_2);
-        lineEdit_5->setObjectName(QStringLiteral("lineEdit_5"));
+        titleLineEdit = new QLineEdit(tab_2);
+        titleLineEdit->setObjectName(QStringLiteral("titleLineEdit"));
 
-        gridLayout->addWidget(lineEdit_5, 6, 0, 1, 3);
+        gridLayout->addWidget(titleLineEdit, 6, 0, 1, 3);
 
         label_14 = new QLabel(tab_2);
         label_14->setObjectName(QStringLiteral("label_14"));
@@ -298,10 +301,10 @@ public:
 
         gridLayout->addWidget(label_13, 5, 0, 1, 1);
 
-        textEdit = new QTextEdit(tab_2);
-        textEdit->setObjectName(QStringLiteral("textEdit"));
+        jobDescriptionTextEdit = new QTextEdit(tab_2);
+        jobDescriptionTextEdit->setObjectName(QStringLiteral("jobDescriptionTextEdit"));
 
-        gridLayout->addWidget(textEdit, 8, 0, 3, 3);
+        gridLayout->addWidget(jobDescriptionTextEdit, 8, 0, 3, 3);
 
         pushButton = new QPushButton(tab_2);
         pushButton->setObjectName(QStringLiteral("pushButton"));
@@ -327,7 +330,7 @@ public:
         label_17 = new QLabel(tab_3);
         label_17->setObjectName(QStringLiteral("label_17"));
         label_17->setGeometry(QRect(10, 10, 641, 46));
-        label_17->setFont(font);
+        label_17->setFont(font1);
         label_17->setStyleSheet(QStringLiteral("background-color: rgb(85, 170, 255);"));
         label_17->setFrameShadow(QFrame::Raised);
         label_17->setTextFormat(Qt::PlainText);
@@ -360,15 +363,15 @@ public:
         label_21->setGeometry(QRect(10, 220, 276, 21));
         pushButtonSkills = new QPushButton(tab_3);
         pushButtonSkills->setObjectName(QStringLiteral("pushButtonSkills"));
-        pushButtonSkills->setGeometry(QRect(660, 385, 131, 28));
+        pushButtonSkills->setGeometry(QRect(660, 385, 161, 28));
         pushButtonSkills->setStyleSheet(QStringLiteral("background-color: rgb(85, 170, 255);"));
         pushButton_2 = new QPushButton(tab_3);
         pushButton_2->setObjectName(QStringLiteral("pushButton_2"));
-        pushButton_2->setGeometry(QRect(660, 350, 131, 28));
+        pushButton_2->setGeometry(QRect(660, 350, 161, 28));
         pushButton_2->setStyleSheet(QStringLiteral("background-color: rgb(85, 170, 255);"));
         pushButtonBackWork = new QPushButton(tab_3);
         pushButtonBackWork->setObjectName(QStringLiteral("pushButtonBackWork"));
-        pushButtonBackWork->setGeometry(QRect(660, 420, 131, 28));
+        pushButtonBackWork->setGeometry(QRect(660, 420, 161, 28));
         pushButtonBackWork->setStyleSheet(QStringLiteral("background-color: rgb(85, 255, 255);"));
         label_23 = new QLabel(tab_3);
         label_23->setObjectName(QStringLiteral("label_23"));
@@ -382,30 +385,30 @@ public:
         label_22 = new QLabel(tab_4);
         label_22->setObjectName(QStringLiteral("label_22"));
         label_22->setGeometry(QRect(10, 10, 651, 46));
-        label_22->setFont(font);
+        label_22->setFont(font1);
         label_22->setStyleSheet(QStringLiteral("background-color: rgb(85, 170, 255);"));
         label_22->setFrameShadow(QFrame::Raised);
         label_22->setTextFormat(Qt::PlainText);
-        tableWidget = new QTableWidget(tab_4);
-        if (tableWidget->columnCount() < 3)
-            tableWidget->setColumnCount(3);
+        tableWidgetSkills = new QTableWidget(tab_4);
+        if (tableWidgetSkills->columnCount() < 3)
+            tableWidgetSkills->setColumnCount(3);
         QTableWidgetItem *__qtablewidgetitem = new QTableWidgetItem();
-        tableWidget->setHorizontalHeaderItem(0, __qtablewidgetitem);
+        tableWidgetSkills->setHorizontalHeaderItem(0, __qtablewidgetitem);
         QTableWidgetItem *__qtablewidgetitem1 = new QTableWidgetItem();
-        tableWidget->setHorizontalHeaderItem(1, __qtablewidgetitem1);
+        tableWidgetSkills->setHorizontalHeaderItem(1, __qtablewidgetitem1);
         QTableWidgetItem *__qtablewidgetitem2 = new QTableWidgetItem();
-        tableWidget->setHorizontalHeaderItem(2, __qtablewidgetitem2);
-        tableWidget->setObjectName(QStringLiteral("tableWidget"));
-        tableWidget->setGeometry(QRect(20, 110, 641, 311));
-        tableWidget->setAlternatingRowColors(true);
-        tableWidget->setSelectionMode(QAbstractItemView::SingleSelection);
+        tableWidgetSkills->setHorizontalHeaderItem(2, __qtablewidgetitem2);
+        tableWidgetSkills->setObjectName(QStringLiteral("tableWidgetSkills"));
+        tableWidgetSkills->setGeometry(QRect(20, 110, 641, 311));
+        tableWidgetSkills->setAlternatingRowColors(true);
+        tableWidgetSkills->setSelectionMode(QAbstractItemView::SingleSelection);
         pushButtonBackEducation = new QPushButton(tab_4);
         pushButtonBackEducation->setObjectName(QStringLiteral("pushButtonBackEducation"));
-        pushButtonBackEducation->setGeometry(QRect(670, 390, 141, 28));
+        pushButtonBackEducation->setGeometry(QRect(670, 390, 171, 28));
         pushButtonBackEducation->setStyleSheet(QStringLiteral("background-color: rgb(85, 255, 255);"));
         pushButtonAdditionalSkils = new QPushButton(tab_4);
         pushButtonAdditionalSkils->setObjectName(QStringLiteral("pushButtonAdditionalSkils"));
-        pushButtonAdditionalSkils->setGeometry(QRect(670, 350, 141, 28));
+        pushButtonAdditionalSkils->setGeometry(QRect(670, 350, 171, 28));
         pushButtonAdditionalSkils->setStyleSheet(QStringLiteral("background-color: rgb(85, 170, 255);"));
         pushButtonAddSkill = new QPushButton(tab_4);
         pushButtonAddSkill->setObjectName(QStringLiteral("pushButtonAddSkill"));
@@ -418,28 +421,28 @@ public:
         tabWidgetMain->addTab(tab_4, QString());
         tab_5 = new QWidget();
         tab_5->setObjectName(QStringLiteral("tab_5"));
-        pushButtonAdditionalSkils_2 = new QPushButton(tab_5);
-        pushButtonAdditionalSkils_2->setObjectName(QStringLiteral("pushButtonAdditionalSkils_2"));
-        pushButtonAdditionalSkils_2->setGeometry(QRect(250, 270, 141, 28));
-        pushButtonAdditionalSkils_2->setStyleSheet(QStringLiteral("background-color: rgb(85, 170, 255);"));
+        pushButtonSaveInDB = new QPushButton(tab_5);
+        pushButtonSaveInDB->setObjectName(QStringLiteral("pushButtonSaveInDB"));
+        pushButtonSaveInDB->setGeometry(QRect(250, 270, 141, 28));
+        pushButtonSaveInDB->setStyleSheet(QStringLiteral("background-color: rgb(85, 170, 255);"));
         pushButtonBackSkills = new QPushButton(tab_5);
         pushButtonBackSkills->setObjectName(QStringLiteral("pushButtonBackSkills"));
         pushButtonBackSkills->setGeometry(QRect(10, 270, 141, 28));
         pushButtonBackSkills->setStyleSheet(QStringLiteral("background-color: rgb(85, 255, 255);"));
-        pushButtonBackEducation_2 = new QPushButton(tab_5);
-        pushButtonBackEducation_2->setObjectName(QStringLiteral("pushButtonBackEducation_2"));
-        pushButtonBackEducation_2->setGeometry(QRect(520, 270, 141, 28));
-        pushButtonBackEducation_2->setStyleSheet(QStringLiteral("background-color: rgb(85, 170, 255);"));
+        pushButtonExportAsPDF = new QPushButton(tab_5);
+        pushButtonExportAsPDF->setObjectName(QStringLiteral("pushButtonExportAsPDF"));
+        pushButtonExportAsPDF->setGeometry(QRect(520, 270, 141, 28));
+        pushButtonExportAsPDF->setStyleSheet(QStringLiteral("background-color: rgb(85, 170, 255);"));
         label_24 = new QLabel(tab_5);
         label_24->setObjectName(QStringLiteral("label_24"));
         label_24->setGeometry(QRect(10, 10, 651, 46));
-        label_24->setFont(font);
+        label_24->setFont(font1);
         label_24->setStyleSheet(QStringLiteral("background-color: rgb(85, 170, 255);"));
         label_24->setFrameShadow(QFrame::Raised);
         label_24->setTextFormat(Qt::PlainText);
-        textEdit_2 = new QTextEdit(tab_5);
-        textEdit_2->setObjectName(QStringLiteral("textEdit_2"));
-        textEdit_2->setGeometry(QRect(10, 110, 651, 98));
+        textEditAdditionalSkills = new QTextEdit(tab_5);
+        textEditAdditionalSkills->setObjectName(QStringLiteral("textEditAdditionalSkills"));
+        textEditAdditionalSkills->setGeometry(QRect(10, 110, 651, 98));
         label_25 = new QLabel(tab_5);
         label_25->setObjectName(QStringLiteral("label_25"));
         label_25->setGeometry(QRect(10, 80, 181, 16));
@@ -458,7 +461,7 @@ public:
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 1068, 26));
+        menuBar->setGeometry(QRect(0, 0, 1085, 21));
         MainWindow->setMenuBar(menuBar);
         mainToolBar = new QToolBar(MainWindow);
         mainToolBar->setObjectName(QStringLiteral("mainToolBar"));
@@ -469,7 +472,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabWidgetMain->setCurrentIndex(4);
+        tabWidgetMain->setCurrentIndex(1);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -538,15 +541,15 @@ public:
         label_15->setText(QApplication::translate("MainWindow", "Add Work experience to showcase your skills", Q_NULLPTR));
         label_11->setText(QApplication::translate("MainWindow", "From", Q_NULLPTR));
         label_10->setText(QApplication::translate("MainWindow", "Company Name ", Q_NULLPTR));
-        lineEdit_2->setPlaceholderText(QApplication::translate("MainWindow", "e.g : Qorvo Inc.", Q_NULLPTR));
-        lineEdit_4->setPlaceholderText(QApplication::translate("MainWindow", "e.g. 01/01/2018", Q_NULLPTR));
-        checkBox->setText(QApplication::translate("MainWindow", "Currently working", Q_NULLPTR));
-        lineEdit_3->setPlaceholderText(QApplication::translate("MainWindow", "e.g. 01/01/2016", Q_NULLPTR));
+        companyLineEdit->setPlaceholderText(QApplication::translate("MainWindow", "e.g : Qorvo Inc.", Q_NULLPTR));
+        toWorkExLineEdit->setPlaceholderText(QApplication::translate("MainWindow", "e.g. 01/01/2018", Q_NULLPTR));
+        checkBoxCurrentlyWorking->setText(QApplication::translate("MainWindow", "Currently working", Q_NULLPTR));
+        FromWorkExLineEdit->setPlaceholderText(QApplication::translate("MainWindow", "e.g. 01/01/2016", Q_NULLPTR));
         label_12->setText(QApplication::translate("MainWindow", "To", Q_NULLPTR));
-        lineEdit_5->setPlaceholderText(QApplication::translate("MainWindow", "e.g : Software Engineer", Q_NULLPTR));
+        titleLineEdit->setPlaceholderText(QApplication::translate("MainWindow", "e.g : Software Engineer", Q_NULLPTR));
         label_14->setText(QApplication::translate("MainWindow", "Job Description", Q_NULLPTR));
         label_13->setText(QApplication::translate("MainWindow", "Title", Q_NULLPTR));
-        textEdit->setPlaceholderText(QApplication::translate("MainWindow", "e.g. Application Programming exeperience using C++/Linux", Q_NULLPTR));
+        jobDescriptionTextEdit->setPlaceholderText(QApplication::translate("MainWindow", "e.g. Application Programming exeperience using C++/Linux", Q_NULLPTR));
         pushButton->setText(QApplication::translate("MainWindow", "Add Another Job", Q_NULLPTR));
         pushButtonEducation->setText(QApplication::translate("MainWindow", "--> Education", Q_NULLPTR));
         pushButtonBackPersonal->setText(QApplication::translate("MainWindow", "<- -   Back", Q_NULLPTR));
@@ -568,22 +571,22 @@ public:
         lineEdit_10->setPlaceholderText(QApplication::translate("MainWindow", "e.g. 3.8", Q_NULLPTR));
         tabWidgetMain->setTabText(tabWidgetMain->indexOf(tab_3), QApplication::translate("MainWindow", "Education", Q_NULLPTR));
         label_22->setText(QApplication::translate("MainWindow", "Add Technical skills", Q_NULLPTR));
-        QTableWidgetItem *___qtablewidgetitem = tableWidget->horizontalHeaderItem(0);
+        QTableWidgetItem *___qtablewidgetitem = tableWidgetSkills->horizontalHeaderItem(0);
         ___qtablewidgetitem->setText(QApplication::translate("MainWindow", "Technical Skill", Q_NULLPTR));
-        QTableWidgetItem *___qtablewidgetitem1 = tableWidget->horizontalHeaderItem(1);
+        QTableWidgetItem *___qtablewidgetitem1 = tableWidgetSkills->horizontalHeaderItem(1);
         ___qtablewidgetitem1->setText(QApplication::translate("MainWindow", "Proficiency", Q_NULLPTR));
-        QTableWidgetItem *___qtablewidgetitem2 = tableWidget->horizontalHeaderItem(2);
+        QTableWidgetItem *___qtablewidgetitem2 = tableWidgetSkills->horizontalHeaderItem(2);
         ___qtablewidgetitem2->setText(QApplication::translate("MainWindow", "Years/Used", Q_NULLPTR));
         pushButtonBackEducation->setText(QApplication::translate("MainWindow", "<-- Back", Q_NULLPTR));
         pushButtonAdditionalSkils->setText(QApplication::translate("MainWindow", "--> Additional Details", Q_NULLPTR));
         pushButtonAddSkill->setText(QApplication::translate("MainWindow", "Add", Q_NULLPTR));
         pushButtonDeleteSkill->setText(QApplication::translate("MainWindow", "Delete", Q_NULLPTR));
         tabWidgetMain->setTabText(tabWidgetMain->indexOf(tab_4), QApplication::translate("MainWindow", "Technical Skills", Q_NULLPTR));
-        pushButtonAdditionalSkils_2->setText(QApplication::translate("MainWindow", "Save in DB", Q_NULLPTR));
+        pushButtonSaveInDB->setText(QApplication::translate("MainWindow", "Save in DB", Q_NULLPTR));
         pushButtonBackSkills->setText(QApplication::translate("MainWindow", "<--Back", Q_NULLPTR));
-        pushButtonBackEducation_2->setText(QApplication::translate("MainWindow", "Export as PDF", Q_NULLPTR));
+        pushButtonExportAsPDF->setText(QApplication::translate("MainWindow", "Export as PDF", Q_NULLPTR));
         label_24->setText(QApplication::translate("MainWindow", "Add Additional Information that can be relevant ", Q_NULLPTR));
-        textEdit_2->setPlaceholderText(QApplication::translate("MainWindow", "e.g. Certifications or relevant skills information", Q_NULLPTR));
+        textEditAdditionalSkills->setPlaceholderText(QApplication::translate("MainWindow", "e.g. Certifications or relevant skills information", Q_NULLPTR));
         label_25->setText(QApplication::translate("MainWindow", "Additional Skills/certificate(s)/", Q_NULLPTR));
         tabWidgetMain->setTabText(tabWidgetMain->indexOf(tab_5), QApplication::translate("MainWindow", "Additional Details", Q_NULLPTR));
         label_16->setText(QApplication::translate("MainWindow", "Existing Resume", Q_NULLPTR));

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1068</width>
-    <height>573</height>
+    <width>1085</width>
+    <height>581</height>
    </rect>
   </property>
   <property name="maximumSize">
@@ -25,7 +25,7 @@
      <rect>
       <x>220</x>
       <y>20</y>
-      <width>831</width>
+      <width>851</width>
       <height>491</height>
      </rect>
     </property>
@@ -36,7 +36,7 @@
      <string notr="true">background-color: rgb(252, 255, 237);</string>
     </property>
     <property name="currentIndex">
-     <number>4</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
@@ -52,7 +52,7 @@
          <string/>
         </property>
         <property name="echoMode">
-         <enum>QLineEdit::PasswordEchoOnEdit</enum>
+         <enum>QLineEdit::Normal</enum>
         </property>
         <property name="placeholderText">
          <string>e.g. Orlando</string>
@@ -68,7 +68,7 @@
          <string/>
         </property>
         <property name="echoMode">
-         <enum>QLineEdit::PasswordEchoOnEdit</enum>
+         <enum>QLineEdit::Normal</enum>
         </property>
         <property name="placeholderText">
          <string>e.g. Florida</string>
@@ -84,7 +84,7 @@
          <string/>
         </property>
         <property name="echoMode">
-         <enum>QLineEdit::PasswordEchoOnEdit</enum>
+         <enum>QLineEdit::Normal</enum>
         </property>
         <property name="placeholderText">
          <string>e.g. 32719</string>
@@ -93,6 +93,11 @@
       </item>
       <item row="2" column="0" colspan="2">
        <widget class="QLineEdit" name="firstNameLineEdit">
+        <property name="font">
+         <font>
+          <kerning>false</kerning>
+         </font>
+        </property>
         <property name="toolTip">
          <string>First Name</string>
         </property>
@@ -100,7 +105,7 @@
          <string/>
         </property>
         <property name="echoMode">
-         <enum>QLineEdit::PasswordEchoOnEdit</enum>
+         <enum>QLineEdit::Normal</enum>
         </property>
         <property name="placeholderText">
          <string>e.g. Vishal</string>
@@ -144,7 +149,7 @@
          <string/>
         </property>
         <property name="echoMode">
-         <enum>QLineEdit::PasswordEchoOnEdit</enum>
+         <enum>QLineEdit::Normal</enum>
         </property>
         <property name="placeholderText">
          <string>e.g. 858-610-8419</string>
@@ -220,7 +225,7 @@
          <string/>
         </property>
         <property name="echoMode">
-         <enum>QLineEdit::PasswordEchoOnEdit</enum>
+         <enum>QLineEdit::Normal</enum>
         </property>
         <property name="placeholderText">
          <string>e.g. vishal_kaushik@yahoo.com</string>
@@ -301,28 +306,28 @@
        </widget>
       </item>
       <item row="2" column="0" colspan="3">
-       <widget class="QLineEdit" name="lineEdit_2">
+       <widget class="QLineEdit" name="companyLineEdit">
         <property name="placeholderText">
          <string>e.g : Qorvo Inc.</string>
         </property>
        </widget>
       </item>
       <item row="4" column="1">
-       <widget class="QLineEdit" name="lineEdit_4">
+       <widget class="QLineEdit" name="toWorkExLineEdit">
         <property name="placeholderText">
          <string>e.g. 01/01/2018</string>
         </property>
        </widget>
       </item>
       <item row="4" column="2">
-       <widget class="QCheckBox" name="checkBox">
+       <widget class="QCheckBox" name="checkBoxCurrentlyWorking">
         <property name="text">
          <string>Currently working</string>
         </property>
        </widget>
       </item>
       <item row="4" column="0">
-       <widget class="QLineEdit" name="lineEdit_3">
+       <widget class="QLineEdit" name="FromWorkExLineEdit">
         <property name="placeholderText">
          <string>e.g. 01/01/2016</string>
         </property>
@@ -336,7 +341,7 @@
        </widget>
       </item>
       <item row="6" column="0" colspan="3">
-       <widget class="QLineEdit" name="lineEdit_5">
+       <widget class="QLineEdit" name="titleLineEdit">
         <property name="placeholderText">
          <string>e.g : Software Engineer</string>
         </property>
@@ -357,7 +362,7 @@
        </widget>
       </item>
       <item row="8" column="0" rowspan="3" colspan="3">
-       <widget class="QTextEdit" name="textEdit">
+       <widget class="QTextEdit" name="jobDescriptionTextEdit">
         <property name="placeholderText">
          <string>e.g. Application Programming exeperience using C++/Linux</string>
         </property>
@@ -548,7 +553,7 @@
        <rect>
         <x>660</x>
         <y>385</y>
-        <width>131</width>
+        <width>161</width>
         <height>28</height>
        </rect>
       </property>
@@ -564,7 +569,7 @@
        <rect>
         <x>660</x>
         <y>350</y>
-        <width>131</width>
+        <width>161</width>
         <height>28</height>
        </rect>
       </property>
@@ -580,7 +585,7 @@
        <rect>
         <x>660</x>
         <y>420</y>
-        <width>131</width>
+        <width>161</width>
         <height>28</height>
        </rect>
       </property>
@@ -649,7 +654,7 @@
        <enum>Qt::PlainText</enum>
       </property>
      </widget>
-     <widget class="QTableWidget" name="tableWidget">
+     <widget class="QTableWidget" name="tableWidgetSkills">
       <property name="geometry">
        <rect>
         <x>20</x>
@@ -685,7 +690,7 @@
        <rect>
         <x>670</x>
         <y>390</y>
-        <width>141</width>
+        <width>171</width>
         <height>28</height>
        </rect>
       </property>
@@ -701,7 +706,7 @@
        <rect>
         <x>670</x>
         <y>350</y>
-        <width>141</width>
+        <width>171</width>
         <height>28</height>
        </rect>
       </property>
@@ -749,7 +754,7 @@
      <attribute name="title">
       <string>Additional Details</string>
      </attribute>
-     <widget class="QPushButton" name="pushButtonAdditionalSkils_2">
+     <widget class="QPushButton" name="pushButtonSaveInDB">
       <property name="geometry">
        <rect>
         <x>250</x>
@@ -781,7 +786,7 @@
        <string>&lt;--Back</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButtonBackEducation_2">
+     <widget class="QPushButton" name="pushButtonExportAsPDF">
       <property name="geometry">
        <rect>
         <x>520</x>
@@ -824,7 +829,7 @@
        <enum>Qt::PlainText</enum>
       </property>
      </widget>
-     <widget class="QTextEdit" name="textEdit_2">
+     <widget class="QTextEdit" name="textEditAdditionalSkills">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -903,8 +908,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1068</width>
-     <height>26</height>
+     <width>1085</width>
+     <height>21</height>
     </rect>
    </property>
   </widget>

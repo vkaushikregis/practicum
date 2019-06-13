@@ -2,6 +2,9 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QtSql>
+#include <QSql>
+#include <QSqlDatabase>
 
 namespace Ui {
 class MainWindow;
@@ -17,10 +20,14 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    void connectToDatabase();
 
 private slots:
     void setTabWidgetIndex();
     void addDeleteSkills();
+    void validateFirstTabInputs();
+    void validateSecondTabInputs();
+    void exportAsPDF();
 };
 
 #endif // MAINWINDOW_H
