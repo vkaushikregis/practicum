@@ -21,6 +21,7 @@ public:
 private:
     Ui::MainWindow *ui;
     void connectToDatabase();
+    void displayExistingResumesInDB();
 
 private slots:
     void setTabWidgetIndex();

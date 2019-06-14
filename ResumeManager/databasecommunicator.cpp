@@ -5,21 +5,31 @@
 #include <QtWidgets/QMessageBox>
 #include <stdio.h>
 #include <string.h>
+#include "globalproductdata.h"
+
 DatabaseCommunicator* DatabaseCommunicator::_instance = NULL;
 
 DatabaseCommunicator::DatabaseCommunicator()
 {
-    //create database connection here
-    QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL");
-    db.setHostName("127.0.0.1");
+    isDatabaseConnected = false;
 
-    db.setUserName("root");
-    db.setPassword("root");
-    db.setDatabaseName("resumemanager");
+    userName = "root";
+    password = "root";
+    databaseName = "resumemanager";
+    hostName = "127.0.0.1";
+
+    //create database connection here
+    db = QSqlDatabase::addDatabase("QMYSQL");
+    db.setHostName(hostName);
+    db.setUserName(userName);
+    db.setPassword(password);
+    db.setDatabaseName(databaseName);
+    db.open();
 
     if (db.open())
     {
-        //QMessageBox::critical(NULL, QObject::QT_TR_NOOP("Database Connection"), tr("Database successfully connected"));
+        isDatabaseConnected = true;
+       /* //QMessageBox::critical(NULL, QObject::QT_TR_NOOP("Database Connection"), tr("Database successfully connected"));
         //return;
         QSqlQuery query;
            query.prepare("INSERT INTO resumename ( resume_name) "
@@ -29,16 +39,18 @@ DatabaseCommunicator::DatabaseCommunicator()
 
            query.exec();
 
-         //  if(query.)
+         //  if(query.)*/
     }
     else
     {
+        isDatabaseConnected = false;
       //  QMessageBox::critical(NULL, QObject::tr("Database Connection"), tr("Database not connected"));
         return ;
     }
 }
 DatabaseCommunicator::~DatabaseCommunicator()
 {
+    db.close();
 }
 
 DatabaseCommunicator* DatabaseCommunicator::Instance()
@@ -47,3 +59,32 @@ DatabaseCommunicator* DatabaseCommunicator::Instance()
         _instance = new DatabaseCommunicator;
     return _instance;
 }
+
+bool DatabaseCommunicator::getExistingResumesFromDB(std::string &msg)
+{
+    gResumeNamesList.clear();
+    if(db.open())
+    {
+        QSqlQuery query;
+        query.exec("SELECT resume_name_pk,resume_name FROM resumemanager.resumename");
+        if(!query.exec())
+        {
+            msg = "There are no resumes in the database currently";
+            return false;
+        }
+        if (query.next()) {
+            ResumeNames resumeObj;
+            resumeObj.mResume_pk = query.value(0).toInt();
+            resumeObj.mResume_name = query.value(1).toString().toStdString();
+            gResumeNamesList.push_back(resumeObj);
+
+        }
+    }
+
+    return true;
+}
+ bool DatabaseCommunicator::getPersonalDetailFromDB(int resume_fk,std::string &msg)
+ {
+
+     return true;
+ }

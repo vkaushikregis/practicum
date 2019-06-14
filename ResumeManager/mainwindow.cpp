@@ -12,6 +12,7 @@
 #include <QPdfWriter>
 #include <QtPrintSupport>
 #include "databasecommunicator.h"
+#include "globalproductdata.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -68,7 +69,8 @@ MainWindow::MainWindow(QWidget *parent) :
      connect(ui->pushButtonEducation,SIGNAL(clicked(bool)),this,SLOT(validateSecondTabInputs()));
      connect(ui->pushButtonExportAsPDF,SIGNAL(clicked(bool)),this,SLOT(exportAsPDF()));
 
-     connectToDatabase();
+     //connectToDatabase();
+     displayExistingResumesInDB();
 }
 
 MainWindow::~MainWindow()
@@ -78,11 +80,28 @@ MainWindow::~MainWindow()
 
 void MainWindow::connectToDatabase()
 {
-  if(! DatabaseCommunicator::Instance())
+  DatabaseCommunicator::Instance();
+  if(!isDatabaseConnected)
   {
       QMessageBox::critical(NULL, QObject::tr("Database Connection"), tr("Database not connected"));
       return;
   }
+}
+void MainWindow::displayExistingResumesInDB()
+{
+    std::string message;
+    bool status = DatabaseCommunicator::Instance()->getExistingResumesFromDB(message);
+
+    if(status)
+    {
+        qDebug()<<"gResumeNamesList .size " <<gResumeNamesList.size();
+        for(int count =0; count <gResumeNamesList.size(); count++)
+            qDebug()<<"existing reumes name" <<gResumeNamesList[count].mResume_name.c_str();
+    }
+    else
+    {
+        QMessageBox::critical(NULL, QObject::tr("Database Connection"), tr("Database not connected"));
+    }
 }
 
 void MainWindow::setTabWidgetIndex()
@@ -462,30 +481,7 @@ void MainWindow::exportAsPDF()
             "</body>"
             "</html>";
 
-    QString htm4 =
 
-            "%----------------------------------------------------------------------------------------"
-            "%	ADDITIONAL INFORMATION"
-            "%----------------------------------------------------------------------------------------"
-
-            "\begin{minipage}[t]{0.3\textwidth}"
-                "\vspace{-\baselineskip} % Required for vertically aligning minipages"
-
-               " \cvsect{Languages}"
-
-                "\textbf{English} - native\\"
-                "\textbf{German} - proficient\\"
-                "\textbf{Polish} - rudimentary"
-            "\end{minipage}"
-            "\hfill"
-            "\begin{minipage}[t]{0.3\textwidth}"
-                "\vspace{-\baselineskip} % Required for vertically aligning minipages"
-
-                "\cvsect{Hobbies}"
-
-                "I love... \lorem"
-            "\end{minipage}"
-            "\hfill";
 
 
     QTextDocument document;
