@@ -68,6 +68,7 @@ MainWindow::MainWindow(QWidget *parent) :
      connect(ui->pushButtonWorkEx,SIGNAL(clicked(bool)),this,SLOT(validateFirstTabInputs()));
      connect(ui->pushButtonEducation,SIGNAL(clicked(bool)),this,SLOT(validateSecondTabInputs()));
      connect(ui->pushButtonExportAsPDF,SIGNAL(clicked(bool)),this,SLOT(exportAsPDF()));
+     connect(ui->listWidgetResumeNames, SIGNAL(itemSelectionChanged()), this, SLOT(getSelectedResumeDataFromDB()));
 
      //connectToDatabase();
      displayExistingResumesInDB();
@@ -80,23 +81,23 @@ MainWindow::~MainWindow()
 
 void MainWindow::connectToDatabase()
 {
-  DatabaseCommunicator::Instance();
-  if(!isDatabaseConnected)
-  {
-      QMessageBox::critical(NULL, QObject::tr("Database Connection"), tr("Database not connected"));
-      return;
-  }
+    DatabaseCommunicator::Instance();
+    if(!isDatabaseConnected)
+    {
+        QMessageBox::critical(NULL, QObject::tr("Database Connection"), tr("Database not connected"));
+        return;
+    }
 }
 void MainWindow::displayExistingResumesInDB()
 {
     std::string message;
     bool status = DatabaseCommunicator::Instance()->getExistingResumesFromDB(message);
-
+    qDebug()<<gResumeNamesList.size();
     if(status)
     {
-        qDebug()<<"gResumeNamesList .size " <<gResumeNamesList.size();
-        for(int count =0; count <gResumeNamesList.size(); count++)
-            qDebug()<<"existing reumes name" <<gResumeNamesList[count].mResume_name.c_str();
+       ui->listWidgetResumeNames->clear();
+       for(int count =0; count <gResumeNamesList.size(); count++)
+            ui->listWidgetResumeNames->addItem(QString::fromUtf8(gResumeNamesList[count].mResume_name.c_str()));
     }
     else
     {
@@ -104,24 +105,64 @@ void MainWindow::displayExistingResumesInDB()
     }
 }
 
+void MainWindow::getSelectedResumeDataFromDB()
+{
+    std::string message;
+    mResumeManagerBaseObj = {};//resetting structure
+
+    ResumeNames resuObj =findResumePK();
+    mResumeManagerBaseObj.mResume_pk = resuObj.mResume_pk;
+    mResumeManagerBaseObj.mResume_name = resuObj.mResume_name;
+
+    if(resuObj.mResume_pk !=-1)
+    {
+        bool status = DatabaseCommunicator::Instance()->getPersonalDetailFromDB(resuObj.mResume_pk,mResumeManagerBaseObj,message);
+
+        if(status)
+        {
+            qDebug()<<"first name:" << mResumeManagerBaseObj.mPersonalDetails.mFirst_name.c_str();
+        }
+    }
+}
+
+ResumeNames MainWindow::findResumePK()
+{
+    ResumeNames obj ={};
+    if(ui->listWidgetResumeNames->currentItem())
+    {
+        std::string selecteResume = ui->listWidgetResumeNames->currentItem()->text().toStdString();
+        for(int count =0; count <gResumeNamesList.size(); count++)
+        {
+            if(gResumeNamesList[count].mResume_name == selecteResume)
+            {
+                obj.mResume_pk = gResumeNamesList[count].mResume_pk;
+                obj.mResume_name = selecteResume;
+                break;
+            }
+        }
+    }
+
+    return obj;
+}
+
 void MainWindow::setTabWidgetIndex()
 {
-   if ((sender()->objectName() == "pushButtonWorkEx"))
-         ui->tabWidgetMain->setCurrentIndex(1);
-   else if ((sender()->objectName() == "pushButtonBackPersonal"))
+    if ((sender()->objectName() == "pushButtonWorkEx"))
+        ui->tabWidgetMain->setCurrentIndex(1);
+    else if ((sender()->objectName() == "pushButtonBackPersonal"))
         ui->tabWidgetMain->setCurrentIndex(0);
-   else if ((sender()->objectName() == "pushButtonEducation"))
-          ui->tabWidgetMain->setCurrentIndex(2);
-   else if ((sender()->objectName() == "pushButtonBackWork"))
-          ui->tabWidgetMain->setCurrentIndex(1);
-   else if ((sender()->objectName() == "pushButtonSkills"))
-          ui->tabWidgetMain->setCurrentIndex(3);
-   else if ((sender()->objectName() == "pushButtonBackEducation"))
-          ui->tabWidgetMain->setCurrentIndex(2);
-   else if ((sender()->objectName() == "pushButtonAdditionalSkils"))
-          ui->tabWidgetMain->setCurrentIndex(4);
-   else if ((sender()->objectName() == "pushButtonBackSkills"))
-          ui->tabWidgetMain->setCurrentIndex(3);
+    else if ((sender()->objectName() == "pushButtonEducation"))
+        ui->tabWidgetMain->setCurrentIndex(2);
+    else if ((sender()->objectName() == "pushButtonBackWork"))
+        ui->tabWidgetMain->setCurrentIndex(1);
+    else if ((sender()->objectName() == "pushButtonSkills"))
+        ui->tabWidgetMain->setCurrentIndex(3);
+    else if ((sender()->objectName() == "pushButtonBackEducation"))
+        ui->tabWidgetMain->setCurrentIndex(2);
+    else if ((sender()->objectName() == "pushButtonAdditionalSkils"))
+        ui->tabWidgetMain->setCurrentIndex(4);
+    else if ((sender()->objectName() == "pushButtonBackSkills"))
+        ui->tabWidgetMain->setCurrentIndex(3);
 }
 
 void MainWindow::addDeleteSkills()

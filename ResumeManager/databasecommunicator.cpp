@@ -29,22 +29,10 @@ DatabaseCommunicator::DatabaseCommunicator()
     if (db.open())
     {
         isDatabaseConnected = true;
-       /* //QMessageBox::critical(NULL, QObject::QT_TR_NOOP("Database Connection"), tr("Database successfully connected"));
-        //return;
-        QSqlQuery query;
-           query.prepare("INSERT INTO resumename ( resume_name) "
-                         "VALUES ( :name)");
-
-           query.bindValue(":name", "test_first_name2");
-
-           query.exec();
-
-         //  if(query.)*/
     }
     else
     {
         isDatabaseConnected = false;
-      //  QMessageBox::critical(NULL, QObject::tr("Database Connection"), tr("Database not connected"));
         return ;
     }
 }
@@ -72,7 +60,7 @@ bool DatabaseCommunicator::getExistingResumesFromDB(std::string &msg)
             msg = "There are no resumes in the database currently";
             return false;
         }
-        if (query.next()) {
+        while (query.next()) {
             ResumeNames resumeObj;
             resumeObj.mResume_pk = query.value(0).toInt();
             resumeObj.mResume_name = query.value(1).toString().toStdString();
@@ -83,8 +71,141 @@ bool DatabaseCommunicator::getExistingResumesFromDB(std::string &msg)
 
     return true;
 }
- bool DatabaseCommunicator::getPersonalDetailFromDB(int resume_fk,std::string &msg)
+  bool DatabaseCommunicator::getPersonalDetailFromDB(int resume_fk,ResumeManagerBase &resuObj,std::string &msg)
  {
+      if(db.open())
+      {
+          QSqlQuery query;
+          QString preparedStmt = "SELECT personal_details_pk,first_name,last_name,mobile,email,resume_name_fk FROM resumemanager.personal_details where resume_name_fk =" + QString::number(resume_fk);
+          query.exec(preparedStmt);
+          if(!query.exec())
+          {
+              msg = "There is no personal detail information stored for resume_fk " + resume_fk;
+              return false;
+          }
+          if (query.next()) {
+              resuObj.mPersonalDetails.mPersonal_details_pk = query.value(0).toInt();
+              resuObj.mPersonalDetails.mFirst_name = query.value(1).toString().toStdString();
+              resuObj.mPersonalDetails.mLast_name = query.value(2).toString().toStdString();
+              resuObj.mPersonalDetails.mMobile = query.value(3).toInt();
+              resuObj.mPersonalDetails.mEmail = query.value(4).toString().toStdString();
+              resuObj.mPersonalDetails.mResume_fk = query.value(5).toInt();
+          }
+      }
 
      return true;
  }
+
+  bool DatabaseCommunicator::getAddressFromDB(int resume_fk,ResumeManagerBase &resuObj,std::string &msg)
+  {
+      if(db.open())
+      {
+          QSqlQuery query;
+          QString preparedStmt = "SELECT address_pk,streetaddress,city,state,zip,resume_name_fk FROM resumemanager.address where resume_name_fk =" + QString::number(resume_fk);
+          query.exec(preparedStmt);
+          if(!query.exec())
+          {
+              msg = "There is no address stored for resume_fk " + resume_fk;
+              return false;
+          }
+          if (query.next()) {
+              resuObj.mAddress.mAddress_pk = query.value(0).toInt();
+              resuObj.mAddress.mStreet_address = query.value(1).toString().toStdString();
+              resuObj.mAddress.mCity = query.value(2).toString().toStdString();
+              resuObj.mAddress.mState = query.value(3).toString().toStdString();
+              resuObj.mAddress.mZip = query.value(4).toInt();
+              resuObj.mAddress.mResume_fk = query.value(5).toInt();
+          }
+      }
+
+     return true;
+  }
+
+
+   bool DatabaseCommunicator::getEducationDetailsFromDB(int resume_fk,ResumeManagerBase &resuObj,std::string &msg)
+   {
+       if(db.open())
+       {
+           QSqlQuery query;
+           QString preparedStmt = "SELECT education_details_pk,college_name,from_date,to_date,still_pursuing,field,GPA,resume_name_fk FROM resumemanager.education_details where resume_name_fk =" + QString::number(resume_fk);
+           query.exec(preparedStmt);
+           if(!query.exec())
+           {
+               msg = "There is no education details stored for resume_fk " + resume_fk;
+               return false;
+           }
+           resuObj.mEducationDetailsList.clear();
+           while (query.next()) {
+               EducationDetails eduObj;
+               eduObj.mEducation_details_pk = query.value(0).toInt();
+               eduObj.mCollege_name = query.value(1).toString().toStdString();
+               eduObj.mFrom_date = query.value(2).toString().toStdString();
+               eduObj.mTo_date = query.value(3).toString().toStdString();
+               eduObj.mStill_pursuing = query.value(4).toInt();
+               eduObj.mField = query.value(5).toString().toStdString();
+               eduObj.mGPA = query.value(6).toDouble();
+               eduObj.mResume_fk = query.value(7).toInt();
+
+               resuObj.mEducationDetailsList.push_back(eduObj);
+           }
+       }
+
+      return true;
+   }
+
+   bool DatabaseCommunicator::getWorkExDetailsFromDB(int resume_fk,ResumeManagerBase &resuObj,std::string &msg)
+   {
+       if(db.open())
+       {
+           QSqlQuery query;
+           QString preparedStmt = "SELECT work_ex_pk,company_name,from_date,to_date,job_description,currently_pursuing,resume_name_fk FROM resumemanager.work_experience where resume_name_fk =" + QString::number(resume_fk);
+           query.exec(preparedStmt);
+           if(!query.exec())
+           {
+               msg = "There is no work experience stored for resume_fk " + resume_fk;
+               return false;
+           }
+           resuObj.mWorkExList.clear();
+           while (query.next()) {
+               WorkExperience workObj;
+               workObj.mWork_experience_pk = query.value(0).toInt();
+               workObj.mCompany_name = query.value(1).toString().toStdString();
+               workObj.mFrom_date = query.value(2).toString().toStdString();
+               workObj.mTo_date = query.value(3).toString().toStdString();
+               workObj.mJob_description = query.value(4).toInt();
+               workObj.mCurrent = query.value(5).toInt();
+               workObj.mResume_fk = query.value(6).toInt();
+
+               resuObj.mWorkExList.push_back(workObj);
+           }
+       }
+
+      return true;
+   }
+   bool DatabaseCommunicator::getTechnicalSkillsFromDB(int resume_fk,ResumeManagerBase &resuObj,std::string &msg)
+   {
+       if(db.open())
+       {
+           QSqlQuery query;
+           QString preparedStmt = "SELECT technical_skills_pk,skill_name,proficiency,years_used,resume_name_fk FROM resumemanager.technical_skilss where resume_name_fk =" + QString::number(resume_fk);
+           query.exec(preparedStmt);
+           if(!query.exec())
+           {
+               msg = "There is no work experience stored for resume_fk " + resume_fk;
+               return false;
+           }
+           resuObj.mTechSkillsList.clear();
+           while (query.next()) {
+               TechnicalSkills techObj;
+               techObj.mTech_skills_pk = query.value(0).toInt();
+               techObj.mSkill_name = query.value(1).toString().toStdString();
+               techObj.mProficiency = query.value(2).toString().toStdString();
+               techObj.mYears_used = query.value(3).toInt();
+               techObj.mResume_fk = query.value(4).toInt();
+
+               resuObj.mTechSkillsList.push_back(techObj);
+           }
+       }
+
+      return true;
+   }
