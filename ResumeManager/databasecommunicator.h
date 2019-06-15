@@ -16,6 +16,8 @@ public:
     bool getEducationDetailsFromDB(int resume_fk,ResumeManagerBase &resuObj,std::string &msg);
     bool getWorkExDetailsFromDB(int resume_fk,ResumeManagerBase &resuObj,std::string &msg);
     bool getTechnicalSkillsFromDB(int resume_fk,ResumeManagerBase &resuObj,std::string &msg);
+
+    bool insertResumeInformationInDB(const ResumeManagerBase &resuObj,std::string &msg);
 private:
     DatabaseCommunicator();
     static DatabaseCommunicator *_instance;

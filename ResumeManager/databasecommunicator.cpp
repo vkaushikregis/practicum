@@ -209,3 +209,27 @@ bool DatabaseCommunicator::getExistingResumesFromDB(std::string &msg)
 
       return true;
    }
+
+   bool DatabaseCommunicator::insertResumeInformationInDB(const ResumeManagerBase &resuObj,std::string &msg)
+   {
+       db.transaction(); // Starts a transaction
+
+       QSqlQuery q;
+
+       // first insert
+       q.prepare("INSERT INTO table_name VALUES(:some_column_name)");
+       q.bindValue(":some_column_name", "FooBar");
+       q.exec();
+
+       int pk = q.lastInsertId().toInt();
+
+       // second insert
+       q.prepare("INSERT INTO other_table VALUES(:other_column_name, :fk)");
+       q.bindValue(":other_column_name", "OtherText");
+       q.bindValue(":fk", pk);
+       q.exec();
+
+       db.commit(); // Commits transaction
+
+       return true;
+   }
