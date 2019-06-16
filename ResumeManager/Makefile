@@ -215,8 +215,10 @@ Makefile: ResumeManager.pro C:\Qt\Qt5.6.3\5.6.3\msvc2013_64\mkspecs\win32-msvc20
 		C:\Qt\Qt5.6.3\5.6.3\msvc2013_64\mkspecs\features\lex.prf \
 		ResumeManager.pro \
 		C:\Qt\Qt5.6.3\5.6.3\msvc2013_64\lib\qtmain.prl \
+		C:\Qt\Qt5.6.3\5.6.3\msvc2013_64\lib\Qt5PrintSupport.prl \
 		C:\Qt\Qt5.6.3\5.6.3\msvc2013_64\lib\Qt5Widgets.prl \
 		C:\Qt\Qt5.6.3\5.6.3\msvc2013_64\lib\Qt5Gui.prl \
+		C:\Qt\Qt5.6.3\5.6.3\msvc2013_64\lib\Qt5Sql.prl \
 		C:\Qt\Qt5.6.3\5.6.3\msvc2013_64\lib\Qt5Core.prl
 	$(QMAKE) -spec win32-msvc2013 -o Makefile ResumeManager.pro
 C:\Qt\Qt5.6.3\5.6.3\msvc2013_64\mkspecs\features\spec_pre.prf:
@@ -361,8 +363,10 @@ C:\Qt\Qt5.6.3\5.6.3\msvc2013_64\mkspecs\features\yacc.prf:
 C:\Qt\Qt5.6.3\5.6.3\msvc2013_64\mkspecs\features\lex.prf:
 ResumeManager.pro:
 C:\Qt\Qt5.6.3\5.6.3\msvc2013_64\lib\qtmain.prl:
+C:\Qt\Qt5.6.3\5.6.3\msvc2013_64\lib\Qt5PrintSupport.prl:
 C:\Qt\Qt5.6.3\5.6.3\msvc2013_64\lib\Qt5Widgets.prl:
 C:\Qt\Qt5.6.3\5.6.3\msvc2013_64\lib\Qt5Gui.prl:
+C:\Qt\Qt5.6.3\5.6.3\msvc2013_64\lib\Qt5Sql.prl:
 C:\Qt\Qt5.6.3\5.6.3\msvc2013_64\lib\Qt5Core.prl:
 qmake: FORCE
 	@$(QMAKE) -spec win32-msvc2013 -o Makefile ResumeManager.pro

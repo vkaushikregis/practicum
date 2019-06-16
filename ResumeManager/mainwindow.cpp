@@ -70,6 +70,16 @@ MainWindow::MainWindow(QWidget *parent) :
      connect(ui->pushButtonExportAsPDF,SIGNAL(clicked(bool)),this,SLOT(exportAsPDF()));
      connect(ui->listWidgetResumeNames, SIGNAL(itemSelectionChanged()), this, SLOT(getSelectedResumeDataFromDB()));
 
+     //open ediot widnows for Work experience
+     connect(ui->pushButtonAddWorkEx, SIGNAL(clicked()),this, SLOT(addNewWorkExClicked()));
+     connect(ui->pushButtonEditWorkEx, SIGNAL(clicked()),this, SLOT(addNewWorkExClicked()));
+     connect(ui->pushButtonDeleteWorkEx, SIGNAL(clicked()),this, SLOT(deleteWorkExOnDeleteClicked()));
+
+     ui->tableWidgetWorkEx->setSelectionBehavior(QAbstractItemView::SelectRows);
+     ui->tableWidgetWorkEx->setSelectionMode(QAbstractItemView::SelectionMode::SingleSelection);
+
+     ui->tableWidgetEducation->setSelectionBehavior(QAbstractItemView::SelectRows);
+     ui->tableWidgetEducation->setSelectionMode(QAbstractItemView::SelectionMode::SingleSelection);
      //connectToDatabase();
      displayExistingResumesInDB();
 }
@@ -248,7 +258,7 @@ void MainWindow::validateFirstTabInputs()
 
 void MainWindow::validateSecondTabInputs()
 {
-    if(ui->companyLineEdit->text().toStdString().empty())
+   /* if(ui->companyLineEdit->text().toStdString().empty())
     {
         QMessageBox::critical(NULL, tr("Work Experience"), tr("Company Name is not filled, it is a mandatory field"));
         return;
@@ -275,8 +285,18 @@ void MainWindow::validateSecondTabInputs()
     {
         QMessageBox::critical(NULL, tr("Work Experience"), tr("Job Description is not filled, it is a mandatory field"));
         return;
-    }
+    }*/
     setTabWidgetIndex();
+}
+
+void MainWindow::addNewWorkExClicked()
+{
+
+}
+
+void MainWindow::deleteWorkExOnDeleteClicked()
+{
+
 }
 
 void MainWindow::exportAsPDF()

@@ -14,9 +14,17 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    databasecommunicator.cpp
+    databasecommunicator.cpp \
+    globalproductdata.cpp \
+    educationdetails.cpp \
+    workexperiencedetails.cpp
 
 HEADERS  += mainwindow.h \
-    databasecommunicator.h
+    databasecommunicator.h \
+    globalproductdata.h \
+    educationdetails.h \
+    workexperiencedetails.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    educationdetails.ui \
+    workexperiencedetails.ui

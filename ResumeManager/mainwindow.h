@@ -5,6 +5,7 @@
 #include <QtSql>
 #include <QSql>
 #include <QSqlDatabase>
+#include "globalproductdata.h"
 
 namespace Ui {
 class MainWindow;
@@ -20,8 +21,11 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    ResumeManagerBase mResumeManagerBaseObj;
+
     void connectToDatabase();
     void displayExistingResumesInDB();
+    ResumeNames findResumePK();
 
 private slots:
     void setTabWidgetIndex();
@@ -29,6 +33,9 @@ private slots:
     void validateFirstTabInputs();
     void validateSecondTabInputs();
     void exportAsPDF();
+    void getSelectedResumeDataFromDB();
+    void addNewWorkExClicked();
+    void deleteWorkExOnDeleteClicked();
 };
 
 #endif // MAINWINDOW_H

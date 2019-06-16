@@ -43,7 +43,7 @@ struct EducationDetails
 struct Address
 {
     long int mAddress_pk;
-    std::string mStree_address;
+    std::string mStreet_address;
     std::string mCity;
     std::string mState;
     long int mZip;
