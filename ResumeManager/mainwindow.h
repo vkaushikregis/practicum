@@ -36,6 +36,8 @@ private slots:
     void getSelectedResumeDataFromDB();
     void addNewWorkExClicked();
     void deleteWorkExOnDeleteClicked();
+    void addNewCollegeClicked();
+    void deleteCollegeOnDeleteClicked();
 };
 
 #endif // MAINWINDOW_H

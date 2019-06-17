@@ -29,18 +29,19 @@ public:
     QString getTitle();
     QString getJobDescription();
 
+    //setters
+    void setCompanyName(QString companyName);
+    void setFromDate(QString fromDate);
+    void setToDate(QString toDate);
+    void setCurrentJob(int isCurrent);
+    void setTitle(QString title);
+    void setJobDescription(QString jobDescription);
+
 private:
     Ui::workExperienceDetails *ui;
     std::string function;
 
-
-
-    //void setStackPk(QString stack_pk);
-    //void setGroupValue(std::vector<std::string> groupsList, std::string groupVal);
-    //void setStackValue(std::vector<std::string> ExistingstackNamesList, QString stackValue);
-    //std::vector<std::string> mExistingStackNamesList;
-
- private slots:
+private slots:
     void OnButtonAccepted();
     void OnButtonRejected();
 };

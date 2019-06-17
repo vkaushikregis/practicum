@@ -13,6 +13,7 @@
 #include <QtPrintSupport>
 #include "databasecommunicator.h"
 #include "globalproductdata.h"
+#include "workexperiencedetails.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -74,6 +75,11 @@ MainWindow::MainWindow(QWidget *parent) :
      connect(ui->pushButtonAddWorkEx, SIGNAL(clicked()),this, SLOT(addNewWorkExClicked()));
      connect(ui->pushButtonEditWorkEx, SIGNAL(clicked()),this, SLOT(addNewWorkExClicked()));
      connect(ui->pushButtonDeleteWorkEx, SIGNAL(clicked()),this, SLOT(deleteWorkExOnDeleteClicked()));
+
+     //open ediot widnows for Work experience
+     connect(ui->pushButtonAddEducation, SIGNAL(clicked()),this, SLOT(addNewCollegeClicked()));
+     connect(ui->pushButtonEditEducation, SIGNAL(clicked()),this, SLOT(addNewCollegeClicked()));
+     connect(ui->pushButtonDeleteEducation, SIGNAL(clicked()),this, SLOT(deleteCollegeOnDeleteClicked()));
 
      ui->tableWidgetWorkEx->setSelectionBehavior(QAbstractItemView::SelectRows);
      ui->tableWidgetWorkEx->setSelectionMode(QAbstractItemView::SelectionMode::SingleSelection);
@@ -258,43 +264,95 @@ void MainWindow::validateFirstTabInputs()
 
 void MainWindow::validateSecondTabInputs()
 {
-   /* if(ui->companyLineEdit->text().toStdString().empty())
-    {
-        QMessageBox::critical(NULL, tr("Work Experience"), tr("Company Name is not filled, it is a mandatory field"));
-        return;
-    }
-    else if (ui->FromWorkExLineEdit->text().toStdString().empty())
-    {
-        QMessageBox::critical(NULL, tr("Work Experience"), tr("From date is not filled, it is a mandatory field"));
-        return;
-    }
-    else if(!ui->checkBoxCurrentlyWorking->isChecked())
-    {
-        if (ui->toWorkExLineEdit->text().toStdString().empty())
-        {
-             QMessageBox::critical(NULL, tr("Work Experience"), tr("To Date is not filled, fill this field if it is not a current job"));
-             return;
-        }
-    }
-    else if (ui->titleLineEdit->text().toStdString().empty())
-    {
-        QMessageBox::critical(NULL, tr("Work Experience"), tr("Title is not filled, it is a mandatory field"));
-        return;
-    }
-    else if (ui->jobDescriptionTextEdit->toPlainText().toStdString().empty())
-    {
-        QMessageBox::critical(NULL, tr("Work Experience"), tr("Job Description is not filled, it is a mandatory field"));
-        return;
-    }*/
     setTabWidgetIndex();
 }
 
 void MainWindow::addNewWorkExClicked()
 {
+    if (sender()->objectName() == "pushButtonAddWorkEx")
+    {
+        workExperienceDetails workExWindow("Add");
+        workExWindow.setWindowTitle("Enter Work Experience");
+
+        //workExWindow("-1");
+        workExWindow.setCompanyName("");
+        workExWindow.setFromDate("");
+
+        int res = workExWindow.exec();
+        if (res == QDialog::Rejected)
+            return;
+
+        ui->tableWidgetWorkEx->insertRow( ui->tableWidgetWorkEx->rowCount());
+        ui->tableWidgetWorkEx->setItem( ui->tableWidgetWorkEx->rowCount() - 1, 0, new QTableWidgetItem((QString::number(-1))));
+        ui->tableWidgetWorkEx->setItem( ui->tableWidgetWorkEx->rowCount() - 1, 1, new QTableWidgetItem((workExWindow.getCompanyName())));
+        ui->tableWidgetWorkEx->setItem( ui->tableWidgetWorkEx->rowCount() - 1, 2, new QTableWidgetItem((workExWindow.getFromDate())));
+
+        for (int count = 0; count <  ui->tableWidgetWorkEx->columnCount(); count++)
+        {
+            if ( ui->tableWidgetWorkEx->item( ui->tableWidgetWorkEx->rowCount() -1, count))
+                ui->tableWidgetWorkEx->item( ui->tableWidgetWorkEx->rowCount()-1 , count)->setBackgroundColor(QColor(255, 170, 127));
+        }
+
+        ui->tableWidgetWorkEx->scrollToBottom();
+        // isStackEdited = true;
+        //tabWidget->setTabEnabled(0, false);
+    }
+
+    /*if (sender()->objectName() == "pushButtonEditStack")
+    {
+        if (tableWidgetStacksGroup->selectedItems().size() <= 0)
+        {
+            QMessageBox::warning(NULL, tr("Edit Stack Value"), tr("Select a row to edit."));
+            return;
+        }
+        int row = tableWidgetStacksGroup->selectedItems().at(0)->row();
+        if (row < 0)
+            return;
+
+        PBFSEditorManualStackEditorWindow stackEditorWindow("Edit");
+        stackEditorWindow.setWindowTitle("Edit Stack data for row:" + QString::number(tableWidgetStacksGroup->currentRow() + 1));
+
+        if (tableWidgetStacksGroup->item(row, STACKS_PK))
+            stackEditorWindow.setStackPk(tableWidgetStacksGroup->item(row, STACKS_PK)->text());
+
+        if (tableWidgetStacksGroup->item(row, STACKS_COL))
+            stackEditorWindow.setStackValue(tempExistingStackNameList, tableWidgetStacksGroup->item(row, STACKS_COL)->text());
+
+        if (tableWidgetStacksGroup->item(row, GROUPS_COL))
+            stackEditorWindow.setGroupValue(tempGroupList, tableWidgetStacksGroup->item(row, GROUPS_COL)->text().toStdString());
+
+
+        int res = stackEditorWindow.exec();
+        if (res == QDialog::Rejected)
+            return;
+
+        tableWidgetStacksGroup->setItem(row, STACKS_PK, new QTableWidgetItem((tableWidgetStacksGroup->item(row, STACKS_PK)->text())));
+        tableWidgetStacksGroup->setItem(row, STACKS_COL, new QTableWidgetItem((stackEditorWindow.getStackValue())));
+        tableWidgetStacksGroup->setItem(row, GROUPS_COL, new QTableWidgetItem((stackEditorWindow.getGroupValue())));
+
+        for (int count = 0; count <tableWidgetStacksGroup->columnCount(); count++)
+        {
+            if (tableWidgetStacksGroup->item(row, count))
+                tableWidgetStacksGroup->item(row, count)->setBackgroundColor(QColor(255, 170, 127));
+        }
+
+        isStackEdited = true;
+        tabWidget->setTabEnabled(0, false);
+    }*/
 
 }
 
 void MainWindow::deleteWorkExOnDeleteClicked()
+{
+
+}
+
+void MainWindow::addNewCollegeClicked()
+{
+
+}
+
+void MainWindow::deleteCollegeOnDeleteClicked()
 {
 
 }
