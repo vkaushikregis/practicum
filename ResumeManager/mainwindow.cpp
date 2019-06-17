@@ -14,6 +14,7 @@
 #include "databasecommunicator.h"
 #include "globalproductdata.h"
 #include "workexperiencedetails.h"
+#include "educationdetails.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -29,8 +30,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->cityLineEdit->setValidator(validator);
     //Navigating tab widgets signal connection
-    //connect(ui->pushButtonWorkEx,SIGNAL(clicked(bool)),this,SLOT(setTabWidgetIndex()));
-   // connect(ui->pushButtonEducation,SIGNAL(clicked(bool)),this,SLOT(setTabWidgetIndex()));
     connect(ui->pushButtonBackPersonal,SIGNAL(clicked(bool)),this,SLOT(setTabWidgetIndex()));
     connect(ui->pushButtonBackWork,SIGNAL(clicked(bool)),this,SLOT(setTabWidgetIndex()));
     connect(ui->pushButtonSkills,SIGNAL(clicked(bool)),this,SLOT(setTabWidgetIndex()));
@@ -41,29 +40,6 @@ MainWindow::MainWindow(QWidget *parent) :
     //adding/deleting skill's table rows
     connect(ui->pushButtonAddSkill,SIGNAL(clicked(bool)),this,SLOT(addDeleteSkills()));
     connect(ui->pushButtonDeleteSkill,SIGNAL(clicked(bool)),this,SLOT(addDeleteSkills()));
-    /*std::string latex =
-            "\\documentclass{article}"
-            "\\begin{document}"
-            "Hello world!"
-            "\\end{document}";
-        try {
-            std::string pdf;
-            std::string info;
-            texcaller::convert(pdf, info, latex, "LaTeX", "PDF", 5);
-           // std::cout << "Generated PDF of " << pdf.size() << " bytes.";
-            //std::cout << " Details:" << std::endl << std::endl << info;
-        } catch (std::domain_error &e) {
-           // std::cout << "Error: " << e.what() << std::endl;
-        }*/
-    /*std::string latex =
-                "\\documentclass{article}"
-                "\\begin{document}"
-                "Hello world!"
-                "\\end{document}";
-    std::string pdf;
-    std::string info;
-    ::texcaller::convert(pdf, info, latex, "LaTeX", "PDF", 5);*/
-    //::texcaller::
 
     //validate first tab inputs
      connect(ui->pushButtonWorkEx,SIGNAL(clicked(bool)),this,SLOT(validateFirstTabInputs()));
@@ -86,6 +62,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
      ui->tableWidgetEducation->setSelectionBehavior(QAbstractItemView::SelectRows);
      ui->tableWidgetEducation->setSelectionMode(QAbstractItemView::SelectionMode::SingleSelection);
+
+     connect(ui->pushButtonSaveInDB,SIGNAL(clicked(bool)),this,SLOT(saveResumeDetailsInDB()));
+
      //connectToDatabase();
      displayExistingResumesInDB();
 }
@@ -274,18 +253,31 @@ void MainWindow::addNewWorkExClicked()
         workExperienceDetails workExWindow("Add");
         workExWindow.setWindowTitle("Enter Work Experience");
 
+        //WORK_EX_PK,COMPANY_NAME,FROM_DATE_W,TO_DATE_W,IS_CURR_W,TITLE,JD
         //workExWindow("-1");
         workExWindow.setCompanyName("");
         workExWindow.setFromDate("");
+        workExWindow.setToDate("");
+        workExWindow.setTitle("");
+        workExWindow.setCurrentJob(0);
+        workExWindow.setJobDescription("");
 
         int res = workExWindow.exec();
         if (res == QDialog::Rejected)
             return;
 
         ui->tableWidgetWorkEx->insertRow( ui->tableWidgetWorkEx->rowCount());
-        ui->tableWidgetWorkEx->setItem( ui->tableWidgetWorkEx->rowCount() - 1, 0, new QTableWidgetItem((QString::number(-1))));
-        ui->tableWidgetWorkEx->setItem( ui->tableWidgetWorkEx->rowCount() - 1, 1, new QTableWidgetItem((workExWindow.getCompanyName())));
-        ui->tableWidgetWorkEx->setItem( ui->tableWidgetWorkEx->rowCount() - 1, 2, new QTableWidgetItem((workExWindow.getFromDate())));
+        ui->tableWidgetWorkEx->setItem( ui->tableWidgetWorkEx->rowCount() - 1, WORK_EX_PK, new QTableWidgetItem((QString::number(-1))));
+        ui->tableWidgetWorkEx->setItem( ui->tableWidgetWorkEx->rowCount() - 1, COMPANY_NAME, new QTableWidgetItem((workExWindow.getCompanyName())));
+        ui->tableWidgetWorkEx->setItem( ui->tableWidgetWorkEx->rowCount() - 1, FROM_DATE_W, new QTableWidgetItem((workExWindow.getFromDate())));
+        ui->tableWidgetWorkEx->setItem( ui->tableWidgetWorkEx->rowCount() - 1, TO_DATE_W, new QTableWidgetItem((workExWindow.getToDate())));
+        if(workExWindow.getCurrentJob())
+            ui->tableWidgetWorkEx->setItem( ui->tableWidgetWorkEx->rowCount() - 1, IS_CURR_W, new QTableWidgetItem(("Yes")));
+        else
+            ui->tableWidgetWorkEx->setItem( ui->tableWidgetWorkEx->rowCount() - 1, IS_CURR_W, new QTableWidgetItem(("No")));
+
+        ui->tableWidgetWorkEx->setItem( ui->tableWidgetWorkEx->rowCount() - 1, TITLE, new QTableWidgetItem((workExWindow.getTitle())));
+        ui->tableWidgetWorkEx->setItem( ui->tableWidgetWorkEx->rowCount() - 1, JD, new QTableWidgetItem((workExWindow.getJobDescription())));
 
         for (int count = 0; count <  ui->tableWidgetWorkEx->columnCount(); count++)
         {
@@ -294,65 +286,246 @@ void MainWindow::addNewWorkExClicked()
         }
 
         ui->tableWidgetWorkEx->scrollToBottom();
-        // isStackEdited = true;
-        //tabWidget->setTabEnabled(0, false);
     }
 
-    /*if (sender()->objectName() == "pushButtonEditStack")
+    if (sender()->objectName() == "pushButtonEditWorkEx")
     {
-        if (tableWidgetStacksGroup->selectedItems().size() <= 0)
+        if (ui->tableWidgetWorkEx->selectedItems().size() <= 0)
         {
-            QMessageBox::warning(NULL, tr("Edit Stack Value"), tr("Select a row to edit."));
+            QMessageBox::warning(NULL, tr("Edit Work Experience"), tr("Select a row to edit."));
             return;
         }
-        int row = tableWidgetStacksGroup->selectedItems().at(0)->row();
+        int row = ui->tableWidgetWorkEx->selectedItems().at(0)->row();
         if (row < 0)
             return;
 
-        PBFSEditorManualStackEditorWindow stackEditorWindow("Edit");
-        stackEditorWindow.setWindowTitle("Edit Stack data for row:" + QString::number(tableWidgetStacksGroup->currentRow() + 1));
+        workExperienceDetails workExWindow("Edit");
+        workExWindow.setWindowTitle("Edit Work Experience for row:" + QString::number(ui->tableWidgetWorkEx->currentRow() + 1));
 
-        if (tableWidgetStacksGroup->item(row, STACKS_PK))
-            stackEditorWindow.setStackPk(tableWidgetStacksGroup->item(row, STACKS_PK)->text());
+       // if (ui->tableWidgetWorkEx->item(row, STACKS_PK))
+           // workExWindow.setStackPk(ui->tableWidgetWorkEx->item(row, STACKS_PK)->text());
 
-        if (tableWidgetStacksGroup->item(row, STACKS_COL))
-            stackEditorWindow.setStackValue(tempExistingStackNameList, tableWidgetStacksGroup->item(row, STACKS_COL)->text());
+        if (ui->tableWidgetWorkEx->item(row, COMPANY_NAME))
+            workExWindow.setCompanyName( ui->tableWidgetWorkEx->item(row, COMPANY_NAME)->text());
 
-        if (tableWidgetStacksGroup->item(row, GROUPS_COL))
-            stackEditorWindow.setGroupValue(tempGroupList, tableWidgetStacksGroup->item(row, GROUPS_COL)->text().toStdString());
+        if (ui->tableWidgetWorkEx->item(row, FROM_DATE_W))
+            workExWindow.setFromDate( ui->tableWidgetWorkEx->item(row, FROM_DATE_W)->text());
 
+        if (ui->tableWidgetWorkEx->item(row, TO_DATE_W))
+            workExWindow.setToDate( ui->tableWidgetWorkEx->item(row, TO_DATE_W)->text());
 
-        int res = stackEditorWindow.exec();
+        if (ui->tableWidgetWorkEx->item(row, IS_CURR_W))
+            workExWindow.setCurrentJob( ui->tableWidgetEducation->item(row, IS_CURR_W)->text().toInt());
+
+        if (ui->tableWidgetWorkEx->item(row, TITLE))
+            workExWindow.setTitle( ui->tableWidgetWorkEx->item(row, TITLE)->text());
+
+        if (ui->tableWidgetWorkEx->item(row, JD))
+            workExWindow.setJobDescription( ui->tableWidgetWorkEx->item(row, JD)->text());
+
+        int res = workExWindow.exec();
         if (res == QDialog::Rejected)
             return;
 
-        tableWidgetStacksGroup->setItem(row, STACKS_PK, new QTableWidgetItem((tableWidgetStacksGroup->item(row, STACKS_PK)->text())));
-        tableWidgetStacksGroup->setItem(row, STACKS_COL, new QTableWidgetItem((stackEditorWindow.getStackValue())));
-        tableWidgetStacksGroup->setItem(row, GROUPS_COL, new QTableWidgetItem((stackEditorWindow.getGroupValue())));
+        ui->tableWidgetWorkEx->setItem(row, WORK_EX_PK, new QTableWidgetItem((QString::number(-1))));
+        ui->tableWidgetWorkEx->setItem( row, COMPANY_NAME, new QTableWidgetItem((workExWindow.getCompanyName())));
+        ui->tableWidgetWorkEx->setItem( row, FROM_DATE_W, new QTableWidgetItem((workExWindow.getFromDate())));
+        ui->tableWidgetWorkEx->setItem( row, TO_DATE_W, new QTableWidgetItem((workExWindow.getToDate())));
+        if(workExWindow.getCurrentJob())
+            ui->tableWidgetWorkEx->setItem(row, IS_CURR_W, new QTableWidgetItem(("Yes")));
+        else
+            ui->tableWidgetWorkEx->setItem( row, IS_CURR_W, new QTableWidgetItem(("No")));
 
-        for (int count = 0; count <tableWidgetStacksGroup->columnCount(); count++)
+        ui->tableWidgetWorkEx->setItem( row, TITLE, new QTableWidgetItem((workExWindow.getTitle())));
+        ui->tableWidgetWorkEx->setItem( row, JD, new QTableWidgetItem((workExWindow.getJobDescription())));
+
+        for (int count = 0; count <ui->tableWidgetWorkEx->columnCount(); count++)
         {
-            if (tableWidgetStacksGroup->item(row, count))
-                tableWidgetStacksGroup->item(row, count)->setBackgroundColor(QColor(255, 170, 127));
+            if (ui->tableWidgetWorkEx->item(row, count))
+                ui->tableWidgetWorkEx->item(row, count)->setBackgroundColor(QColor(255, 170, 127));
         }
-
-        isStackEdited = true;
-        tabWidget->setTabEnabled(0, false);
-    }*/
+    }
 
 }
 
 void MainWindow::deleteWorkExOnDeleteClicked()
 {
+    QString msg = "";
+    if (ui->tableWidgetWorkEx->selectedItems().size() <= 0)
+    {
+        QMessageBox::warning(NULL, tr("Delete Work Experience"), tr("Select a job to be deleted"));
+        return;
+    }
 
+    QMessageBox::StandardButton reply;
+    //QString msg = "Are you sure, you want to delete this row?";
+    reply = QMessageBox::question(this, "Delete Row Table", msg + "\nDo you want to continue?",
+                                  QMessageBox::Yes | QMessageBox::No);
+
+    if (reply == QMessageBox::Yes)
+    {
+        QModelIndexList indexList = ui->tableWidgetWorkEx->selectionModel()->selectedRows();
+
+        QList<int> rows;
+        for (auto listIndex : indexList)
+            rows.append(listIndex.row());
+
+        qSort(rows);
+
+        int prev = -1;
+        for (int i = rows.count() - 1; i >= 0; i -= 1) {
+            int current = rows[i];
+            if (current != prev) {
+                qDebug() << "row deleted from work experience table " << current << " data :" << ui->tableWidgetWorkEx->item(current, WORK_EX_PK)->text().toStdString().c_str();
+                ui->tableWidgetWorkEx->removeRow(current);
+                prev = current;
+            }
+        }
+    }
+    else
+    {
+        return;
+    }
 }
 
 void MainWindow::addNewCollegeClicked()
 {
+    if (sender()->objectName() == "pushButtonAddEducation")
+    {
+        educationDetails educationWindow("Add");
+        educationWindow.setWindowTitle("Enter Education Details");
 
+        educationWindow.setCollegeName("");
+        educationWindow.setFromDate("");
+        educationWindow.setToDate("");
+        educationWindow.setField("");
+        educationWindow.setCurrentCollege(0);
+        educationWindow.setGPA("");
+
+        int res = educationWindow.exec();
+        if (res == QDialog::Rejected)
+            return;
+
+        ui->tableWidgetEducation->insertRow( ui->tableWidgetEducation->rowCount());
+        ui->tableWidgetEducation->setItem( ui->tableWidgetEducation->rowCount() - 1, EDU_PK, new QTableWidgetItem((QString::number(-1))));
+        ui->tableWidgetEducation->setItem( ui->tableWidgetEducation->rowCount() - 1, COLLEGE_NAME, new QTableWidgetItem((educationWindow.getCollegeName())));
+        ui->tableWidgetEducation->setItem( ui->tableWidgetEducation->rowCount() - 1, FROM_DATE_C, new QTableWidgetItem((educationWindow.getFromDate())));
+        ui->tableWidgetEducation->setItem( ui->tableWidgetEducation->rowCount() - 1, TO_DATE_C, new QTableWidgetItem((educationWindow.getToDate())));
+        if(educationWindow.getCurrentCollege())
+            ui->tableWidgetEducation->setItem( ui->tableWidgetEducation->rowCount() - 1, IS_CURR_C, new QTableWidgetItem(("Yes")));
+        else
+            ui->tableWidgetEducation->setItem( ui->tableWidgetEducation->rowCount() - 1, IS_CURR_C, new QTableWidgetItem(("No")));
+
+        ui->tableWidgetEducation->setItem( ui->tableWidgetEducation->rowCount() - 1, FIELD, new QTableWidgetItem((educationWindow.getField())));
+        ui->tableWidgetEducation->setItem( ui->tableWidgetEducation->rowCount() - 1, GPA, new QTableWidgetItem((educationWindow.getGPA())));
+
+        for (int count = 0; count <  ui->tableWidgetEducation->columnCount(); count++)
+        {
+            if ( ui->tableWidgetEducation->item( ui->tableWidgetEducation->rowCount() -1, count))
+                ui->tableWidgetEducation->item( ui->tableWidgetEducation->rowCount()-1 , count)->setBackgroundColor(QColor(255, 170, 127));
+        }
+
+        ui->tableWidgetEducation->scrollToBottom();
+    }
+
+    if (sender()->objectName() == "pushButtonEditEducation")
+    {
+        if (ui->tableWidgetEducation->selectedItems().size() <= 0)
+        {
+            QMessageBox::warning(NULL, tr("Edit Education details"), tr("Select a row to edit."));
+            return;
+        }
+        int row = ui->tableWidgetEducation->selectedItems().at(0)->row();
+        if (row < 0)
+            return;
+
+        //EDU_PK,COLLEGE_NAME,FROM_DATE_W,TO_DATE_W,IS_CURR_W,FIELD,GPA
+        educationDetails educationWindow("Edit");
+        educationWindow.setWindowTitle("Edit Education details for row:" + QString::number(ui->tableWidgetEducation->currentRow() + 1));
+
+        if (ui->tableWidgetEducation->item(row, COLLEGE_NAME))
+            educationWindow.setCollegeName( ui->tableWidgetEducation->item(row, COLLEGE_NAME)->text());
+
+        if (ui->tableWidgetEducation->item(row, FROM_DATE_C))
+            educationWindow.setFromDate( ui->tableWidgetEducation->item(row, FROM_DATE_C)->text());
+
+        if (ui->tableWidgetEducation->item(row, TO_DATE_C))
+            educationWindow.setToDate( ui->tableWidgetEducation->item(row, TO_DATE_C)->text());
+
+        if (ui->tableWidgetEducation->item(row, IS_CURR_C))
+            educationWindow.setCurrentCollege( ui->tableWidgetEducation->item(row, IS_CURR_C)->text().toInt());
+
+        if (ui->tableWidgetEducation->item(row, FIELD))
+            educationWindow.setField( ui->tableWidgetEducation->item(row, FIELD)->text());
+
+        if (ui->tableWidgetEducation->item(row, GPA))
+            educationWindow.setGPA( ui->tableWidgetEducation->item(row, GPA)->text());
+
+        int res = educationWindow.exec();
+        if (res == QDialog::Rejected)
+            return;
+
+        ui->tableWidgetEducation->setItem(row, EDU_PK, new QTableWidgetItem((QString::number(-1))));
+        ui->tableWidgetEducation->setItem( row, COLLEGE_NAME, new QTableWidgetItem((educationWindow.getCollegeName())));
+        ui->tableWidgetEducation->setItem( row, FROM_DATE_C, new QTableWidgetItem((educationWindow.getFromDate())));
+        ui->tableWidgetEducation->setItem( row, TO_DATE_C, new QTableWidgetItem((educationWindow.getToDate())));
+        if(educationWindow.getCurrentCollege())
+            ui->tableWidgetEducation->setItem(row, IS_CURR_C, new QTableWidgetItem(("Yes")));
+        else
+            ui->tableWidgetEducation->setItem( row, IS_CURR_C, new QTableWidgetItem(("No")));
+
+        ui->tableWidgetEducation->setItem( row, FIELD, new QTableWidgetItem((educationWindow.getField())));
+        ui->tableWidgetEducation->setItem( row, GPA, new QTableWidgetItem((educationWindow.getGPA())));
+
+        for (int count = 0; count <ui->tableWidgetEducation->columnCount(); count++)
+        {
+            if (ui->tableWidgetEducation->item(row, count))
+                ui->tableWidgetEducation->item(row, count)->setBackgroundColor(QColor(255, 170, 127));
+        }
+    }
 }
 
 void MainWindow::deleteCollegeOnDeleteClicked()
+{
+    QString msg = "";
+    if (ui->tableWidgetEducation->selectedItems().size() <= 0)
+    {
+        QMessageBox::warning(NULL, tr("Delete College"), tr("Select a College information to be deleted"));
+        return;
+    }
+
+    QMessageBox::StandardButton reply;
+    //QString msg = "Are you sure, you want to delete this row?";
+    reply = QMessageBox::question(this, "Delete Row Table", msg + "\nDo you want to continue?",
+                                  QMessageBox::Yes | QMessageBox::No);
+
+    if (reply == QMessageBox::Yes)
+    {
+        QModelIndexList indexList = ui->tableWidgetEducation->selectionModel()->selectedRows();
+
+        QList<int> rows;
+        for (auto listIndex : indexList)
+            rows.append(listIndex.row());
+
+        qSort(rows);
+
+        int prev = -1;
+        for (int i = rows.count() - 1; i >= 0; i -= 1) {
+            int current = rows[i];
+            if (current != prev) {
+                qDebug() << "row deleted from education table " << current << " data :" << ui->tableWidgetEducation->item(current, WORK_EX_PK)->text().toStdString().c_str();
+                ui->tableWidgetEducation->removeRow(current);
+                prev = current;
+            }
+        }
+    }
+    else
+    {
+        return;
+    }
+}
+
+void MainWindow::saveResumeDetailsInDB()
 {
 
 }
