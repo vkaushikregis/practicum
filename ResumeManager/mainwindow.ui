@@ -57,6 +57,12 @@
     </item>
     <item row="0" column="1" rowspan="4">
      <widget class="QTabWidget" name="tabWidgetMain">
+      <property name="font">
+       <font>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
       <property name="whatsThis">
        <string/>
       </property>
@@ -64,7 +70,7 @@
        <string notr="true">background-color: rgb(252, 255, 237);</string>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="tab">
        <attribute name="title">
@@ -125,6 +131,12 @@
                  </item>
                  <item>
                   <widget class="QLineEdit" name="firstNameLineEdit">
+                   <property name="minimumSize">
+                    <size>
+                     <width>55</width>
+                     <height>0</height>
+                    </size>
+                   </property>
                    <property name="font">
                     <font>
                      <kerning>false</kerning>
@@ -157,6 +169,12 @@
                  </item>
                  <item>
                   <widget class="QLineEdit" name="lastNameLineEdit">
+                   <property name="minimumSize">
+                    <size>
+                     <width>55</width>
+                     <height>0</height>
+                    </size>
+                   </property>
                    <property name="toolTip">
                     <string>First Name</string>
                    </property>
@@ -201,6 +219,12 @@
                  </item>
                  <item>
                   <widget class="QLineEdit" name="addressLineEdit">
+                   <property name="minimumSize">
+                    <size>
+                     <width>55</width>
+                     <height>0</height>
+                    </size>
+                   </property>
                    <property name="toolTip">
                     <string>First Name</string>
                    </property>
@@ -353,24 +377,6 @@
                 </layout>
                </item>
               </layout>
-              <zorder>mobileLineEdit</zorder>
-              <zorder>lastNameLineEdit</zorder>
-              <zorder>firstNameLineEdit</zorder>
-              <zorder>label_7</zorder>
-              <zorder>cityLineEdit</zorder>
-              <zorder>label_2</zorder>
-              <zorder>label_5</zorder>
-              <zorder>label_8</zorder>
-              <zorder>stateLineEdit</zorder>
-              <zorder>zipLineEdit</zorder>
-              <zorder>label_3</zorder>
-              <zorder>label_4</zorder>
-              <zorder>label_6</zorder>
-              <zorder>addressLineEdit</zorder>
-              <zorder>label</zorder>
-              <zorder>emailLineEdit</zorder>
-              <zorder>label</zorder>
-              <zorder>horizontalSpacer_2</zorder>
              </widget>
             </item>
            </layout>
@@ -492,7 +498,85 @@
                   </layout>
                  </item>
                  <item>
-                  <widget class="QTableWidget" name="tableWidgetWorkEx"/>
+                  <widget class="QTableWidget" name="tableWidgetWorkEx">
+                   <column>
+                    <property name="text">
+                     <string>Work Ex PK</string>
+                    </property>
+                    <property name="font">
+                     <font>
+                      <weight>75</weight>
+                      <bold>true</bold>
+                     </font>
+                    </property>
+                   </column>
+                   <column>
+                    <property name="text">
+                     <string>Company Name</string>
+                    </property>
+                    <property name="font">
+                     <font>
+                      <weight>75</weight>
+                      <bold>true</bold>
+                     </font>
+                    </property>
+                   </column>
+                   <column>
+                    <property name="text">
+                     <string>From Date</string>
+                    </property>
+                    <property name="font">
+                     <font>
+                      <weight>75</weight>
+                      <bold>true</bold>
+                     </font>
+                    </property>
+                   </column>
+                   <column>
+                    <property name="text">
+                     <string>To Date</string>
+                    </property>
+                    <property name="font">
+                     <font>
+                      <weight>75</weight>
+                      <bold>true</bold>
+                     </font>
+                    </property>
+                   </column>
+                   <column>
+                    <property name="text">
+                     <string>Current Company</string>
+                    </property>
+                    <property name="font">
+                     <font>
+                      <weight>75</weight>
+                      <bold>true</bold>
+                     </font>
+                    </property>
+                   </column>
+                   <column>
+                    <property name="text">
+                     <string>Title</string>
+                    </property>
+                    <property name="font">
+                     <font>
+                      <weight>75</weight>
+                      <bold>true</bold>
+                     </font>
+                    </property>
+                   </column>
+                   <column>
+                    <property name="text">
+                     <string>Job Description</string>
+                    </property>
+                    <property name="font">
+                     <font>
+                      <weight>75</weight>
+                      <bold>true</bold>
+                     </font>
+                    </property>
+                   </column>
+                  </widget>
                  </item>
                 </layout>
                </item>
@@ -624,7 +708,85 @@
               </layout>
              </item>
              <item>
-              <widget class="QTableWidget" name="tableWidgetEducation"/>
+              <widget class="QTableWidget" name="tableWidgetEducation">
+               <column>
+                <property name="text">
+                 <string>education_pk</string>
+                </property>
+                <property name="font">
+                 <font>
+                  <weight>75</weight>
+                  <bold>true</bold>
+                 </font>
+                </property>
+               </column>
+               <column>
+                <property name="text">
+                 <string>College Name</string>
+                </property>
+                <property name="font">
+                 <font>
+                  <weight>75</weight>
+                  <bold>true</bold>
+                 </font>
+                </property>
+               </column>
+               <column>
+                <property name="text">
+                 <string>From Date</string>
+                </property>
+                <property name="font">
+                 <font>
+                  <weight>75</weight>
+                  <bold>true</bold>
+                 </font>
+                </property>
+               </column>
+               <column>
+                <property name="text">
+                 <string>To Date</string>
+                </property>
+                <property name="font">
+                 <font>
+                  <weight>75</weight>
+                  <bold>true</bold>
+                 </font>
+                </property>
+               </column>
+               <column>
+                <property name="text">
+                 <string>Is_current</string>
+                </property>
+                <property name="font">
+                 <font>
+                  <weight>75</weight>
+                  <bold>true</bold>
+                 </font>
+                </property>
+               </column>
+               <column>
+                <property name="text">
+                 <string>Field</string>
+                </property>
+                <property name="font">
+                 <font>
+                  <weight>75</weight>
+                  <bold>true</bold>
+                 </font>
+                </property>
+               </column>
+               <column>
+                <property name="text">
+                 <string>GPA</string>
+                </property>
+                <property name="font">
+                 <font>
+                  <weight>75</weight>
+                  <bold>true</bold>
+                 </font>
+                </property>
+               </column>
+              </widget>
              </item>
             </layout>
            </item>
@@ -718,17 +880,46 @@
         </property>
         <column>
          <property name="text">
+          <string>Tech_skills_pk</string>
+         </property>
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+        </column>
+        <column>
+         <property name="text">
           <string>Technical Skill</string>
+         </property>
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
          </property>
         </column>
         <column>
          <property name="text">
           <string>Proficiency</string>
          </property>
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
         </column>
         <column>
          <property name="text">
           <string>Years/Used</string>
+         </property>
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
          </property>
         </column>
        </widget>
@@ -784,7 +975,7 @@
         <property name="geometry">
          <rect>
           <x>670</x>
-          <y>220</y>
+          <y>260</y>
           <width>93</width>
           <height>28</height>
          </rect>
@@ -794,6 +985,22 @@
         </property>
         <property name="text">
          <string>Delete</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="pushButtonEditSkill">
+        <property name="geometry">
+         <rect>
+          <x>670</x>
+          <y>220</y>
+          <width>93</width>
+          <height>28</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color: rgb(159, 255, 144);</string>
+        </property>
+        <property name="text">
+         <string>EDIT</string>
         </property>
        </widget>
       </widget>

@@ -1,0 +1,7 @@
+
+ResumeManager/release/databasecommunicator.obj
+ResumeManager/release/educationdetails.obj
+*.obj
+*.obj
+ResumeManager/release/mainwindow.obj
+ResumeManager/release/moc_mainwindow.obj

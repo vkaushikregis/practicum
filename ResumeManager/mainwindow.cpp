@@ -15,6 +15,7 @@
 #include "globalproductdata.h"
 #include "workexperiencedetails.h"
 #include "educationdetails.h"
+#include "technicalskills.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -37,10 +38,6 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->pushButtonAdditionalSkils,SIGNAL(clicked(bool)),this,SLOT(setTabWidgetIndex()));
     connect(ui->pushButtonBackSkills,SIGNAL(clicked(bool)),this,SLOT(setTabWidgetIndex()));
 
-    //adding/deleting skill's table rows
-    connect(ui->pushButtonAddSkill,SIGNAL(clicked(bool)),this,SLOT(addDeleteSkills()));
-    connect(ui->pushButtonDeleteSkill,SIGNAL(clicked(bool)),this,SLOT(addDeleteSkills()));
-
     //validate first tab inputs
      connect(ui->pushButtonWorkEx,SIGNAL(clicked(bool)),this,SLOT(validateFirstTabInputs()));
      connect(ui->pushButtonEducation,SIGNAL(clicked(bool)),this,SLOT(validateSecondTabInputs()));
@@ -52,10 +49,15 @@ MainWindow::MainWindow(QWidget *parent) :
      connect(ui->pushButtonEditWorkEx, SIGNAL(clicked()),this, SLOT(addNewWorkExClicked()));
      connect(ui->pushButtonDeleteWorkEx, SIGNAL(clicked()),this, SLOT(deleteWorkExOnDeleteClicked()));
 
-     //open ediot widnows for Work experience
+     //open ediot widnows for Education
      connect(ui->pushButtonAddEducation, SIGNAL(clicked()),this, SLOT(addNewCollegeClicked()));
      connect(ui->pushButtonEditEducation, SIGNAL(clicked()),this, SLOT(addNewCollegeClicked()));
      connect(ui->pushButtonDeleteEducation, SIGNAL(clicked()),this, SLOT(deleteCollegeOnDeleteClicked()));
+
+     //open ediot widnows for Tech skills
+     connect(ui->pushButtonAddSkill, SIGNAL(clicked()),this, SLOT(addNewTechSkillsClicked()));
+     connect(ui->pushButtonEditSkill, SIGNAL(clicked()),this, SLOT(addNewTechSkillsClicked()));
+     connect(ui->pushButtonDeleteSkill, SIGNAL(clicked()),this, SLOT(deleteTechSkillsDeleteClicked()));
 
      ui->tableWidgetWorkEx->setSelectionBehavior(QAbstractItemView::SelectRows);
      ui->tableWidgetWorkEx->setSelectionMode(QAbstractItemView::SelectionMode::SingleSelection);
@@ -118,6 +120,8 @@ void MainWindow::getSelectedResumeDataFromDB()
             qDebug()<<"first name:" << mResumeManagerBaseObj.mPersonalDetails.mFirst_name.c_str();
         }
     }
+
+    //once the data is received , fill the widgets from database
 }
 
 ResumeNames MainWindow::findResumePK()
@@ -160,90 +164,174 @@ void MainWindow::setTabWidgetIndex()
         ui->tabWidgetMain->setCurrentIndex(3);
 }
 
-void MainWindow::addDeleteSkills()
+
+bool MainWindow::validatePersonalDetailsAndAddress()
 {
-    if ((sender()->objectName() == "pushButtonAddSkill"))
-    {
-        ui->tableWidgetSkills->setSelectionBehavior(QAbstractItemView::SelectRows);
-        int currentRow = ui->tableWidgetSkills->rowCount();
-        ui->tableWidgetSkills->setRowCount(currentRow + 1);
-
-        QHeaderView* header = ui->tableWidgetSkills->horizontalHeader();
-        header->setSectionResizeMode(QHeaderView::Stretch);
-
-        QHeaderView* vheader = ui->tableWidgetSkills->verticalHeader();
-        vheader->setSectionResizeMode(QHeaderView::Stretch);
-
-        std::stringstream temp;
-        temp << currentRow;
-        std::string label = "DEV" + temp.str();
-        ui->tableWidgetSkills->setItem(currentRow, 0, new QTableWidgetItem(""));
-        ui->tableWidgetSkills->setItem(currentRow, 1, new QTableWidgetItem(""));
-        ui->tableWidgetSkills->setItem(currentRow, 2, new QTableWidgetItem(""));
-        ui->tableWidgetSkills->update();
-    }
-
-    else if((sender()->objectName() == "pushButtonDeleteSkill"))
-    {
-        if(ui->tableWidgetSkills->selectedItems().size()<=0)
-        {
-            QMessageBox::critical(NULL, tr("Skills Table"), tr("Select a skill row to delete"));
-            return;
-        }
-
-        int row = ui->tableWidgetSkills->selectedItems().at(0)->row();
-        ui->tableWidgetSkills->removeRow(row);
-    }
-}
-void MainWindow::validateFirstTabInputs()
-{
-
     if(ui->firstNameLineEdit->text().toStdString().empty())
     {
         QMessageBox::critical(NULL, tr("Personal Details"), tr("First Name is not filled, it is a mandatory field"));
-        return;
+        return false;
     }
     else if (ui->lastNameLineEdit->text().toStdString().empty())
     {
         QMessageBox::critical(NULL, tr("Personal Details"), tr("Last Name is not filled, it is a mandatory field"));
-        return;
+        return false;
     }
     else if (ui->addressLineEdit->text().toStdString().empty())
     {
         QMessageBox::critical(NULL, tr("Personal Details"), tr("Address is not filled, it is a mandatory field"));
-        return;
+        return false;
     }
     else if (ui->cityLineEdit->text().toStdString().empty())
     {
         QMessageBox::critical(NULL, tr("Personal Details"), tr("City is not filled, it is a mandatory field"));
-        return;
+        return false;
     }
     else if (ui->stateLineEdit->text().toStdString().empty())
     {
         QMessageBox::critical(NULL, tr("Personal Details"), tr("State is not filled, it is a mandatory field"));
-        return;
+        return false;
     }
     else if (ui->zipLineEdit->text().toStdString().empty())
     {
         QMessageBox::critical(NULL, tr("Personal Details"), tr("Zip is not filled, it is a mandatory field"));
-        return;
+        return false;
     }
     else if (ui->mobileLineEdit->text().toStdString().empty())
     {
         QMessageBox::critical(NULL, tr("Personal Details"), tr("Mobile is not filled, it is a mandatory field"));
-        return;
+        return false;
     }
     else if (ui->emailLineEdit->text().toStdString().empty())
     {
         QMessageBox::critical(NULL, tr("Personal Details"), tr("Email is not filled, it is a mandatory field"));
-        return;
+        return false;
     }
-    setTabWidgetIndex();
+
+    return true;
+}
+
+void MainWindow::validateFirstTabInputs()
+{
+    if(validatePersonalDetailsAndAddress())
+        setTabWidgetIndex();
+    else
+        return;
 }
 
 void MainWindow::validateSecondTabInputs()
 {
     setTabWidgetIndex();
+}
+void MainWindow::addNewTechSkillsClicked()
+{
+    if (sender()->objectName() == "pushButtonAddSkill")
+    {
+        technicalSkills techSkillsWindow("Add");
+        techSkillsWindow.setWindowTitle("Enter Technical Skills");
+
+        techSkillsWindow.setSkillName("");
+        techSkillsWindow.setProficieny("");
+        techSkillsWindow.setYearsUsed(0);
+
+        int res = techSkillsWindow.exec();
+        if (res == QDialog::Rejected)
+            return;
+
+        ui->tableWidgetSkills->insertRow( ui->tableWidgetSkills->rowCount());
+        ui->tableWidgetSkills->setItem( ui->tableWidgetSkills->rowCount() - 1, TECH_PK, new QTableWidgetItem((QString::number(-1))));
+        ui->tableWidgetSkills->setItem( ui->tableWidgetSkills->rowCount() - 1, SKILL_NAME, new QTableWidgetItem((techSkillsWindow.getSkillName())));
+        ui->tableWidgetSkills->setItem( ui->tableWidgetSkills->rowCount() - 1, PROFICIENCY, new QTableWidgetItem((techSkillsWindow.getProficieny())));
+        ui->tableWidgetSkills->setItem( ui->tableWidgetSkills->rowCount() - 1, YEARS_USED, new QTableWidgetItem((techSkillsWindow.getYearsUsed())));
+
+        for (int count = 0; count <  ui->tableWidgetSkills->columnCount(); count++)
+        {
+            if ( ui->tableWidgetSkills->item( ui->tableWidgetSkills->rowCount() -1, count))
+                ui->tableWidgetSkills->item( ui->tableWidgetSkills->rowCount()-1 , count)->setBackgroundColor(QColor(255, 170, 127));
+        }
+
+        ui->tableWidgetSkills->scrollToBottom();
+    }
+
+    if (sender()->objectName() == "pushButtonEditSkill")
+    {
+        if (ui->tableWidgetSkills->selectedItems().size() <= 0)
+        {
+            QMessageBox::warning(NULL, tr("Edit Technical Skill"), tr("Select a row to edit."));
+            return;
+        }
+        int row = ui->tableWidgetSkills->selectedItems().at(0)->row();
+        if (row < 0)
+            return;
+
+         // TECH_PK,SKILL_NAME,PROFICIENCY,YEARS_USED
+        technicalSkills techSkillsWindow("Edit");
+        techSkillsWindow.setWindowTitle("Edit Technical Skill for row:" + QString::number(ui->tableWidgetSkills->currentRow() + 1));
+
+        if (ui->tableWidgetSkills->item(row, SKILL_NAME))
+            techSkillsWindow.setSkillName( ui->tableWidgetSkills->item(row, SKILL_NAME)->text());
+
+        if (ui->tableWidgetSkills->item(row, PROFICIENCY))
+            techSkillsWindow.setProficieny( ui->tableWidgetSkills->item(row, PROFICIENCY)->text());
+
+        if (ui->tableWidgetSkills->item(row, YEARS_USED))
+            techSkillsWindow.setYearsUsed( ui->tableWidgetSkills->item(row, YEARS_USED)->text().toInt());
+
+        int res = techSkillsWindow.exec();
+        if (res == QDialog::Rejected)
+            return;
+
+        ui->tableWidgetSkills->setItem(row, TECH_PK, new QTableWidgetItem((QString::number(-1))));
+        ui->tableWidgetSkills->setItem( row, SKILL_NAME, new QTableWidgetItem((techSkillsWindow.getSkillName())));
+        ui->tableWidgetSkills->setItem( row, PROFICIENCY, new QTableWidgetItem((techSkillsWindow.getProficieny())));
+        ui->tableWidgetSkills->setItem( row, YEARS_USED, new QTableWidgetItem((techSkillsWindow.getYearsUsed())));
+
+        for (int count = 0; count <ui->tableWidgetSkills->columnCount(); count++)
+        {
+            if (ui->tableWidgetSkills->item(row, count))
+                ui->tableWidgetSkills->item(row, count)->setBackgroundColor(QColor(255, 170, 127));
+        }
+    }
+}
+
+void MainWindow::deleteTechSkillsDeleteClicked()
+{
+    QString msg = "";
+    if (ui->tableWidgetSkills->selectedItems().size() <= 0)
+    {
+        QMessageBox::warning(NULL, tr("Delete Technical Skill"), tr("Select a job to be deleted"));
+        return;
+    }
+
+    QMessageBox::StandardButton reply;
+    //QString msg = "Are you sure, you want to delete this row?";
+    reply = QMessageBox::question(this, "Delete Row Table", msg + "\nDo you want to continue?",
+                                  QMessageBox::Yes | QMessageBox::No);
+
+    if (reply == QMessageBox::Yes)
+    {
+        QModelIndexList indexList = ui->tableWidgetSkills->selectionModel()->selectedRows();
+
+        QList<int> rows;
+        for (auto listIndex : indexList)
+            rows.append(listIndex.row());
+
+        qSort(rows);
+
+        int prev = -1;
+        for (int i = rows.count() - 1; i >= 0; i -= 1) {
+            int current = rows[i];
+            if (current != prev) {
+                qDebug() << "row deleted from work experience table " << current << " data :" << ui->tableWidgetSkills->item(current, TECH_PK)->text().toStdString().c_str();
+                ui->tableWidgetSkills->removeRow(current);
+                prev = current;
+            }
+        }
+    }
+    else
+    {
+        return;
+    }
 }
 
 void MainWindow::addNewWorkExClicked()
@@ -527,8 +615,109 @@ void MainWindow::deleteCollegeOnDeleteClicked()
 
 void MainWindow::saveResumeDetailsInDB()
 {
+    if(validatePersonalDetailsAndAddress())
+    {
+        //filling personal details first
+        mResumeManagerBaseObj.mPersonalDetails.mFirst_name = ui->firstNameLineEdit->text().toStdString();
+        mResumeManagerBaseObj.mPersonalDetails.mLast_name = ui->lastNameLineEdit->text().toStdString();
+        mResumeManagerBaseObj.mPersonalDetails.mMobile = ui->mobileLineEdit->text().toInt();
+        mResumeManagerBaseObj.mPersonalDetails.mEmail = ui->emailLineEdit->text().toStdString();
 
+        //filling address details
+        mResumeManagerBaseObj.mAddress.mStreet_address = ui->addressLineEdit->text().toStdString();
+        mResumeManagerBaseObj.mAddress.mCity = ui->cityLineEdit->text().toStdString();
+        mResumeManagerBaseObj.mAddress.mState = ui->stateLineEdit->text().toStdString();
+        mResumeManagerBaseObj.mAddress.mZip = ui->zipLineEdit->text().toInt();
+
+        //filling Education details
+        std::vector<EducationDetails> tempEducationDetailsList;
+        fillEducationDetailsList(tempEducationDetailsList);
+        mResumeManagerBaseObj.mEducationDetailsList = tempEducationDetailsList;
+
+        //filling Work experience details
+        std::vector<WorkExperience> tempWorkExList;
+        fillWorkExDetailsList(tempWorkExList);
+        mResumeManagerBaseObj.mWorkExList = tempWorkExList;
+
+        //filling the technical details
+        std::vector<TechnicalSkills> tempTechSkillsList;
+        fillTechSkillsList(tempTechSkillsList);
+        mResumeManagerBaseObj.mTechSkillsList = tempTechSkillsList;
+
+        std::string message;
+        DatabaseCommunicator::Instance()->saveResumeInformationInDB(mResumeManagerBaseObj,message);
+
+    }
 }
+void MainWindow::fillEducationDetailsList(std::vector<EducationDetails> &tempEducationDetailsList)
+{
+    for (int rowNum = 0; rowNum < ui->tableWidgetEducation->rowCount(); rowNum++)
+    {
+        EducationDetails obj;
+        obj.mCollege_name = ui->tableWidgetEducation->item(rowNum, COLLEGE_NAME)->text().toStdString();
+        obj.mFrom_date = ui->tableWidgetEducation->item(rowNum, FROM_DATE_C)->text().toStdString();
+        obj.mTo_date = ui->tableWidgetEducation->item(rowNum, TO_DATE_C)->text().toStdString();
+
+        if (ui->tableWidgetEducation->item(rowNum, IS_CURR_C))
+        {
+            if(ui->tableWidgetEducation->item(rowNum, IS_CURR_C)->text() == "Yes")
+            {
+               obj.mStill_pursuing = 1;
+            }
+            else
+                obj.mStill_pursuing =0;
+        }
+
+        if (ui->tableWidgetEducation->item(rowNum, FIELD))
+            obj.mField = ui->tableWidgetEducation->item(rowNum, FIELD)->text().toStdString();
+
+        if (ui->tableWidgetEducation->item(rowNum, GPA))
+            obj.mGPA = ui->tableWidgetEducation->item(rowNum, GPA)->text().toInt();
+
+        tempEducationDetailsList.push_back(obj);
+    }
+}
+void MainWindow::fillWorkExDetailsList(std::vector<WorkExperience> &tempWorkExList)
+{
+    for (int rowNum = 0; rowNum < ui->tableWidgetWorkEx->rowCount(); rowNum++)
+    {
+        WorkExperience obj;
+        obj.mCompany_name = ui->tableWidgetWorkEx->item(rowNum, COMPANY_NAME)->text().toStdString();
+        obj.mFrom_date = ui->tableWidgetWorkEx->item(rowNum, FROM_DATE_W)->text().toStdString();
+        obj.mTo_date = ui->tableWidgetWorkEx->item(rowNum, TO_DATE_W)->text().toStdString();
+
+        if (ui->tableWidgetWorkEx->item(rowNum, IS_CURR_W))
+        {
+            if(ui->tableWidgetWorkEx->item(rowNum, IS_CURR_W)->text() == "Yes")
+            {
+               obj.mCurrent = 1;
+            }
+            else
+                obj.mCurrent =0;
+        }
+
+        if (ui->tableWidgetWorkEx->item(rowNum, TITLE))
+            obj.mTitle = ui->tableWidgetWorkEx->item(rowNum, TITLE)->text().toStdString();
+
+        if (ui->tableWidgetWorkEx->item(rowNum, JD))
+            obj.mJob_description = ui->tableWidgetWorkEx->item(rowNum, JD)->text().toInt();
+
+        tempWorkExList.push_back(obj);
+    }
+}
+ void MainWindow::fillTechSkillsList(std::vector<TechnicalSkills> &tempTechSkillsList)
+ {
+     for (int rowNum = 0; rowNum < ui->tableWidgetSkills->rowCount(); rowNum++)
+     {
+         // TECH_PK,SKILL_NAME,PROFICIENCY,YEARS_USED
+         TechnicalSkills obj;
+         obj.mSkill_name = ui->tableWidgetSkills->item(rowNum, SKILL_NAME)->text().toStdString();
+         obj.mProficiency = ui->tableWidgetSkills->item(rowNum, PROFICIENCY)->text().toStdString();
+         obj.mYears_used = ui->tableWidgetSkills->item(rowNum, YEARS_USED)->text().toInt();
+
+         tempTechSkillsList.push_back(obj);
+     }
+ }
 
 void MainWindow::exportAsPDF()
 {

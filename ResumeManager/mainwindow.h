@@ -25,11 +25,14 @@ private:
 
     void connectToDatabase();
     void displayExistingResumesInDB();
+    bool validatePersonalDetailsAndAddress();
     ResumeNames findResumePK();
+    void fillWorkExDetailsList(std::vector<WorkExperience> &tempWorkExList);
+    void fillEducationDetailsList(std::vector<EducationDetails> &tempEducationDetailsList);
+    void fillTechSkillsList(std::vector<TechnicalSkills> &tempTechSkillsList);
 
 private slots:
-    void setTabWidgetIndex();
-    void addDeleteSkills();
+    void setTabWidgetIndex();    
     void validateFirstTabInputs();
     void validateSecondTabInputs();
     void exportAsPDF();
@@ -38,6 +41,8 @@ private slots:
     void deleteWorkExOnDeleteClicked();
     void addNewCollegeClicked();
     void deleteCollegeOnDeleteClicked();
+    void addNewTechSkillsClicked();
+    void deleteTechSkillsDeleteClicked();
     void saveResumeDetailsInDB();
 };
 

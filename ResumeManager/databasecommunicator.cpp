@@ -158,7 +158,7 @@ bool DatabaseCommunicator::getExistingResumesFromDB(std::string &msg)
        if(db.open())
        {
            QSqlQuery query;
-           QString preparedStmt = "SELECT work_ex_pk,company_name,from_date,to_date,job_description,currently_pursuing,resume_name_fk FROM resumemanager.work_experience where resume_name_fk =" + QString::number(resume_fk);
+           QString preparedStmt = "SELECT work_ex_pk,company_name,from_date,to_date,job_description,currently_pursuing,title,resume_name_fk FROM resumemanager.work_experience where resume_name_fk =" + QString::number(resume_fk);
            query.exec(preparedStmt);
            if(!query.exec())
            {
@@ -174,7 +174,8 @@ bool DatabaseCommunicator::getExistingResumesFromDB(std::string &msg)
                workObj.mTo_date = query.value(3).toString().toStdString();
                workObj.mJob_description = query.value(4).toInt();
                workObj.mCurrent = query.value(5).toInt();
-               workObj.mResume_fk = query.value(6).toInt();
+               workObj.mTitle = query.value(6).toString().toStdString();
+               workObj.mResume_fk = query.value(7).toInt();
 
                resuObj.mWorkExList.push_back(workObj);
            }
@@ -210,24 +211,81 @@ bool DatabaseCommunicator::getExistingResumesFromDB(std::string &msg)
       return true;
    }
 
-   bool DatabaseCommunicator::insertResumeInformationInDB(const ResumeManagerBase &resuObj,std::string &msg)
+   bool DatabaseCommunicator::saveResumeInformationInDB(const ResumeManagerBase &resuObj,std::string &msg)
    {
        db.transaction(); // Starts a transaction
 
        QSqlQuery q;
 
-       // first insert
-       q.prepare("INSERT INTO table_name VALUES(:some_column_name)");
-       q.bindValue(":some_column_name", "FooBar");
+       // first insert into Resumename table and return the primary key
+       q.prepare("INSERT INTO resumename VALUES(:resume_name_val)");
+       q.bindValue(":resume_name_val", QString::fromUtf8(resuObj.mResume_name.c_str()));
        q.exec();
 
-       int pk = q.lastInsertId().toInt();
+       //IMPORTANT: check that every insert is a success otherwise rollback
 
-       // second insert
-       q.prepare("INSERT INTO other_table VALUES(:other_column_name, :fk)");
-       q.bindValue(":other_column_name", "OtherText");
-       q.bindValue(":fk", pk);
-       q.exec();
+
+       int resume_name_pk = q.lastInsertId().toInt();
+
+       // second insert into personal_details table
+       QSqlQuery qPer;
+       qPer.prepare("INSERT INTO personal_details VALUES(:first_name,:last_name,:mobile,:email,:resume_fk)");
+       qPer.bindValue(":first_name", QString::fromUtf8(resuObj.mPersonalDetails.mFirst_name.c_str()));
+       qPer.bindValue(":last_name",  QString::fromUtf8(resuObj.mPersonalDetails.mLast_name.c_str()));
+       qPer.bindValue(":mobile", resuObj.mPersonalDetails.mMobile);
+       qPer.bindValue(":email",  QString::fromUtf8(resuObj.mPersonalDetails.mEmail.c_str()));
+       qPer.bindValue(":resume_fk", resume_name_pk);
+       qPer.exec();
+
+
+       // third insert into address table
+       QSqlQuery qAdd;
+       qAdd.prepare("INSERT INTO address VALUES(:streetadress,:city,:state,:zip,:resume_fk)");
+       qAdd.bindValue(":streetadress",  QString::fromUtf8(resuObj.mAddress.mStreet_address.c_str()));
+       qAdd.bindValue(":city",  QString::fromUtf8(resuObj.mAddress.mCity.c_str()));
+       qAdd.bindValue(":state",  QString::fromUtf8(resuObj.mAddress.mState.c_str()));
+       qAdd.bindValue(":zip", resuObj.mAddress.mZip);
+       qAdd.bindValue(":resume_fk", resume_name_pk);
+       qAdd.exec();
+
+       for(int count =0; count < resuObj.mWorkExList.size(); count++)
+       {
+           QSqlQuery q;
+           q.prepare("INSERT INTO work_experience VALUES(:company_name,:from_date,:to_date,:jd,:resume_fk,:current_job, :title)");
+           q.bindValue(":company_name",  QString::fromUtf8(resuObj.mWorkExList[count].mCompany_name.c_str()));
+           q.bindValue(":from_date",  QString::fromUtf8(resuObj.mWorkExList[count].mFrom_date.c_str()));
+           q.bindValue(":to_date",  QString::fromUtf8(resuObj.mWorkExList[count].mTo_date.c_str()));
+           q.bindValue(":jd",  QString::fromUtf8(resuObj.mWorkExList[count].mJob_description.c_str()));
+           q.bindValue(":resume_fk", resume_name_pk);
+           q.bindValue(":current_job", resuObj.mWorkExList[count].mCurrent);
+           q.bindValue(":title", QString::fromUtf8(resuObj.mWorkExList[count].mTitle.c_str()));
+           q.exec();
+       }
+
+       for(int count =0; count < resuObj.mEducationDetailsList.size(); count++)
+       {
+           QSqlQuery q;
+           q.prepare("INSERT INTO education_details VALUES(:college_name,:from_date,:to_date,:isCurrent,:field,:GPA,:resume_fk)");
+           q.bindValue(":college_name",  QString::fromUtf8(resuObj.mEducationDetailsList[count].mCollege_name.c_str()));
+           q.bindValue(":from_date",  QString::fromUtf8(resuObj.mEducationDetailsList[count].mFrom_date.c_str()));
+           q.bindValue(":to_date",  QString::fromUtf8(resuObj.mEducationDetailsList[count].mTo_date.c_str()));
+           q.bindValue(":isCurrent", resuObj.mEducationDetailsList[count].mStill_pursuing);
+           q.bindValue(":field",  QString::fromUtf8(resuObj.mEducationDetailsList[count].mField.c_str()));
+           q.bindValue(":GPA",  resuObj.mEducationDetailsList[count].mGPA);
+           q.bindValue(":resume_fk", resume_name_pk);
+           q.exec();
+       }
+
+       for(int count =0; count < resuObj.mTechSkillsList.size(); count++)
+       {
+           QSqlQuery q;
+           q.prepare("INSERT INTO technical_skilss VALUES(:skill_name,:proficiency,:years_used,:resume_fk)");
+           q.bindValue(":college_name",  QString::fromUtf8(resuObj.mTechSkillsList[count].mSkill_name.c_str()));
+           q.bindValue(":from_date",  QString::fromUtf8(resuObj.mTechSkillsList[count].mProficiency.c_str()));
+           q.bindValue(":to_date",  resuObj.mTechSkillsList[count].mYears_used);
+           q.bindValue(":resume_fk", resume_name_pk);
+           q.exec();
+       }
 
        db.commit(); // Commits transaction
 

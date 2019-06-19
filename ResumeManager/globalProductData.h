@@ -7,6 +7,20 @@
 #include <iostream>
 
 extern bool isDatabaseConnected;
+typedef enum
+    {
+        WORK_EX_PK,COMPANY_NAME,FROM_DATE_W,TO_DATE_W,IS_CURR_W,TITLE,JD
+    }WorkExTablecolumns;
+
+typedef enum
+    {
+        EDU_PK,COLLEGE_NAME,FROM_DATE_C,TO_DATE_C,IS_CURR_C,FIELD,GPA
+    }EducationTablecolumns;
+
+typedef enum
+    {
+        TECH_PK,SKILL_NAME,PROFICIENCY,YEARS_USED
+    }TechSkillsTablecolumns;
 
 struct TechnicalSkills
 {
@@ -24,6 +38,7 @@ struct WorkExperience
     std::string mFrom_date;
     std::string mTo_date;
     int mCurrent;
+    std::string mTitle;
     std::string mJob_description;
     long int mResume_fk;
 };
