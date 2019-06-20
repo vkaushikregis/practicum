@@ -30,11 +30,13 @@ private:
     void fillWorkExDetailsList(std::vector<WorkExperience> &tempWorkExList);
     void fillEducationDetailsList(std::vector<EducationDetails> &tempEducationDetailsList);
     void fillTechSkillsList(std::vector<TechnicalSkills> &tempTechSkillsList);
+    void fillProficiencyList();
 
 private slots:
     void setTabWidgetIndex();    
     void validateFirstTabInputs();
     void validateSecondTabInputs();
+    void browseSlot();
     void exportAsPDF();
     void getSelectedResumeDataFromDB();
     void addNewWorkExClicked();
@@ -44,6 +46,7 @@ private slots:
     void addNewTechSkillsClicked();
     void deleteTechSkillsDeleteClicked();
     void saveResumeDetailsInDB();
+    void filterReumeInListWidget();
 };
 
 #endif // MAINWINDOW_H

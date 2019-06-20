@@ -1,11 +1,13 @@
 #include "educationdetails.h"
 #include "ui_educationdetails.h"
 
-educationDetails::educationDetails(QDialog *parent) :
+educationDetails::educationDetails(std::string functionality,QDialog *parent) :
     QDialog(parent),
     ui(new Ui::educationDetails)
 {
     ui->setupUi(this);
+    connect(ui->pushButtonOK, SIGNAL(clicked()), this, SLOT(OnButtonAccepted()));
+    connect(ui->pushButtonCancel, SIGNAL(clicked()), this, SLOT(OnButtonRejected()));
 }
 
 educationDetails::~educationDetails()

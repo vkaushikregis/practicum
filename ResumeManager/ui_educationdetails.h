@@ -35,33 +35,33 @@ public:
     QGridLayout *gridLayout;
     QVBoxLayout *verticalLayout_5;
     QLabel *label_18;
-    QLineEdit *lineEdit_6;
+    QLineEdit *lineEditCollegeName;
     QVBoxLayout *verticalLayout_3;
     QLabel *label_19;
-    QLineEdit *lineEdit_8;
+    QLineEdit *lineEditFromDateCol;
     QHBoxLayout *horizontalLayout;
     QVBoxLayout *verticalLayout_4;
     QLabel *label_20;
-    QLineEdit *lineEdit_7;
-    QCheckBox *checkBox_2;
+    QLineEdit *lineEditToDateColl;
+    QCheckBox *checkBoxCurrPursuing;
     QVBoxLayout *verticalLayout_2;
     QLabel *label_21;
-    QLineEdit *lineEdit_9;
+    QLineEdit *lineEditCollegeField;
     QVBoxLayout *verticalLayout;
     QLabel *label_23;
-    QLineEdit *lineEdit_10;
+    QLineEdit *lineEditGPA;
     QGroupBox *groupBox_2;
     QGridLayout *gridLayout_2;
     QHBoxLayout *horizontalLayout_2;
     QSpacerItem *horizontalSpacer;
-    QPushButton *pushButton;
-    QPushButton *pushButton_2;
+    QPushButton *pushButtonOK;
+    QPushButton *pushButtonCancel;
 
     void setupUi(QWidget *educationDetails)
     {
         if (educationDetails->objectName().isEmpty())
             educationDetails->setObjectName(QStringLiteral("educationDetails"));
-        educationDetails->resize(948, 490);
+        educationDetails->resize(617, 338);
         gridLayout_3 = new QGridLayout(educationDetails);
         gridLayout_3->setObjectName(QStringLiteral("gridLayout_3"));
         groupBox = new QGroupBox(educationDetails);
@@ -72,13 +72,19 @@ public:
         verticalLayout_5->setObjectName(QStringLiteral("verticalLayout_5"));
         label_18 = new QLabel(groupBox);
         label_18->setObjectName(QStringLiteral("label_18"));
+        QFont font;
+        font.setPointSize(8);
+        font.setBold(true);
+        font.setWeight(75);
+        label_18->setFont(font);
 
         verticalLayout_5->addWidget(label_18);
 
-        lineEdit_6 = new QLineEdit(groupBox);
-        lineEdit_6->setObjectName(QStringLiteral("lineEdit_6"));
+        lineEditCollegeName = new QLineEdit(groupBox);
+        lineEditCollegeName->setObjectName(QStringLiteral("lineEditCollegeName"));
+        lineEditCollegeName->setMinimumSize(QSize(0, 30));
 
-        verticalLayout_5->addWidget(lineEdit_6);
+        verticalLayout_5->addWidget(lineEditCollegeName);
 
 
         gridLayout->addLayout(verticalLayout_5, 0, 0, 1, 2);
@@ -87,13 +93,15 @@ public:
         verticalLayout_3->setObjectName(QStringLiteral("verticalLayout_3"));
         label_19 = new QLabel(groupBox);
         label_19->setObjectName(QStringLiteral("label_19"));
+        label_19->setFont(font);
 
         verticalLayout_3->addWidget(label_19);
 
-        lineEdit_8 = new QLineEdit(groupBox);
-        lineEdit_8->setObjectName(QStringLiteral("lineEdit_8"));
+        lineEditFromDateCol = new QLineEdit(groupBox);
+        lineEditFromDateCol->setObjectName(QStringLiteral("lineEditFromDateCol"));
+        lineEditFromDateCol->setMinimumSize(QSize(0, 30));
 
-        verticalLayout_3->addWidget(lineEdit_8);
+        verticalLayout_3->addWidget(lineEditFromDateCol);
 
 
         gridLayout->addLayout(verticalLayout_3, 1, 0, 1, 1);
@@ -104,21 +112,24 @@ public:
         verticalLayout_4->setObjectName(QStringLiteral("verticalLayout_4"));
         label_20 = new QLabel(groupBox);
         label_20->setObjectName(QStringLiteral("label_20"));
+        label_20->setFont(font);
 
         verticalLayout_4->addWidget(label_20);
 
-        lineEdit_7 = new QLineEdit(groupBox);
-        lineEdit_7->setObjectName(QStringLiteral("lineEdit_7"));
+        lineEditToDateColl = new QLineEdit(groupBox);
+        lineEditToDateColl->setObjectName(QStringLiteral("lineEditToDateColl"));
+        lineEditToDateColl->setMinimumSize(QSize(0, 30));
 
-        verticalLayout_4->addWidget(lineEdit_7);
+        verticalLayout_4->addWidget(lineEditToDateColl);
 
 
         horizontalLayout->addLayout(verticalLayout_4);
 
-        checkBox_2 = new QCheckBox(groupBox);
-        checkBox_2->setObjectName(QStringLiteral("checkBox_2"));
+        checkBoxCurrPursuing = new QCheckBox(groupBox);
+        checkBoxCurrPursuing->setObjectName(QStringLiteral("checkBoxCurrPursuing"));
+        checkBoxCurrPursuing->setFont(font);
 
-        horizontalLayout->addWidget(checkBox_2);
+        horizontalLayout->addWidget(checkBoxCurrPursuing);
 
 
         gridLayout->addLayout(horizontalLayout, 1, 1, 1, 1);
@@ -127,13 +138,15 @@ public:
         verticalLayout_2->setObjectName(QStringLiteral("verticalLayout_2"));
         label_21 = new QLabel(groupBox);
         label_21->setObjectName(QStringLiteral("label_21"));
+        label_21->setFont(font);
 
         verticalLayout_2->addWidget(label_21);
 
-        lineEdit_9 = new QLineEdit(groupBox);
-        lineEdit_9->setObjectName(QStringLiteral("lineEdit_9"));
+        lineEditCollegeField = new QLineEdit(groupBox);
+        lineEditCollegeField->setObjectName(QStringLiteral("lineEditCollegeField"));
+        lineEditCollegeField->setMinimumSize(QSize(0, 30));
 
-        verticalLayout_2->addWidget(lineEdit_9);
+        verticalLayout_2->addWidget(lineEditCollegeField);
 
 
         gridLayout->addLayout(verticalLayout_2, 2, 0, 1, 2);
@@ -142,13 +155,15 @@ public:
         verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
         label_23 = new QLabel(groupBox);
         label_23->setObjectName(QStringLiteral("label_23"));
+        label_23->setFont(font);
 
         verticalLayout->addWidget(label_23);
 
-        lineEdit_10 = new QLineEdit(groupBox);
-        lineEdit_10->setObjectName(QStringLiteral("lineEdit_10"));
+        lineEditGPA = new QLineEdit(groupBox);
+        lineEditGPA->setObjectName(QStringLiteral("lineEditGPA"));
+        lineEditGPA->setMinimumSize(QSize(0, 30));
 
-        verticalLayout->addWidget(lineEdit_10);
+        verticalLayout->addWidget(lineEditGPA);
 
 
         gridLayout->addLayout(verticalLayout, 3, 0, 1, 1);
@@ -167,15 +182,15 @@ public:
 
         horizontalLayout_2->addItem(horizontalSpacer);
 
-        pushButton = new QPushButton(groupBox_2);
-        pushButton->setObjectName(QStringLiteral("pushButton"));
+        pushButtonOK = new QPushButton(groupBox_2);
+        pushButtonOK->setObjectName(QStringLiteral("pushButtonOK"));
 
-        horizontalLayout_2->addWidget(pushButton);
+        horizontalLayout_2->addWidget(pushButtonOK);
 
-        pushButton_2 = new QPushButton(groupBox_2);
-        pushButton_2->setObjectName(QStringLiteral("pushButton_2"));
+        pushButtonCancel = new QPushButton(groupBox_2);
+        pushButtonCancel->setObjectName(QStringLiteral("pushButtonCancel"));
 
-        horizontalLayout_2->addWidget(pushButton_2);
+        horizontalLayout_2->addWidget(pushButtonCancel);
 
 
         gridLayout_2->addLayout(horizontalLayout_2, 0, 0, 1, 1);
@@ -194,19 +209,19 @@ public:
         educationDetails->setWindowTitle(QApplication::translate("educationDetails", "Form", Q_NULLPTR));
         groupBox->setTitle(QString());
         label_18->setText(QApplication::translate("educationDetails", "University/College", Q_NULLPTR));
-        lineEdit_6->setPlaceholderText(QApplication::translate("educationDetails", "e.g. Regis University", Q_NULLPTR));
+        lineEditCollegeName->setPlaceholderText(QApplication::translate("educationDetails", "e.g. Regis University", Q_NULLPTR));
         label_19->setText(QApplication::translate("educationDetails", "From", Q_NULLPTR));
-        lineEdit_8->setPlaceholderText(QApplication::translate("educationDetails", "e.g. 01/01/2016", Q_NULLPTR));
+        lineEditFromDateCol->setPlaceholderText(QApplication::translate("educationDetails", "e.g. 01/01/2016", Q_NULLPTR));
         label_20->setText(QApplication::translate("educationDetails", "To", Q_NULLPTR));
-        lineEdit_7->setPlaceholderText(QApplication::translate("educationDetails", "e.g. 01/01/2018", Q_NULLPTR));
-        checkBox_2->setText(QApplication::translate("educationDetails", "Currently pursuing", Q_NULLPTR));
+        lineEditToDateColl->setPlaceholderText(QApplication::translate("educationDetails", "e.g. 01/01/2018", Q_NULLPTR));
+        checkBoxCurrPursuing->setText(QApplication::translate("educationDetails", "Currently pursuing", Q_NULLPTR));
         label_21->setText(QApplication::translate("educationDetails", "Major/Minor", Q_NULLPTR));
-        lineEdit_9->setPlaceholderText(QApplication::translate("educationDetails", "e.g : MS in Software Engineering", Q_NULLPTR));
+        lineEditCollegeField->setPlaceholderText(QApplication::translate("educationDetails", "e.g : MS in Software Engineering", Q_NULLPTR));
         label_23->setText(QApplication::translate("educationDetails", "GPA", Q_NULLPTR));
-        lineEdit_10->setPlaceholderText(QApplication::translate("educationDetails", "e.g. 3.8", Q_NULLPTR));
+        lineEditGPA->setPlaceholderText(QApplication::translate("educationDetails", "e.g. 3.8", Q_NULLPTR));
         groupBox_2->setTitle(QString());
-        pushButton->setText(QApplication::translate("educationDetails", "OK", Q_NULLPTR));
-        pushButton_2->setText(QApplication::translate("educationDetails", "CANCEL", Q_NULLPTR));
+        pushButtonOK->setText(QApplication::translate("educationDetails", "OK", Q_NULLPTR));
+        pushButtonCancel->setText(QApplication::translate("educationDetails", "CANCEL", Q_NULLPTR));
     } // retranslateUi
 
 };

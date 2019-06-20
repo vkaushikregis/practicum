@@ -12,7 +12,7 @@ class educationDetails : public QDialog
     Q_OBJECT
 
 public:
-    explicit educationDetails(QDialog *parent = 0);
+    explicit educationDetails(std::string functionality,QDialog *parent = 0);
     ~educationDetails();
 
     //getters

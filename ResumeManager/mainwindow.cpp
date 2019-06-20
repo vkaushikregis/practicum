@@ -16,6 +16,8 @@
 #include "workexperiencedetails.h"
 #include "educationdetails.h"
 #include "technicalskills.h"
+#include <windows.h>
+#include <shlobj.h>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -41,7 +43,7 @@ MainWindow::MainWindow(QWidget *parent) :
     //validate first tab inputs
      connect(ui->pushButtonWorkEx,SIGNAL(clicked(bool)),this,SLOT(validateFirstTabInputs()));
      connect(ui->pushButtonEducation,SIGNAL(clicked(bool)),this,SLOT(validateSecondTabInputs()));
-     connect(ui->pushButtonExportAsPDF,SIGNAL(clicked(bool)),this,SLOT(exportAsPDF()));
+
      connect(ui->listWidgetResumeNames, SIGNAL(itemSelectionChanged()), this, SLOT(getSelectedResumeDataFromDB()));
 
      //open ediot widnows for Work experience
@@ -65,15 +67,75 @@ MainWindow::MainWindow(QWidget *parent) :
      ui->tableWidgetEducation->setSelectionBehavior(QAbstractItemView::SelectRows);
      ui->tableWidgetEducation->setSelectionMode(QAbstractItemView::SelectionMode::SingleSelection);
 
+     ui->tableWidgetSkills->setSelectionBehavior(QAbstractItemView::SelectRows);
+     ui->tableWidgetSkills->setSelectionMode(QAbstractItemView::SelectionMode::SingleSelection);
+
      connect(ui->pushButtonSaveInDB,SIGNAL(clicked(bool)),this,SLOT(saveResumeDetailsInDB()));
 
+     connect(ui->lineEditSearchResume,SIGNAL(textChanged(QString)),this,SLOT(filterReumeInListWidget()));
+
+     connect(ui->pushButtonExportAsPDF,SIGNAL(clicked(bool)),this,SLOT(exportAsPDF()));
+     connect(ui->pushButtonBrowse, SIGNAL(clicked()), this, SLOT(browseSlot()));
+
      //connectToDatabase();
+     fillProficiencyList();
      displayExistingResumesInDB();
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::fillProficiencyList()
+{
+    gProficiencyLevelList.push_back("No Experience");
+    gProficiencyLevelList.push_back("Beginner");
+    gProficiencyLevelList.push_back("Intermediate");
+    gProficiencyLevelList.push_back("Expert");
+}
+
+void MainWindow::filterReumeInListWidget()
+{
+    int cursorPosition = ui->lineEditSearchResume->cursorPosition();
+    ui->lineEditSearchResume->setText(ui->lineEditSearchResume->text().toUpper());  /*===setting the text to Uppercase*/
+    ui->lineEditSearchResume->setCursorPosition(cursorPosition);
+
+    std::string text = ui->lineEditSearchResume->text().toStdString();
+
+    /*else -- if search by number directly use below-- note removed ^ sign from %1 */
+    QRegExp regExp(QString("%1").arg(ui->lineEditSearchResume->text().replace(QRegExp("\\$(?!\\])"), tr("[\\$]"))).replace(QChar('~'), tr("$")));
+    regExp.setCaseSensitivity(Qt::CaseInsensitive);
+
+    QList<QListWidgetItem*> listItem;
+    for(int index =0; index<ui->listWidgetResumeNames->count(); index++)
+     listItem.append(ui->listWidgetResumeNames->item(index));
+
+    if(!text.empty())
+    {
+       for(int i=0; i <listItem.size(); i++ )
+       {
+           QString s = listItem[i]->text();
+
+          if(s.contains(regExp))
+          {
+             listItem[i]->setHidden(false);
+          }
+          else
+          {
+              listItem[i]->setHidden(true);
+          }
+       }
+    }
+    else
+    {
+       /*this loop is for diplaying all the items when lineedit text is emptied*/
+       for (int i = 0; i<listItem.size(); i++)
+       {
+           listItem[i]->setHidden(false);
+       }
+    }
+
 }
 
 void MainWindow::connectToDatabase()
@@ -242,7 +304,7 @@ void MainWindow::addNewTechSkillsClicked()
         ui->tableWidgetSkills->setItem( ui->tableWidgetSkills->rowCount() - 1, TECH_PK, new QTableWidgetItem((QString::number(-1))));
         ui->tableWidgetSkills->setItem( ui->tableWidgetSkills->rowCount() - 1, SKILL_NAME, new QTableWidgetItem((techSkillsWindow.getSkillName())));
         ui->tableWidgetSkills->setItem( ui->tableWidgetSkills->rowCount() - 1, PROFICIENCY, new QTableWidgetItem((techSkillsWindow.getProficieny())));
-        ui->tableWidgetSkills->setItem( ui->tableWidgetSkills->rowCount() - 1, YEARS_USED, new QTableWidgetItem((techSkillsWindow.getYearsUsed())));
+        ui->tableWidgetSkills->setItem( ui->tableWidgetSkills->rowCount() - 1, YEARS_USED, new QTableWidgetItem(QString::number(techSkillsWindow.getYearsUsed())));
 
         for (int count = 0; count <  ui->tableWidgetSkills->columnCount(); count++)
         {
@@ -284,7 +346,7 @@ void MainWindow::addNewTechSkillsClicked()
         ui->tableWidgetSkills->setItem(row, TECH_PK, new QTableWidgetItem((QString::number(-1))));
         ui->tableWidgetSkills->setItem( row, SKILL_NAME, new QTableWidgetItem((techSkillsWindow.getSkillName())));
         ui->tableWidgetSkills->setItem( row, PROFICIENCY, new QTableWidgetItem((techSkillsWindow.getProficieny())));
-        ui->tableWidgetSkills->setItem( row, YEARS_USED, new QTableWidgetItem((techSkillsWindow.getYearsUsed())));
+        ui->tableWidgetSkills->setItem( row, YEARS_USED, new QTableWidgetItem(QString::number(techSkillsWindow.getYearsUsed())));
 
         for (int count = 0; count <ui->tableWidgetSkills->columnCount(); count++)
         {
@@ -390,8 +452,6 @@ void MainWindow::addNewWorkExClicked()
         workExperienceDetails workExWindow("Edit");
         workExWindow.setWindowTitle("Edit Work Experience for row:" + QString::number(ui->tableWidgetWorkEx->currentRow() + 1));
 
-       // if (ui->tableWidgetWorkEx->item(row, STACKS_PK))
-           // workExWindow.setStackPk(ui->tableWidgetWorkEx->item(row, STACKS_PK)->text());
 
         if (ui->tableWidgetWorkEx->item(row, COMPANY_NAME))
             workExWindow.setCompanyName( ui->tableWidgetWorkEx->item(row, COMPANY_NAME)->text());
@@ -403,7 +463,13 @@ void MainWindow::addNewWorkExClicked()
             workExWindow.setToDate( ui->tableWidgetWorkEx->item(row, TO_DATE_W)->text());
 
         if (ui->tableWidgetWorkEx->item(row, IS_CURR_W))
-            workExWindow.setCurrentJob( ui->tableWidgetEducation->item(row, IS_CURR_W)->text().toInt());
+        {
+            if(ui->tableWidgetWorkEx->item(row, IS_CURR_W)->text() == "Yes")
+                workExWindow.setCurrentJob(1);
+            else
+                workExWindow.setCurrentJob(0);
+        }
+
 
         if (ui->tableWidgetWorkEx->item(row, TITLE))
             workExWindow.setTitle( ui->tableWidgetWorkEx->item(row, TITLE)->text());
@@ -541,7 +607,13 @@ void MainWindow::addNewCollegeClicked()
             educationWindow.setToDate( ui->tableWidgetEducation->item(row, TO_DATE_C)->text());
 
         if (ui->tableWidgetEducation->item(row, IS_CURR_C))
-            educationWindow.setCurrentCollege( ui->tableWidgetEducation->item(row, IS_CURR_C)->text().toInt());
+        {
+            if(ui->tableWidgetEducation->item(row, IS_CURR_C)->text() == "Yes")
+                educationWindow.setCurrentCollege(1);
+            else
+                educationWindow.setCurrentCollege(0);
+        }
+
 
         if (ui->tableWidgetEducation->item(row, FIELD))
             educationWindow.setField( ui->tableWidgetEducation->item(row, FIELD)->text());
@@ -719,8 +791,21 @@ void MainWindow::fillWorkExDetailsList(std::vector<WorkExperience> &tempWorkExLi
      }
  }
 
+ void MainWindow::browseSlot()
+ {
+     QString dir = QFileDialog::getExistingDirectory(this, tr("Open Directory"),
+            "/home",QFileDialog::ShowDirsOnly   | QFileDialog::DontResolveSymlinks);
+        ui->lineEditDirectoryPath->setText(dir);
+ }
+
 void MainWindow::exportAsPDF()
 {
+    QDir dir;
+    if(!dir.exists(ui->lineEditDirectoryPath->text()))
+    {
+        QMessageBox::warning(NULL, tr("Export Wafer Maps"), tr("The directory does not exist!"));
+        return;
+    }
 
     QString html =
     "<div align=right>"
@@ -970,7 +1055,7 @@ void MainWindow::exportAsPDF()
     QPrinter printer(QPrinter::PrinterResolution);
     printer.setOutputFormat(QPrinter::PdfFormat);
     printer.setPaperSize(QPrinter::A4);
-    printer.setOutputFileName("test.pdf");
+    printer.setOutputFileName(ui->lineEditDirectoryPath->text()+"\\test.pdf");
     printer.setPageMargins(QMarginsF(15, 15, 15, 15));
     document.print(&printer);
 }

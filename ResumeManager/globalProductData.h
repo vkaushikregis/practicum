@@ -92,5 +92,6 @@ struct ResumeNames
     std::string mResume_name;
 };
 extern std::vector<ResumeNames> gResumeNamesList;
+extern std::vector<std::string> gProficiencyLevelList;
 
 #endif // PRODUCTDATA_H

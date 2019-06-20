@@ -17,14 +17,17 @@ SOURCES += main.cpp\
     databasecommunicator.cpp \
     globalproductdata.cpp \
     educationdetails.cpp \
-    workexperiencedetails.cpp
+    workexperiencedetails.cpp \
+    technicalskills.cpp
 
 HEADERS  += mainwindow.h \
     databasecommunicator.h \
     globalproductdata.h \
     educationdetails.h \
-    workexperiencedetails.h
+    workexperiencedetails.h \
+    technicalskills.h
 
 FORMS    += mainwindow.ui \
     educationdetails.ui \
-    workexperiencedetails.ui
+    workexperiencedetails.ui \
+    technicalskills.ui
