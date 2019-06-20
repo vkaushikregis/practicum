@@ -47,6 +47,7 @@ private slots:
     void deleteTechSkillsDeleteClicked();
     void saveResumeDetailsInDB();
     void filterReumeInListWidget();
+    void deleteExistingResume();
 };
 
 #endif // MAINWINDOW_H

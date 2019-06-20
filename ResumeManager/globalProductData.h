@@ -72,6 +72,7 @@ struct PersonalDetails
     std::string mLast_name;
     long int mMobile;
     std::string mEmail;
+    std::string mAdditional_information;
     long int mResume_fk;
 };
 

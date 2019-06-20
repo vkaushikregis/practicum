@@ -76,7 +76,7 @@ bool DatabaseCommunicator::getExistingResumesFromDB(std::string &msg)
       if(db.open())
       {
           QSqlQuery query;
-          QString preparedStmt = "SELECT personal_details_pk,first_name,last_name,mobile,email,resume_name_fk FROM resumemanager.personal_details where resume_name_fk =" + QString::number(resume_fk);
+          QString preparedStmt = "SELECT personal_details_pk,first_name,last_name,mobile,email,resume_name_fk,additonal_info FROM resumemanager.personal_details where resume_name_fk =" + QString::number(resume_fk);
           query.exec(preparedStmt);
           if(!query.exec())
           {
@@ -90,6 +90,7 @@ bool DatabaseCommunicator::getExistingResumesFromDB(std::string &msg)
               resuObj.mPersonalDetails.mMobile = query.value(3).toInt();
               resuObj.mPersonalDetails.mEmail = query.value(4).toString().toStdString();
               resuObj.mPersonalDetails.mResume_fk = query.value(5).toInt();
+              resuObj.mPersonalDetails.mAdditional_information = query.value(6).toString().toStdString();
           }
       }
 
@@ -172,7 +173,7 @@ bool DatabaseCommunicator::getExistingResumesFromDB(std::string &msg)
                workObj.mCompany_name = query.value(1).toString().toStdString();
                workObj.mFrom_date = query.value(2).toString().toStdString();
                workObj.mTo_date = query.value(3).toString().toStdString();
-               workObj.mJob_description = query.value(4).toInt();
+               workObj.mJob_description = query.value(4).toString().toStdString();
                workObj.mCurrent = query.value(5).toInt();
                workObj.mTitle = query.value(6).toString().toStdString();
                workObj.mResume_fk = query.value(7).toInt();
@@ -228,6 +229,7 @@ bool DatabaseCommunicator::getExistingResumesFromDB(std::string &msg)
             {
                 qDebug() << qry.lastError().text();
                 msg = qry.lastError().text().toStdString();
+                QSqlDatabase::database().rollback();
                 return false;
             }
             else
@@ -237,17 +239,19 @@ bool DatabaseCommunicator::getExistingResumesFromDB(std::string &msg)
 
             // second insert into personal_details table
             QSqlQuery qPer;
-            qPer.prepare("INSERT INTO resumemanager.personal_details (first_name,last_name,mobile,email,resume_name_fk) VALUES(:first_name,:last_name,:mobile,:email,:resume_fk)");
+            qPer.prepare("INSERT INTO resumemanager.personal_details (first_name,last_name,mobile,email,resume_name_fk,additional_info) VALUES(:first_name,:last_name,:mobile,:email,:resume_fk,:additonal_info)");
             qPer.bindValue(":first_name", QString::fromUtf8(resuObj.mPersonalDetails.mFirst_name.c_str()));
             qPer.bindValue(":last_name",  QString::fromUtf8(resuObj.mPersonalDetails.mLast_name.c_str()));
             qPer.bindValue(":mobile", resuObj.mPersonalDetails.mMobile);
             qPer.bindValue(":email",  QString::fromUtf8(resuObj.mPersonalDetails.mEmail.c_str()));
             qPer.bindValue(":resume_fk", resume_name_pk);
+            qPer.bindValue(":additonal_info",  QString::fromUtf8(resuObj.mPersonalDetails.mAdditional_information.c_str()));
 
             if( !qPer.exec() )
             {
                 qDebug() << qPer.lastError().text();
                 msg = qPer.lastError().text().toStdString();
+                QSqlDatabase::database().rollback();
                 return false;
             }
             else
@@ -267,6 +271,7 @@ bool DatabaseCommunicator::getExistingResumesFromDB(std::string &msg)
             {
                 qDebug() << qAdd.lastError().text();
                 msg = qAdd.lastError().text().toStdString();
+                QSqlDatabase::database().rollback();
                 return false;
             }
             else
@@ -289,6 +294,7 @@ bool DatabaseCommunicator::getExistingResumesFromDB(std::string &msg)
                 {
                     qDebug() << q.lastError().text();
                     msg = q.lastError().text().toStdString();
+                    QSqlDatabase::database().rollback();
                     break;
                     return false;
                 }
@@ -313,6 +319,7 @@ bool DatabaseCommunicator::getExistingResumesFromDB(std::string &msg)
                 {
                     qDebug() << q.lastError().text();
                     msg = q.lastError().text().toStdString();
+                    QSqlDatabase::database().rollback();
                     break;
                     return false;
                 }
@@ -334,6 +341,7 @@ bool DatabaseCommunicator::getExistingResumesFromDB(std::string &msg)
                 {
                     qDebug() << q.lastError().text();
                     msg = q.lastError().text().toStdString();
+                    QSqlDatabase::database().rollback();
                     break;
                     return false;
                 }

@@ -40,10 +40,7 @@ class Ui_MainWindow
 public:
     QWidget *centralWidget;
     QGridLayout *gridLayout_3;
-    QLabel *label_16;
-    QListWidget *listWidgetResumeNames;
     QLabel *label_26;
-    QLineEdit *lineEditSearchResume;
     QTabWidget *tabWidgetMain;
     QWidget *tab;
     QGridLayout *gridLayout_5;
@@ -155,6 +152,10 @@ public:
     QLineEdit *lineEditDirectoryPath;
     QPushButton *pushButtonBrowse;
     QPushButton *pushButtonExportAsPDF;
+    QLineEdit *lineEditSearchResume;
+    QLabel *label_16;
+    QListWidget *listWidgetResumeNames;
+    QPushButton *pushButtonDeleteResume;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
@@ -171,31 +172,13 @@ public:
         gridLayout_3->setSpacing(6);
         gridLayout_3->setContentsMargins(11, 11, 11, 11);
         gridLayout_3->setObjectName(QStringLiteral("gridLayout_3"));
-        label_16 = new QLabel(centralWidget);
-        label_16->setObjectName(QStringLiteral("label_16"));
-        QFont font;
-        font.setPointSize(8);
-        label_16->setFont(font);
-
-        gridLayout_3->addWidget(label_16, 2, 0, 1, 1);
-
-        listWidgetResumeNames = new QListWidget(centralWidget);
-        listWidgetResumeNames->setObjectName(QStringLiteral("listWidgetResumeNames"));
-        listWidgetResumeNames->setMaximumSize(QSize(200, 16777215));
-
-        gridLayout_3->addWidget(listWidgetResumeNames, 3, 0, 1, 1);
-
         label_26 = new QLabel(centralWidget);
         label_26->setObjectName(QStringLiteral("label_26"));
+        QFont font;
+        font.setPointSize(8);
         label_26->setFont(font);
 
         gridLayout_3->addWidget(label_26, 0, 0, 1, 1);
-
-        lineEditSearchResume = new QLineEdit(centralWidget);
-        lineEditSearchResume->setObjectName(QStringLiteral("lineEditSearchResume"));
-        lineEditSearchResume->setMaximumSize(QSize(200, 16777215));
-
-        gridLayout_3->addWidget(lineEditSearchResume, 1, 0, 1, 1);
 
         tabWidgetMain = new QTabWidget(centralWidget);
         tabWidgetMain->setObjectName(QStringLiteral("tabWidgetMain"));
@@ -257,8 +240,8 @@ public:
         label->setObjectName(QStringLiteral("label"));
         QFont font3;
         font3.setPointSize(8);
-        font3.setBold(true);
-        font3.setWeight(75);
+        font3.setBold(false);
+        font3.setWeight(50);
         label->setFont(font3);
 
         verticalLayout_9->addWidget(label);
@@ -905,7 +888,32 @@ public:
 
         tabWidgetMain->addTab(tab_5, QString());
 
-        gridLayout_3->addWidget(tabWidgetMain, 0, 1, 4, 1);
+        gridLayout_3->addWidget(tabWidgetMain, 0, 1, 5, 1);
+
+        lineEditSearchResume = new QLineEdit(centralWidget);
+        lineEditSearchResume->setObjectName(QStringLiteral("lineEditSearchResume"));
+        lineEditSearchResume->setMinimumSize(QSize(30, 25));
+        lineEditSearchResume->setMaximumSize(QSize(200, 16777215));
+
+        gridLayout_3->addWidget(lineEditSearchResume, 1, 0, 1, 1);
+
+        label_16 = new QLabel(centralWidget);
+        label_16->setObjectName(QStringLiteral("label_16"));
+        label_16->setMinimumSize(QSize(30, 0));
+        label_16->setFont(font);
+
+        gridLayout_3->addWidget(label_16, 2, 0, 1, 1);
+
+        listWidgetResumeNames = new QListWidget(centralWidget);
+        listWidgetResumeNames->setObjectName(QStringLiteral("listWidgetResumeNames"));
+        listWidgetResumeNames->setMaximumSize(QSize(200, 16777215));
+
+        gridLayout_3->addWidget(listWidgetResumeNames, 3, 0, 1, 1);
+
+        pushButtonDeleteResume = new QPushButton(centralWidget);
+        pushButtonDeleteResume->setObjectName(QStringLiteral("pushButtonDeleteResume"));
+
+        gridLayout_3->addWidget(pushButtonDeleteResume, 4, 0, 1, 1);
 
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
@@ -930,7 +938,6 @@ public:
     void retranslateUi(QMainWindow *MainWindow)
     {
         MainWindow->setWindowTitle(QApplication::translate("MainWindow", "ResumManager", Q_NULLPTR));
-        label_16->setText(QApplication::translate("MainWindow", "Existing Resume(s)", Q_NULLPTR));
         label_26->setText(QApplication::translate("MainWindow", "Search", Q_NULLPTR));
 #ifndef QT_NO_WHATSTHIS
         tabWidgetMain->setWhatsThis(QString());
@@ -1045,7 +1052,7 @@ public:
         QTableWidgetItem *___qtablewidgetitem17 = tableWidgetSkills->horizontalHeaderItem(3);
         ___qtablewidgetitem17->setText(QApplication::translate("MainWindow", "Years/Used", Q_NULLPTR));
         pushButtonAddSkill->setText(QApplication::translate("MainWindow", "Add", Q_NULLPTR));
-        pushButtonEditSkill->setText(QApplication::translate("MainWindow", "EDIT", Q_NULLPTR));
+        pushButtonEditSkill->setText(QApplication::translate("MainWindow", "Edit", Q_NULLPTR));
         pushButtonDeleteSkill->setText(QApplication::translate("MainWindow", "Delete", Q_NULLPTR));
         pushButtonAdditionalSkils->setText(QApplication::translate("MainWindow", "--> Additional Details", Q_NULLPTR));
         pushButtonBackEducation->setText(QApplication::translate("MainWindow", "<-- Back", Q_NULLPTR));
@@ -1062,9 +1069,11 @@ public:
         radioButton->setText(QApplication::translate("MainWindow", "Template 1", Q_NULLPTR));
         radioButton_2->setText(QApplication::translate("MainWindow", "Template 2", Q_NULLPTR));
         label_11->setText(QApplication::translate("MainWindow", "Directory path      ", Q_NULLPTR));
-        pushButtonBrowse->setText(QApplication::translate("MainWindow", "BROWSE", Q_NULLPTR));
-        pushButtonExportAsPDF->setText(QApplication::translate("MainWindow", "EXPORT as PDF", Q_NULLPTR));
+        pushButtonBrowse->setText(QApplication::translate("MainWindow", "Browse", Q_NULLPTR));
+        pushButtonExportAsPDF->setText(QApplication::translate("MainWindow", "Export as PDF", Q_NULLPTR));
         tabWidgetMain->setTabText(tabWidgetMain->indexOf(tab_5), QApplication::translate("MainWindow", "Additional Details", Q_NULLPTR));
+        label_16->setText(QApplication::translate("MainWindow", "Existing Resume(s)", Q_NULLPTR));
+        pushButtonDeleteResume->setText(QApplication::translate("MainWindow", "Delete Resume", Q_NULLPTR));
     } // retranslateUi
 
 };

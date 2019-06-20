@@ -73,6 +73,8 @@ MainWindow::MainWindow(QWidget *parent) :
      connect(ui->pushButtonExportAsPDF,SIGNAL(clicked(bool)),this,SLOT(exportAsPDF()));
      connect(ui->pushButtonBrowse, SIGNAL(clicked()), this, SLOT(browseSlot()));
 
+     connect(ui->pushButtonDeleteResume,SIGNAL(clicked()), this, SLOT(deleteExistingResume()));
+
      //connectToDatabase();
      fillProficiencyList();
      displayExistingResumesInDB();
@@ -134,6 +136,11 @@ void MainWindow::filterReumeInListWidget()
 
 }
 
+void MainWindow::deleteExistingResume()
+{
+
+}
+
 void MainWindow::connectToDatabase()
 {
     DatabaseCommunicator::Instance();
@@ -180,6 +187,7 @@ void MainWindow::getSelectedResumeDataFromDB()
             ui->lastNameLineEdit->setText(QString::fromUtf8(mResumeManagerBaseObj.mPersonalDetails.mLast_name.c_str()));
             ui->mobileLineEdit->setText(QString::number(mResumeManagerBaseObj.mPersonalDetails.mMobile));
             ui->emailLineEdit->setText(QString::fromUtf8(mResumeManagerBaseObj.mPersonalDetails.mEmail.c_str()));
+            ui->textEditAdditionalSkills->setPlainText(QString::fromUtf8(mResumeManagerBaseObj.mPersonalDetails.mAdditional_information.c_str()));
         }
 
         bool statusAddres = DatabaseCommunicator::Instance()->getAddressFromDB(resuObj.mResume_pk,mResumeManagerBaseObj,message);
@@ -763,8 +771,9 @@ void MainWindow::saveResumeDetailsInDB()
         //filling personal details first
         mResumeManagerBaseObj.mPersonalDetails.mFirst_name = ui->firstNameLineEdit->text().toStdString();
         mResumeManagerBaseObj.mPersonalDetails.mLast_name = ui->lastNameLineEdit->text().toStdString();
-        mResumeManagerBaseObj.mPersonalDetails.mMobile = ui->mobileLineEdit->text().toInt();
+        mResumeManagerBaseObj.mPersonalDetails.mMobile = ui->mobileLineEdit->text().toDouble();
         mResumeManagerBaseObj.mPersonalDetails.mEmail = ui->emailLineEdit->text().toStdString();
+        mResumeManagerBaseObj.mPersonalDetails.mAdditional_information = ui->textEditAdditionalSkills->toPlainText().toStdString();
 
         //filling address details
         mResumeManagerBaseObj.mAddress.mStreet_address = ui->addressLineEdit->text().toStdString();
@@ -843,7 +852,7 @@ void MainWindow::fillWorkExDetailsList(std::vector<WorkExperience> &tempWorkExLi
             obj.mTitle = ui->tableWidgetWorkEx->item(rowNum, TITLE)->text().toStdString();
 
         if (ui->tableWidgetWorkEx->item(rowNum, JD))
-            obj.mJob_description = ui->tableWidgetWorkEx->item(rowNum, JD)->text().toInt();
+            obj.mJob_description = ui->tableWidgetWorkEx->item(rowNum, JD)->text().toStdString();
 
         tempWorkExList.push_back(obj);
     }
