@@ -28,10 +28,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->zipLineEdit->setValidator( new QIntValidator(this));
 
-    QRegExp rx("regex");
-    QValidator *validator = new QRegExpValidator(rx, this);
-
-    ui->cityLineEdit->setValidator(validator);
     //Navigating tab widgets signal connection
     connect(ui->pushButtonBackPersonal,SIGNAL(clicked(bool)),this,SLOT(setTabWidgetIndex()));
     connect(ui->pushButtonBackWork,SIGNAL(clicked(bool)),this,SLOT(setTabWidgetIndex()));
@@ -180,10 +176,78 @@ void MainWindow::getSelectedResumeDataFromDB()
         if(status)
         {
             qDebug()<<"first name:" << mResumeManagerBaseObj.mPersonalDetails.mFirst_name.c_str();
+            ui->firstNameLineEdit->setText(QString::fromUtf8(mResumeManagerBaseObj.mPersonalDetails.mFirst_name.c_str()));
+            ui->lastNameLineEdit->setText(QString::fromUtf8(mResumeManagerBaseObj.mPersonalDetails.mLast_name.c_str()));
+            ui->mobileLineEdit->setText(QString::number(mResumeManagerBaseObj.mPersonalDetails.mMobile));
+            ui->emailLineEdit->setText(QString::fromUtf8(mResumeManagerBaseObj.mPersonalDetails.mEmail.c_str()));
         }
-    }
 
-    //once the data is received , fill the widgets from database
+        bool statusAddres = DatabaseCommunicator::Instance()->getAddressFromDB(resuObj.mResume_pk,mResumeManagerBaseObj,message);
+        if(statusAddres)
+        {
+            ui->addressLineEdit->setText(QString::fromUtf8(mResumeManagerBaseObj.mAddress.mStreet_address.c_str()));
+            ui->cityLineEdit->setText(QString::fromUtf8(mResumeManagerBaseObj.mAddress.mCity.c_str()));
+            ui->stateLineEdit->setText(QString::fromUtf8(mResumeManagerBaseObj.mAddress.mState.c_str()));
+            ui->zipLineEdit->setText(QString::number(mResumeManagerBaseObj.mAddress.mZip));
+        }
+
+        bool statusWorkex = DatabaseCommunicator::Instance()->getWorkExDetailsFromDB(resuObj.mResume_pk,mResumeManagerBaseObj,message);
+        if(statusWorkex)
+        {
+            for(int count = 0; count <mResumeManagerBaseObj.mWorkExList.size(); count++)
+            {
+                ui->tableWidgetWorkEx->insertRow( ui->tableWidgetWorkEx->rowCount());
+                ui->tableWidgetWorkEx->setItem( ui->tableWidgetWorkEx->rowCount() - 1, WORK_EX_PK, new QTableWidgetItem((QString::number(mResumeManagerBaseObj.mWorkExList[count].mWork_experience_pk))));
+                ui->tableWidgetWorkEx->setItem( ui->tableWidgetWorkEx->rowCount() - 1, COMPANY_NAME, new QTableWidgetItem(QString::fromUtf8(mResumeManagerBaseObj.mWorkExList[count].mCompany_name.c_str())));
+                ui->tableWidgetWorkEx->setItem( ui->tableWidgetWorkEx->rowCount() - 1, FROM_DATE_W, new QTableWidgetItem(QString::fromUtf8(mResumeManagerBaseObj.mWorkExList[count].mFrom_date.c_str())));
+                ui->tableWidgetWorkEx->setItem( ui->tableWidgetWorkEx->rowCount() - 1, TO_DATE_W, new QTableWidgetItem(QString::fromUtf8(mResumeManagerBaseObj.mWorkExList[count].mTo_date.c_str())));
+                if(mResumeManagerBaseObj.mWorkExList[count].mCurrent)
+                    ui->tableWidgetWorkEx->setItem( ui->tableWidgetWorkEx->rowCount() - 1, IS_CURR_W, new QTableWidgetItem(("Yes")));
+                else
+                    ui->tableWidgetWorkEx->setItem( ui->tableWidgetWorkEx->rowCount() - 1, IS_CURR_W, new QTableWidgetItem(("No")));
+
+                ui->tableWidgetWorkEx->setItem( ui->tableWidgetWorkEx->rowCount() - 1, TITLE, new QTableWidgetItem(QString::fromUtf8(mResumeManagerBaseObj.mWorkExList[count].mTitle.c_str())));
+                ui->tableWidgetWorkEx->setItem( ui->tableWidgetWorkEx->rowCount() - 1, JD, new QTableWidgetItem(QString::fromUtf8(mResumeManagerBaseObj.mWorkExList[count].mJob_description.c_str())));
+
+            }
+        }
+
+        bool statusEdu = DatabaseCommunicator::Instance()->getEducationDetailsFromDB(resuObj.mResume_pk,mResumeManagerBaseObj,message);
+        if(statusEdu)
+        {
+           for(int count = 0; count <mResumeManagerBaseObj.mEducationDetailsList.size(); count++)
+           {
+               ui->tableWidgetEducation->insertRow( ui->tableWidgetEducation->rowCount());
+               ui->tableWidgetEducation->setItem( ui->tableWidgetEducation->rowCount() - 1, EDU_PK, new QTableWidgetItem((QString::number(mResumeManagerBaseObj.mEducationDetailsList[count].mEducation_details_pk))));
+               ui->tableWidgetEducation->setItem( ui->tableWidgetEducation->rowCount() - 1, COLLEGE_NAME, new QTableWidgetItem(QString::fromUtf8(mResumeManagerBaseObj.mEducationDetailsList[count].mCollege_name.c_str())));
+               ui->tableWidgetEducation->setItem( ui->tableWidgetEducation->rowCount() - 1, FROM_DATE_C, new QTableWidgetItem(QString::fromUtf8(mResumeManagerBaseObj.mEducationDetailsList[count].mFrom_date.c_str())));
+               ui->tableWidgetEducation->setItem( ui->tableWidgetEducation->rowCount() - 1, TO_DATE_C, new QTableWidgetItem(QString::fromUtf8(mResumeManagerBaseObj.mEducationDetailsList[count].mTo_date.c_str())));
+               if(mResumeManagerBaseObj.mEducationDetailsList[count].mStill_pursuing)
+                   ui->tableWidgetEducation->setItem( ui->tableWidgetEducation->rowCount() - 1, IS_CURR_C, new QTableWidgetItem(("Yes")));
+               else
+                   ui->tableWidgetEducation->setItem( ui->tableWidgetEducation->rowCount() - 1, IS_CURR_C, new QTableWidgetItem(("No")));
+
+               ui->tableWidgetEducation->setItem( ui->tableWidgetEducation->rowCount() - 1, FIELD, new QTableWidgetItem(QString::fromUtf8(mResumeManagerBaseObj.mEducationDetailsList[count].mField.c_str())));
+               ui->tableWidgetEducation->setItem( ui->tableWidgetEducation->rowCount() - 1, GPA, new QTableWidgetItem((QString::number(mResumeManagerBaseObj.mEducationDetailsList[count].mGPA))));
+
+
+           }
+        }
+
+        bool statusTechSkills = DatabaseCommunicator::Instance()->getTechnicalSkillsFromDB(resuObj.mResume_pk,mResumeManagerBaseObj,message);
+        if(statusTechSkills)
+        {
+            for(int count = 0; count <mResumeManagerBaseObj.mTechSkillsList.size(); count++)
+            {
+                ui->tableWidgetSkills->insertRow( ui->tableWidgetSkills->rowCount());
+                ui->tableWidgetSkills->setItem( ui->tableWidgetSkills->rowCount() - 1, TECH_PK, new QTableWidgetItem((QString::number(mResumeManagerBaseObj.mTechSkillsList[count].mTech_skills_pk))));
+                ui->tableWidgetSkills->setItem( ui->tableWidgetSkills->rowCount() - 1, SKILL_NAME, new QTableWidgetItem(QString::fromUtf8(mResumeManagerBaseObj.mTechSkillsList[count].mSkill_name.c_str())));
+                ui->tableWidgetSkills->setItem( ui->tableWidgetSkills->rowCount() - 1, PROFICIENCY, new QTableWidgetItem(QString::fromUtf8(mResumeManagerBaseObj.mTechSkillsList[count].mProficiency.c_str())));
+                ui->tableWidgetSkills->setItem( ui->tableWidgetSkills->rowCount() - 1, YEARS_USED, new QTableWidgetItem((QString::number(mResumeManagerBaseObj.mTechSkillsList[count].mYears_used))));
+
+            }
+        }
+    }   
 }
 
 ResumeNames MainWindow::findResumePK()
@@ -689,6 +753,13 @@ void MainWindow::saveResumeDetailsInDB()
 {
     if(validatePersonalDetailsAndAddress())
     {
+        if(ui->lineEditResumeName->text().toStdString().empty())
+        {
+            QMessageBox::warning(NULL, tr("Fill Resume Name"), tr("Resume Name is mandatory, please fill a unique resume name."));
+            return;
+        }
+
+        mResumeManagerBaseObj.mResume_name = ui->lineEditResumeName->text().toStdString();
         //filling personal details first
         mResumeManagerBaseObj.mPersonalDetails.mFirst_name = ui->firstNameLineEdit->text().toStdString();
         mResumeManagerBaseObj.mPersonalDetails.mLast_name = ui->lastNameLineEdit->text().toStdString();

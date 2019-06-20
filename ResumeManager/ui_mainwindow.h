@@ -23,6 +23,7 @@
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QPushButton>
+#include <QtWidgets/QRadioButton>
 #include <QtWidgets/QSpacerItem>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QTabWidget>
@@ -129,27 +130,31 @@ public:
     QPushButton *pushButtonAdditionalSkils;
     QPushButton *pushButtonBackEducation;
     QWidget *tab_5;
-    QGridLayout *gridLayout_11;
+    QGridLayout *gridLayout_13;
     QLabel *label_24;
     QGroupBox *groupBox_5;
     QGridLayout *gridLayout_10;
     QVBoxLayout *verticalLayout_16;
     QLabel *label_25;
     QTextEdit *textEditAdditionalSkills;
+    QGroupBox *groupBox_6;
+    QGridLayout *gridLayout_11;
     QHBoxLayout *horizontalLayout_9;
     QHBoxLayout *horizontalLayout_8;
     QHBoxLayout *horizontalLayout_7;
     QLabel *label_10;
-    QLineEdit *lineEdit;
+    QLineEdit *lineEditResumeName;
     QPushButton *pushButtonSaveInDB;
+    QPushButton *pushButtonBackSkills;
+    QGroupBox *groupBox_7;
+    QGridLayout *gridLayout_12;
+    QRadioButton *radioButton;
+    QRadioButton *radioButton_2;
     QHBoxLayout *horizontalLayout_10;
     QLabel *label_11;
     QLineEdit *lineEditDirectoryPath;
     QPushButton *pushButtonBrowse;
     QPushButton *pushButtonExportAsPDF;
-    QHBoxLayout *horizontalLayout_11;
-    QPushButton *pushButtonBackSkills;
-    QSpacerItem *horizontalSpacer_5;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
@@ -314,7 +319,7 @@ public:
         addressLineEdit = new QLineEdit(groupBox_2);
         addressLineEdit->setObjectName(QStringLiteral("addressLineEdit"));
         addressLineEdit->setMinimumSize(QSize(55, 30));
-        addressLineEdit->setEchoMode(QLineEdit::PasswordEchoOnEdit);
+        addressLineEdit->setEchoMode(QLineEdit::Normal);
 
         verticalLayout_8->addWidget(addressLineEdit);
 
@@ -750,10 +755,10 @@ public:
         tabWidgetMain->addTab(tab_4, QString());
         tab_5 = new QWidget();
         tab_5->setObjectName(QStringLiteral("tab_5"));
-        gridLayout_11 = new QGridLayout(tab_5);
-        gridLayout_11->setSpacing(6);
-        gridLayout_11->setContentsMargins(11, 11, 11, 11);
-        gridLayout_11->setObjectName(QStringLiteral("gridLayout_11"));
+        gridLayout_13 = new QGridLayout(tab_5);
+        gridLayout_13->setSpacing(6);
+        gridLayout_13->setContentsMargins(11, 11, 11, 11);
+        gridLayout_13->setObjectName(QStringLiteral("gridLayout_13"));
         label_24 = new QLabel(tab_5);
         label_24->setObjectName(QStringLiteral("label_24"));
         label_24->setMinimumSize(QSize(0, 50));
@@ -762,7 +767,7 @@ public:
         label_24->setFrameShadow(QFrame::Raised);
         label_24->setTextFormat(Qt::PlainText);
 
-        gridLayout_11->addWidget(label_24, 0, 0, 1, 1);
+        gridLayout_13->addWidget(label_24, 0, 0, 1, 2);
 
         groupBox_5 = new QGroupBox(tab_5);
         groupBox_5->setObjectName(QStringLiteral("groupBox_5"));
@@ -788,8 +793,14 @@ public:
         gridLayout_10->addLayout(verticalLayout_16, 0, 0, 1, 1);
 
 
-        gridLayout_11->addWidget(groupBox_5, 1, 0, 1, 1);
+        gridLayout_13->addWidget(groupBox_5, 1, 0, 1, 2);
 
+        groupBox_6 = new QGroupBox(tab_5);
+        groupBox_6->setObjectName(QStringLiteral("groupBox_6"));
+        gridLayout_11 = new QGridLayout(groupBox_6);
+        gridLayout_11->setSpacing(6);
+        gridLayout_11->setContentsMargins(11, 11, 11, 11);
+        gridLayout_11->setObjectName(QStringLiteral("gridLayout_11"));
         horizontalLayout_9 = new QHBoxLayout();
         horizontalLayout_9->setSpacing(6);
         horizontalLayout_9->setObjectName(QStringLiteral("horizontalLayout_9"));
@@ -799,25 +810,25 @@ public:
         horizontalLayout_7 = new QHBoxLayout();
         horizontalLayout_7->setSpacing(6);
         horizontalLayout_7->setObjectName(QStringLiteral("horizontalLayout_7"));
-        label_10 = new QLabel(tab_5);
+        label_10 = new QLabel(groupBox_6);
         label_10->setObjectName(QStringLiteral("label_10"));
         label_10->setFont(font);
 
         horizontalLayout_7->addWidget(label_10);
 
-        lineEdit = new QLineEdit(tab_5);
-        lineEdit->setObjectName(QStringLiteral("lineEdit"));
+        lineEditResumeName = new QLineEdit(groupBox_6);
+        lineEditResumeName->setObjectName(QStringLiteral("lineEditResumeName"));
         QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
-        sizePolicy.setHeightForWidth(lineEdit->sizePolicy().hasHeightForWidth());
-        lineEdit->setSizePolicy(sizePolicy);
-        lineEdit->setMinimumSize(QSize(0, 30));
+        sizePolicy.setHeightForWidth(lineEditResumeName->sizePolicy().hasHeightForWidth());
+        lineEditResumeName->setSizePolicy(sizePolicy);
+        lineEditResumeName->setMinimumSize(QSize(0, 30));
         QFont font6;
-        font6.setPointSize(20);
-        lineEdit->setFont(font6);
+        font6.setPointSize(9);
+        lineEditResumeName->setFont(font6);
 
-        horizontalLayout_7->addWidget(lineEdit);
+        horizontalLayout_7->addWidget(lineEditResumeName);
 
 
         horizontalLayout_8->addLayout(horizontalLayout_7);
@@ -825,59 +836,72 @@ public:
 
         horizontalLayout_9->addLayout(horizontalLayout_8);
 
-        pushButtonSaveInDB = new QPushButton(tab_5);
+        pushButtonSaveInDB = new QPushButton(groupBox_6);
         pushButtonSaveInDB->setObjectName(QStringLiteral("pushButtonSaveInDB"));
         pushButtonSaveInDB->setStyleSheet(QStringLiteral("background-color: rgb(85, 170, 255);"));
 
         horizontalLayout_9->addWidget(pushButtonSaveInDB);
 
 
-        gridLayout_11->addLayout(horizontalLayout_9, 2, 0, 1, 1);
+        gridLayout_11->addLayout(horizontalLayout_9, 0, 0, 1, 1);
+
+
+        gridLayout_13->addWidget(groupBox_6, 2, 0, 1, 2);
+
+        pushButtonBackSkills = new QPushButton(tab_5);
+        pushButtonBackSkills->setObjectName(QStringLiteral("pushButtonBackSkills"));
+        pushButtonBackSkills->setMaximumSize(QSize(100, 16777215));
+        pushButtonBackSkills->setStyleSheet(QStringLiteral("background-color: rgb(85, 255, 255);"));
+
+        gridLayout_13->addWidget(pushButtonBackSkills, 3, 0, 1, 1);
+
+        groupBox_7 = new QGroupBox(tab_5);
+        groupBox_7->setObjectName(QStringLiteral("groupBox_7"));
+        gridLayout_12 = new QGridLayout(groupBox_7);
+        gridLayout_12->setSpacing(6);
+        gridLayout_12->setContentsMargins(11, 11, 11, 11);
+        gridLayout_12->setObjectName(QStringLiteral("gridLayout_12"));
+        radioButton = new QRadioButton(groupBox_7);
+        radioButton->setObjectName(QStringLiteral("radioButton"));
+
+        gridLayout_12->addWidget(radioButton, 0, 0, 1, 1);
+
+        radioButton_2 = new QRadioButton(groupBox_7);
+        radioButton_2->setObjectName(QStringLiteral("radioButton_2"));
+
+        gridLayout_12->addWidget(radioButton_2, 0, 1, 1, 1);
 
         horizontalLayout_10 = new QHBoxLayout();
         horizontalLayout_10->setSpacing(6);
         horizontalLayout_10->setObjectName(QStringLiteral("horizontalLayout_10"));
-        label_11 = new QLabel(tab_5);
+        label_11 = new QLabel(groupBox_7);
         label_11->setObjectName(QStringLiteral("label_11"));
         label_11->setFont(font);
 
         horizontalLayout_10->addWidget(label_11);
 
-        lineEditDirectoryPath = new QLineEdit(tab_5);
+        lineEditDirectoryPath = new QLineEdit(groupBox_7);
         lineEditDirectoryPath->setObjectName(QStringLiteral("lineEditDirectoryPath"));
         lineEditDirectoryPath->setMinimumSize(QSize(0, 30));
 
         horizontalLayout_10->addWidget(lineEditDirectoryPath);
 
-        pushButtonBrowse = new QPushButton(tab_5);
+        pushButtonBrowse = new QPushButton(groupBox_7);
         pushButtonBrowse->setObjectName(QStringLiteral("pushButtonBrowse"));
 
         horizontalLayout_10->addWidget(pushButtonBrowse);
 
-        pushButtonExportAsPDF = new QPushButton(tab_5);
+        pushButtonExportAsPDF = new QPushButton(groupBox_7);
         pushButtonExportAsPDF->setObjectName(QStringLiteral("pushButtonExportAsPDF"));
         pushButtonExportAsPDF->setStyleSheet(QStringLiteral("background-color: rgb(85, 170, 255);"));
 
         horizontalLayout_10->addWidget(pushButtonExportAsPDF);
 
 
-        gridLayout_11->addLayout(horizontalLayout_10, 3, 0, 1, 1);
-
-        horizontalLayout_11 = new QHBoxLayout();
-        horizontalLayout_11->setSpacing(6);
-        horizontalLayout_11->setObjectName(QStringLiteral("horizontalLayout_11"));
-        pushButtonBackSkills = new QPushButton(tab_5);
-        pushButtonBackSkills->setObjectName(QStringLiteral("pushButtonBackSkills"));
-        pushButtonBackSkills->setStyleSheet(QStringLiteral("background-color: rgb(85, 255, 255);"));
-
-        horizontalLayout_11->addWidget(pushButtonBackSkills);
-
-        horizontalSpacer_5 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-
-        horizontalLayout_11->addItem(horizontalSpacer_5);
+        gridLayout_12->addLayout(horizontalLayout_10, 1, 0, 1, 2);
 
 
-        gridLayout_11->addLayout(horizontalLayout_11, 4, 0, 1, 1);
+        gridLayout_13->addWidget(groupBox_7, 3, 1, 1, 1);
 
         tabWidgetMain->addTab(tab_5, QString());
 
@@ -1030,12 +1054,16 @@ public:
         groupBox_5->setTitle(QString());
         label_25->setText(QApplication::translate("MainWindow", "Additional Skills/certificate(s)", Q_NULLPTR));
         textEditAdditionalSkills->setPlaceholderText(QApplication::translate("MainWindow", "e.g. Certifications or relevant skills information", Q_NULLPTR));
+        groupBox_6->setTitle(QString());
         label_10->setText(QApplication::translate("MainWindow", "Resume Name (*)", Q_NULLPTR));
         pushButtonSaveInDB->setText(QApplication::translate("MainWindow", "Save in DB", Q_NULLPTR));
+        pushButtonBackSkills->setText(QApplication::translate("MainWindow", "<--Back", Q_NULLPTR));
+        groupBox_7->setTitle(QString());
+        radioButton->setText(QApplication::translate("MainWindow", "Template 1", Q_NULLPTR));
+        radioButton_2->setText(QApplication::translate("MainWindow", "Template 2", Q_NULLPTR));
         label_11->setText(QApplication::translate("MainWindow", "Directory path      ", Q_NULLPTR));
         pushButtonBrowse->setText(QApplication::translate("MainWindow", "BROWSE", Q_NULLPTR));
         pushButtonExportAsPDF->setText(QApplication::translate("MainWindow", "EXPORT as PDF", Q_NULLPTR));
-        pushButtonBackSkills->setText(QApplication::translate("MainWindow", "<--Back", Q_NULLPTR));
         tabWidgetMain->setTabText(tabWidgetMain->indexOf(tab_5), QApplication::translate("MainWindow", "Additional Details", Q_NULLPTR));
     } // retranslateUi
 
