@@ -953,251 +953,131 @@ void MainWindow::exportAsPDF()
         return;
     }
 
-    QString html =
-    "<div align=right>"
-       "City, 11/11/2015"
-    "</div>"
-    "<div align=left>"
-       "Sender Name<br>"
-       "street 34/56A<br>"
-       "121-43 city"
-    "</div>"
-    "<h1 align=center>DOCUMENT TITLE</h1>"
-    "<p align=justify>"
-       "document content document content document content document content document content document content document content document content document content document content "
-       "document content document content document content document content document content document content document content document content document content document content "
-    "</p>"
-    "<div align=right>sincerly</div>";
+    std::stringstream professional_ex ;
+
+    professional_ex<< "<h2 id="//professional-experience">Professional Experience</h2>"
+                      ;
+    for (int rowNum = 0; rowNum < ui->tableWidgetWorkEx->rowCount(); rowNum++)
+    {
+
+        professional_ex << "<h6><em>" +
+                            ui->tableWidgetWorkEx->item(rowNum, FROM_DATE_W)->text().toStdString()
+                           + "- " + ui->tableWidgetWorkEx->item(rowNum, TO_DATE_W)->text().toStdString()
+                           + "</em></h6>"
+                           + "<h3>"
+                           + ui->tableWidgetWorkEx->item(rowNum, COMPANY_NAME)->text().toStdString()
+                           +"-"
+                           + ui->tableWidgetWorkEx->item(rowNum, TITLE)->text().toStdString()
+                           + "</h3>"
+                           + "<p>"
+                           + ui->tableWidgetWorkEx->item(rowNum, JD)->text().toStdString()
+                             + "</p>"
+                           ;
 
-    QString html2 =
 
+      }
 
 
-            "<head>"
+    std::stringstream education_ex ;
 
-            "<meta http-equiv="//Content-Type" content="//text/html; charset=iso-8859-1" />"
+    education_ex<< "<h2 >Education</h2>"
+                      ;
+    for (int rowNum = 0; rowNum < ui->tableWidgetEducation->rowCount(); rowNum++)
+    {
 
-            "<title>Resume | First Last</title>"
+        education_ex << "<h6><em>" +
+                            ui->tableWidgetEducation->item(rowNum, FROM_DATE_C)->text().toStdString()
+                           + "- " + ui->tableWidgetEducation->item(rowNum, TO_DATE_C)->text().toStdString()
+                           + "</em></h6>"
+                           + "<h3>"
+                           + ui->tableWidgetEducation->item(rowNum, COLLEGE_NAME)->text().toStdString()
+                           + "</h3>"
+                           + "<p>"
+                           + ui->tableWidgetEducation->item(rowNum, FIELD)->text().toStdString()
+                           + " - GPA "
+                           + ui->tableWidgetEducation->item(rowNum, GPA)->text().toStdString()
+                             + "</p>"
+                           ;
 
-            "<meta name="//robots" content="//noindex, nofollow" />"
+      }
 
-            "style type="//text/css" media="//all">"
+    std::stringstream technical ;
 
-            "html{"
+    technical<<  "<h4 >Technical Skills</h4>"
+                  << "<ul>"
+                      ;
+    for (int rowNum = 0; rowNum < ui->tableWidgetSkills->rowCount(); rowNum++)
+    {
 
-            "background-color:#444;"
+        technical <<    " <li>"
+                        + ui->tableWidgetSkills->item(rowNum, SKILL_NAME)->text().toStdString()
+                        + " - "
+                        + ui->tableWidgetSkills->item(rowNum, PROFICIENCY)->text().toStdString()
+                        + "</li>"
+                        ;
 
-            "background: url(/posts/backgrounds/images/20.gif);"
 
-            "padding:0 1em;"
 
-            "}"
+      }
+    technical<< "</ul> ";
 
-            "body { "
 
-            "background-color:#FFF;"
 
-            "font-family:Arial, Helvetica, sans-serif;"
+    QString htmlHeader =
+    "<link href="//https://fonts.googleapis.com/css?family=Montserrat:300,400i,500,800" rel="stylesheet"/>"+
+    "<link href="//https://fonts.googleapis.com/css?family=Fira+Sans:200,400,400i,600,900" rel="stylesheet"/>"
+    ;
 
-            "padding:2em;"
+    QString body =
+            "<body class="//ma0 ">"
+                "<div class="//grid-layout-1">"
+                    "<main class="//main" role="main" id="mainContent">"
+                      "<h1 >"
+                       + ui->firstNameLineEdit->text() + " " + ui->lastNameLineEdit->text()+ "</h1>"
+                       " <p> "
+                        + ui->textEditAdditionalSkills->toPlainText() +
+                      + "</p>"
+                      + "<div class="//grid">"
+                       +     "<div class="//col -span-cols-6 -m-right-2">"
 
-            "margin:1em auto;"
+                       + QString::fromStdString(professional_ex.str())
+                       + QString::fromStdString(education_ex.str())
 
-            "border:2px solid #000;"
+                       + "</div>"
+                        + "<div class="//col -span-cols-4 -p-left-3">"
+                        + QString::fromStdString(technical.str()) +
+                        + "<h2 >Contacts</h2>"
 
-            "max-width: 50em;"
+                       + " <ul>"
+                          + " <li><a >" +
+                           ui->emailLineEdit->text() +
+                          + "</a></li>"
 
-            "}"
+                           + "<li>" +
+                             ui->mobileLineEdit->text() +
+                           +  "</li>"
 
-            "#address{"
+                            +  " </ul>"
+                          + "</div>"
 
-            "float:right;"
 
-            "padding-top:2.5em;"
+                         + " <div ></div>"
+                  + "</main>"
+           + "<footer class="//-m-auto -border-top -em-08 -lineheight-1-3 footer -text-left">"
 
-            "}"
+             +" </footer>"
 
-            "#contact{"
+             +"  </div>"
 
-            "text-align:right;"
+          +" </body>"
+                                               ;
 
-            "}"
-
-            ".date {"
-
-            "float:left;"
-
-            "font-size:1em;"
-
-            "margin:0 0 0 -16em;"
-
-            "text-align:right;"
-
-            "}"
-
-            "abbr, acronym{"
-
-            "border-bottom:1px dotted #333;"
-
-            "cursor:help;"
-
-            "}"
-
-            "address{"
-
-            "font-style:italic;"
-
-            "color:#333;"
-
-            "font-size:.9em;"
-
-            "}"
-
-            ".content{"
-
-            "width:32em;"
-
-            "margin:0 0 0 16em;"
-
-            "}"
-
-            ".section{"
-
-            "margin: 0;"
-
-            "padding:1em 0;"
-
-            "}"
-
-            "ul{"
-
-            "padding-left:.5em;"
-
-            "margin-left:.5em;"
-
-            "}"
-
-            "h1{"
-
-           " margin:0 0 .1em 0;"
-
-            "padding:1em 0 0 0;"
-
-            "font-size:1.75em;"
-
-            "border-bottom:3px double #000;"
-
-            "}"
-
-            "h2 {"
-
-            "font-size:1.3em;"
-
-            "font-variant: small-caps;"
-
-            "letter-spacing: .06em;"
-
-            "border-bottom:1px solid #000;"
-
-            "}"
-
-            ".section h3 {"
-
-            "font-size:1em;"
-
-            "font-variant: small-caps;"
-
-            "margin-bottom:0;"
-
-            "width:14em;"
-
-            "}"
-
-           "</style>"
-
-            "<style type="//text/css" media="//print">"
-
-            "body {"
-
-            "background-color:#FFF;"
-
-            "border-width:0 0 0 0;"
-
-            "margin:0;"
-
-            "width:100%"
-
-            "}"
-
-            "</style> "
-            "</head>"
-            "<body>"
-            "<div id="//address">335 Name Street, Unit #, Town, Province, N2H 3Y6</div>"
-            "<h1>First Last</h1>"
-            "<div id="//contact">3A, Your Major, <abbr title="University of Waterloo">UW</abbr>, 1-519-500-8252, <a href="mailto:YOUREMAILADDRESS@uwaterloo.ca">emailaddress@uwaterloo.ca</a></div>"
-            "<div class="//section">"
-           " <h2>Summary of Qualifications</h2>"
-            "<ul>"
-            "<li>Bullet one Bullet one</li>"
-           " <li>Bullet two Bullet two</li>"
-
-            "</ul>"
-           " </div>"
-            "<div class="//section">"
-            "<h2>Work Experience</h2>"
-            "<div class="//content">"
-            "<span class="//date">Start &raquo; End Year</span>"
-            "<h3>Job Title One</h3>"
-            "<address>Company Name, Address, City Province</address>"
-            "<ul>"
-            "<li>Bullet one Bullet one</li>"
-
-            "</ul>"
-            "<span class="//date">Start &raquo; End Year</span>"
-            "<h3>Job Title Two</h3>"
-            "<address>Company Name, Address, City Province</address>"
-            "<ul>"
-            "<li>Bullet one Bullet one</li>"
-
-            "</ul>"
-            "<span class="//date">Start &raquo; End Year</span>"
-            "<h3>Job Title Three</h3>"
-           " <address>Company Name, Address, City Province</address>"
-            "</div>"
-            "</div>"
-            "<div class="//section">"
-            "<h2>Volunteer Experience</h2>"
-            "<div class="//content">"
-            "<span class="//date">Start &raquo; End Year</span>"
-            "<h3>Volunteer Job Title</h3>"
-            "<address>Company Name, Address, City Province</address>"
-            "<ul>"
-            "<li>Bullet one Bullet one</li>"
-
-            "</ul>"
-            "</div>"
-            "</div>"
-            "<div class="//section">"
-            "<h2>Education</h2>"
-            "<ul>"
-            "<li>Candidate for Bachelor of Major, University, Province, StartYear - Present</li>"
-            "<li>OSSD, Highschool, Town, Province, StartYear-EndYear</li>"
-            "</ul>"
-            "</div>"
-            "<div class="//section">"
-            "<h2>Academic Awards</h2>"
-            "<ul>"
-           " <li>Year, Year, Name of award/Scholarship</li>"
-            "</ul>"
-            "</div>"
-            "</body>"
-            "</html>";
-
-
+    QString final =body;
 
 
     QTextDocument document;
-    document.setHtml(html2);
+    document.setHtml(final);
+    //document.setDefaultStyleSheet();
     QPrinter printer(QPrinter::PrinterResolution);
     printer.setOutputFormat(QPrinter::PdfFormat);
     printer.setPaperSize(QPrinter::A4);

@@ -113,7 +113,7 @@
        <string notr="true">background-color: rgb(255, 255, 255);</string>
       </property>
       <property name="currentIndex">
-       <number>3</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tab">
        <attribute name="title">
@@ -1203,14 +1203,14 @@
                 </font>
                </property>
                <property name="text">
-                <string>Additional Skills/certificate(s)</string>
+                <string>Professional Summary</string>
                </property>
               </widget>
              </item>
              <item>
               <widget class="QTextEdit" name="textEditAdditionalSkills">
                <property name="placeholderText">
-                <string>e.g. Certifications or relevant skills information</string>
+                <string>e.g 11 years of software development expereince</string>
                </property>
               </widget>
              </item>

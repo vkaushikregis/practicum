@@ -941,7 +941,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabWidgetMain->setCurrentIndex(3);
+        tabWidgetMain->setCurrentIndex(1);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -1074,8 +1074,8 @@ public:
         tabWidgetMain->setTabText(tabWidgetMain->indexOf(tab_4), QApplication::translate("MainWindow", "Technical Skills", Q_NULLPTR));
         label_24->setText(QApplication::translate("MainWindow", "Add Additional Information that can be relevant ", Q_NULLPTR));
         groupBox_5->setTitle(QString());
-        label_25->setText(QApplication::translate("MainWindow", "Additional Skills/certificate(s)", Q_NULLPTR));
-        textEditAdditionalSkills->setPlaceholderText(QApplication::translate("MainWindow", "e.g. Certifications or relevant skills information", Q_NULLPTR));
+        label_25->setText(QApplication::translate("MainWindow", "Professional Summary", Q_NULLPTR));
+        textEditAdditionalSkills->setPlaceholderText(QApplication::translate("MainWindow", "e.g 11 years of software development expereince", Q_NULLPTR));
         groupBox_6->setTitle(QString());
         label_10->setText(QApplication::translate("MainWindow", "Resume Name (*)", Q_NULLPTR));
         pushButtonSaveInDB->setText(QApplication::translate("MainWindow", "Save in DB", Q_NULLPTR));
