@@ -28,6 +28,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->zipLineEdit->setValidator( new QIntValidator(this));
 
+    connect(ui->pushButtonCreateNewResume,SIGNAL(clicked(bool)),this,SLOT(createNewResume()));
+
+
     //Navigating tab widgets signal connection
     connect(ui->pushButtonBackPersonal,SIGNAL(clicked(bool)),this,SLOT(setTabWidgetIndex()));
     connect(ui->pushButtonBackWork,SIGNAL(clicked(bool)),this,SLOT(setTabWidgetIndex()));
@@ -85,6 +88,34 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::createNewResume()
+{
+     ui->listWidgetResumeNames->clearSelection();
+
+     ui->firstNameLineEdit->setText("");
+     ui->lastNameLineEdit->setText("");
+     ui->addressLineEdit->setText("");
+     ui->cityLineEdit->setText("");
+     ui->stateLineEdit->setText("");
+     ui->zipLineEdit->setText("");
+     ui->mobileLineEdit->setText("");
+     ui->emailLineEdit->setText("");
+
+     while (ui->tableWidgetWorkEx->rowCount() > 0)
+          ui->tableWidgetWorkEx->removeRow(0);
+
+     while (ui->tableWidgetEducation->rowCount() > 0)
+          ui->tableWidgetEducation->removeRow(0);
+
+     while (ui->tableWidgetSkills->rowCount() > 0)
+          ui->tableWidgetSkills->removeRow(0);
+
+     ui->textEditAdditionalSkills->setPlainText("");
+     ui->lineEditResumeName->setText("");
+
+
+}
+
 void MainWindow::fillProficiencyList()
 {
     gProficiencyLevelList.push_back("No Experience");
@@ -139,6 +170,22 @@ void MainWindow::filterReumeInListWidget()
 void MainWindow::deleteExistingResume()
 {
 
+    ResumeNames obj =  findResumePK();
+    //obj.mResume_pk delete this primary key from the database
+    std::string msg;
+    bool status =DatabaseCommunicator::Instance()->deleteResumeFromDB(obj.mResume_pk,msg);
+    if(status)
+    {
+        QMessageBox::information(NULL, QObject::tr("Delete Resume"), tr(msg.c_str()));
+
+    }
+    else
+    {
+        QMessageBox::critical(NULL, QObject::tr("Delete Resume"), tr(msg.c_str()));
+        return;
+    }
+
+    displayExistingResumesInDB();
 }
 
 void MainWindow::connectToDatabase()
@@ -185,7 +232,7 @@ void MainWindow::getSelectedResumeDataFromDB()
             qDebug()<<"first name:" << mResumeManagerBaseObj.mPersonalDetails.mFirst_name.c_str();
             ui->firstNameLineEdit->setText(QString::fromUtf8(mResumeManagerBaseObj.mPersonalDetails.mFirst_name.c_str()));
             ui->lastNameLineEdit->setText(QString::fromUtf8(mResumeManagerBaseObj.mPersonalDetails.mLast_name.c_str()));
-            ui->mobileLineEdit->setText(QString::number(mResumeManagerBaseObj.mPersonalDetails.mMobile));
+            ui->mobileLineEdit->setText(QString::fromUtf8(mResumeManagerBaseObj.mPersonalDetails.mMobile.c_str()));
             ui->emailLineEdit->setText(QString::fromUtf8(mResumeManagerBaseObj.mPersonalDetails.mEmail.c_str()));
             ui->textEditAdditionalSkills->setPlainText(QString::fromUtf8(mResumeManagerBaseObj.mPersonalDetails.mAdditional_information.c_str()));
         }
@@ -202,6 +249,9 @@ void MainWindow::getSelectedResumeDataFromDB()
         bool statusWorkex = DatabaseCommunicator::Instance()->getWorkExDetailsFromDB(resuObj.mResume_pk,mResumeManagerBaseObj,message);
         if(statusWorkex)
         {
+            while (ui->tableWidgetWorkEx->rowCount() > 0)
+                 ui->tableWidgetWorkEx->removeRow(0);
+
             for(int count = 0; count <mResumeManagerBaseObj.mWorkExList.size(); count++)
             {
                 ui->tableWidgetWorkEx->insertRow( ui->tableWidgetWorkEx->rowCount());
@@ -223,6 +273,9 @@ void MainWindow::getSelectedResumeDataFromDB()
         bool statusEdu = DatabaseCommunicator::Instance()->getEducationDetailsFromDB(resuObj.mResume_pk,mResumeManagerBaseObj,message);
         if(statusEdu)
         {
+            while (ui->tableWidgetEducation->rowCount() > 0)
+                 ui->tableWidgetEducation->removeRow(0);
+
            for(int count = 0; count <mResumeManagerBaseObj.mEducationDetailsList.size(); count++)
            {
                ui->tableWidgetEducation->insertRow( ui->tableWidgetEducation->rowCount());
@@ -245,6 +298,9 @@ void MainWindow::getSelectedResumeDataFromDB()
         bool statusTechSkills = DatabaseCommunicator::Instance()->getTechnicalSkillsFromDB(resuObj.mResume_pk,mResumeManagerBaseObj,message);
         if(statusTechSkills)
         {
+            while (ui->tableWidgetSkills->rowCount() > 0)
+                 ui->tableWidgetSkills->removeRow(0);
+
             for(int count = 0; count <mResumeManagerBaseObj.mTechSkillsList.size(); count++)
             {
                 ui->tableWidgetSkills->insertRow( ui->tableWidgetSkills->rowCount());
@@ -771,7 +827,7 @@ void MainWindow::saveResumeDetailsInDB()
         //filling personal details first
         mResumeManagerBaseObj.mPersonalDetails.mFirst_name = ui->firstNameLineEdit->text().toStdString();
         mResumeManagerBaseObj.mPersonalDetails.mLast_name = ui->lastNameLineEdit->text().toStdString();
-        mResumeManagerBaseObj.mPersonalDetails.mMobile = ui->mobileLineEdit->text().toDouble();
+        mResumeManagerBaseObj.mPersonalDetails.mMobile = ui->mobileLineEdit->text().toStdString();
         mResumeManagerBaseObj.mPersonalDetails.mEmail = ui->emailLineEdit->text().toStdString();
         mResumeManagerBaseObj.mPersonalDetails.mAdditional_information = ui->textEditAdditionalSkills->toPlainText().toStdString();
 
@@ -797,9 +853,19 @@ void MainWindow::saveResumeDetailsInDB()
         mResumeManagerBaseObj.mTechSkillsList = tempTechSkillsList;
 
         std::string message;
-        DatabaseCommunicator::Instance()->saveResumeInformationInDB(mResumeManagerBaseObj,message);
+        bool status= DatabaseCommunicator::Instance()->saveResumeInformationInDB(mResumeManagerBaseObj,message);
+        if(status)
+        {
+            QMessageBox::information(NULL, QObject::tr("Save Resume"), tr(message.c_str()));
+        }
+        else
+        {
+             QMessageBox::critical(NULL, QObject::tr("Save Resume"), tr(message.c_str()));
+        }
 
     }
+
+    displayExistingResumesInDB();
 }
 void MainWindow::fillEducationDetailsList(std::vector<EducationDetails> &tempEducationDetailsList)
 {

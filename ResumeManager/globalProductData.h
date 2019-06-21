@@ -70,7 +70,7 @@ struct PersonalDetails
     long int mPersonal_details_pk;
     std::string mFirst_name;
     std::string mLast_name;
-    long int mMobile;
+    std::string mMobile;
     std::string mEmail;
     std::string mAdditional_information;
     long int mResume_fk;

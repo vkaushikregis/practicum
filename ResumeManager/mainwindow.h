@@ -33,6 +33,7 @@ private:
     void fillProficiencyList();
 
 private slots:
+    void createNewResume();
     void setTabWidgetIndex();    
     void validateFirstTabInputs();
     void validateSecondTabInputs();

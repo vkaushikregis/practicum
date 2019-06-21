@@ -76,7 +76,7 @@ bool DatabaseCommunicator::getExistingResumesFromDB(std::string &msg)
       if(db.open())
       {
           QSqlQuery query;
-          QString preparedStmt = "SELECT personal_details_pk,first_name,last_name,mobile,email,resume_name_fk,additonal_info FROM resumemanager.personal_details where resume_name_fk =" + QString::number(resume_fk);
+          QString preparedStmt = "SELECT personal_details_pk,first_name,last_name,mobile,email,resume_name_fk,additional_info FROM resumemanager.personal_details where resume_name_fk =" + QString::number(resume_fk);
           query.exec(preparedStmt);
           if(!query.exec())
           {
@@ -87,7 +87,7 @@ bool DatabaseCommunicator::getExistingResumesFromDB(std::string &msg)
               resuObj.mPersonalDetails.mPersonal_details_pk = query.value(0).toInt();
               resuObj.mPersonalDetails.mFirst_name = query.value(1).toString().toStdString();
               resuObj.mPersonalDetails.mLast_name = query.value(2).toString().toStdString();
-              resuObj.mPersonalDetails.mMobile = query.value(3).toInt();
+              resuObj.mPersonalDetails.mMobile = query.value(3).toString().toStdString();
               resuObj.mPersonalDetails.mEmail = query.value(4).toString().toStdString();
               resuObj.mPersonalDetails.mResume_fk = query.value(5).toInt();
               resuObj.mPersonalDetails.mAdditional_information = query.value(6).toString().toStdString();
@@ -242,7 +242,7 @@ bool DatabaseCommunicator::getExistingResumesFromDB(std::string &msg)
             qPer.prepare("INSERT INTO resumemanager.personal_details (first_name,last_name,mobile,email,resume_name_fk,additional_info) VALUES(:first_name,:last_name,:mobile,:email,:resume_fk,:additonal_info)");
             qPer.bindValue(":first_name", QString::fromUtf8(resuObj.mPersonalDetails.mFirst_name.c_str()));
             qPer.bindValue(":last_name",  QString::fromUtf8(resuObj.mPersonalDetails.mLast_name.c_str()));
-            qPer.bindValue(":mobile", resuObj.mPersonalDetails.mMobile);
+            qPer.bindValue(":mobile", QString::fromUtf8(resuObj.mPersonalDetails.mMobile.c_str()));
             qPer.bindValue(":email",  QString::fromUtf8(resuObj.mPersonalDetails.mEmail.c_str()));
             qPer.bindValue(":resume_fk", resume_name_pk);
             qPer.bindValue(":additonal_info",  QString::fromUtf8(resuObj.mPersonalDetails.mAdditional_information.c_str()));
@@ -350,7 +350,37 @@ bool DatabaseCommunicator::getExistingResumesFromDB(std::string &msg)
             }
        }
 
+       msg= "Resume is saved in Database successfully.";
        db.commit(); // Commits transaction
 
+       return true;
+   }
+
+   bool DatabaseCommunicator::deleteResumeFromDB(int resume_name_pk,std::string &msg)
+   {
+       db.transaction();
+
+       if(db.open())
+       {
+           QSqlQuery qry;
+
+           qry.prepare("DELETE FROM resumemanager.resumename WHERE resume_name_pk = ?");
+           qry.addBindValue(resume_name_pk);
+
+           if( !qry.exec() )
+           {
+               qDebug() << qry.lastError().text();
+               msg = qry.lastError().text().toStdString();
+               QSqlDatabase::database().rollback();
+               return false;
+           }
+           else
+           {
+               qDebug( "Inserted into resume name!" );
+               msg= "Resume succesfully deleted from database.";
+           }
+       }
+
+       db.commit();
        return true;
    }

@@ -40,6 +40,11 @@ class Ui_MainWindow
 public:
     QWidget *centralWidget;
     QGridLayout *gridLayout_3;
+    QLineEdit *lineEditSearchResume;
+    QLabel *label_16;
+    QListWidget *listWidgetResumeNames;
+    QPushButton *pushButtonDeleteResume;
+    QPushButton *pushButtonCreateNewResume;
     QLabel *label_26;
     QTabWidget *tabWidgetMain;
     QWidget *tab;
@@ -117,13 +122,13 @@ public:
     QLabel *label_22;
     QGroupBox *groupBox_4;
     QGridLayout *gridLayout_8;
-    QTableWidget *tableWidgetSkills;
-    QVBoxLayout *verticalLayout_11;
-    QSpacerItem *verticalSpacer_5;
     QPushButton *pushButtonAddSkill;
     QPushButton *pushButtonEditSkill;
     QPushButton *pushButtonDeleteSkill;
-    QSpacerItem *verticalSpacer_4;
+    QSpacerItem *horizontalSpacer_4;
+    QTableWidget *tableWidgetSkills;
+    QVBoxLayout *verticalLayout_11;
+    QSpacerItem *verticalSpacer_5;
     QPushButton *pushButtonAdditionalSkils;
     QPushButton *pushButtonBackEducation;
     QWidget *tab_5;
@@ -152,10 +157,6 @@ public:
     QLineEdit *lineEditDirectoryPath;
     QPushButton *pushButtonBrowse;
     QPushButton *pushButtonExportAsPDF;
-    QLineEdit *lineEditSearchResume;
-    QLabel *label_16;
-    QListWidget *listWidgetResumeNames;
-    QPushButton *pushButtonDeleteResume;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
@@ -172,13 +173,45 @@ public:
         gridLayout_3->setSpacing(6);
         gridLayout_3->setContentsMargins(11, 11, 11, 11);
         gridLayout_3->setObjectName(QStringLiteral("gridLayout_3"));
-        label_26 = new QLabel(centralWidget);
-        label_26->setObjectName(QStringLiteral("label_26"));
+        lineEditSearchResume = new QLineEdit(centralWidget);
+        lineEditSearchResume->setObjectName(QStringLiteral("lineEditSearchResume"));
+        lineEditSearchResume->setMinimumSize(QSize(30, 25));
+        lineEditSearchResume->setMaximumSize(QSize(200, 16777215));
+
+        gridLayout_3->addWidget(lineEditSearchResume, 3, 0, 1, 1);
+
+        label_16 = new QLabel(centralWidget);
+        label_16->setObjectName(QStringLiteral("label_16"));
+        label_16->setMinimumSize(QSize(30, 0));
         QFont font;
         font.setPointSize(8);
+        label_16->setFont(font);
+
+        gridLayout_3->addWidget(label_16, 5, 0, 1, 1);
+
+        listWidgetResumeNames = new QListWidget(centralWidget);
+        listWidgetResumeNames->setObjectName(QStringLiteral("listWidgetResumeNames"));
+        listWidgetResumeNames->setMaximumSize(QSize(200, 16777215));
+
+        gridLayout_3->addWidget(listWidgetResumeNames, 6, 0, 1, 1);
+
+        pushButtonDeleteResume = new QPushButton(centralWidget);
+        pushButtonDeleteResume->setObjectName(QStringLiteral("pushButtonDeleteResume"));
+        pushButtonDeleteResume->setStyleSheet(QStringLiteral("background-color: rgb(255, 90, 57);"));
+
+        gridLayout_3->addWidget(pushButtonDeleteResume, 7, 0, 1, 1);
+
+        pushButtonCreateNewResume = new QPushButton(centralWidget);
+        pushButtonCreateNewResume->setObjectName(QStringLiteral("pushButtonCreateNewResume"));
+        pushButtonCreateNewResume->setStyleSheet(QStringLiteral("background-color: rgb(87, 170, 94);"));
+
+        gridLayout_3->addWidget(pushButtonCreateNewResume, 1, 0, 1, 1);
+
+        label_26 = new QLabel(centralWidget);
+        label_26->setObjectName(QStringLiteral("label_26"));
         label_26->setFont(font);
 
-        gridLayout_3->addWidget(label_26, 0, 0, 1, 1);
+        gridLayout_3->addWidget(label_26, 2, 0, 1, 1);
 
         tabWidgetMain = new QTabWidget(centralWidget);
         tabWidgetMain->setObjectName(QStringLiteral("tabWidgetMain"));
@@ -187,7 +220,7 @@ public:
         font1.setBold(false);
         font1.setWeight(50);
         tabWidgetMain->setFont(font1);
-        tabWidgetMain->setStyleSheet(QStringLiteral("background-color: rgb(252, 255, 237);"));
+        tabWidgetMain->setStyleSheet(QStringLiteral("background-color: rgb(255, 255, 255);"));
         tab = new QWidget();
         tab->setObjectName(QStringLiteral("tab"));
         gridLayout_5 = new QGridLayout(tab);
@@ -202,7 +235,7 @@ public:
         font2.setFamily(QStringLiteral("Yu Gothic UI"));
         font2.setPointSize(9);
         label_9->setFont(font2);
-        label_9->setStyleSheet(QStringLiteral("background-color: rgb(85, 170, 255);"));
+        label_9->setStyleSheet(QStringLiteral("background-color: rgb(255, 170, 0);"));
         label_9->setFrameShadow(QFrame::Raised);
         label_9->setTextFormat(Qt::PlainText);
 
@@ -430,7 +463,7 @@ public:
         label_15->setObjectName(QStringLiteral("label_15"));
         label_15->setMinimumSize(QSize(0, 50));
         label_15->setFont(font2);
-        label_15->setStyleSheet(QStringLiteral("background-color: rgb(85, 170, 255);"));
+        label_15->setStyleSheet(QStringLiteral("background-color: rgb(255, 170, 0);"));
         label_15->setFrameShadow(QFrame::Raised);
         label_15->setTextFormat(Qt::PlainText);
 
@@ -450,17 +483,19 @@ public:
         horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
         pushButtonAddWorkEx = new QPushButton(groupBox);
         pushButtonAddWorkEx->setObjectName(QStringLiteral("pushButtonAddWorkEx"));
-        pushButtonAddWorkEx->setStyleSheet(QStringLiteral("background-color: rgb(159, 255, 144);"));
+        pushButtonAddWorkEx->setStyleSheet(QStringLiteral("background-color: rgb(87, 170, 94);"));
 
         horizontalLayout->addWidget(pushButtonAddWorkEx);
 
         pushButtonEditWorkEx = new QPushButton(groupBox);
         pushButtonEditWorkEx->setObjectName(QStringLiteral("pushButtonEditWorkEx"));
+        pushButtonEditWorkEx->setStyleSheet(QStringLiteral("background-color: rgb(252, 255, 212);"));
 
         horizontalLayout->addWidget(pushButtonEditWorkEx);
 
         pushButtonDeleteWorkEx = new QPushButton(groupBox);
         pushButtonDeleteWorkEx->setObjectName(QStringLiteral("pushButtonDeleteWorkEx"));
+        pushButtonDeleteWorkEx->setStyleSheet(QStringLiteral("background-color: rgb(255, 90, 57);"));
 
         horizontalLayout->addWidget(pushButtonDeleteWorkEx);
 
@@ -547,7 +582,7 @@ public:
         label_17->setObjectName(QStringLiteral("label_17"));
         label_17->setMinimumSize(QSize(0, 50));
         label_17->setFont(font2);
-        label_17->setStyleSheet(QStringLiteral("background-color: rgb(85, 170, 255);"));
+        label_17->setStyleSheet(QStringLiteral("background-color: rgb(255, 170, 0);"));
         label_17->setFrameShadow(QFrame::Raised);
         label_17->setTextFormat(Qt::PlainText);
 
@@ -567,17 +602,19 @@ public:
         horizontalLayout_5->setObjectName(QStringLiteral("horizontalLayout_5"));
         pushButtonAddEducation = new QPushButton(groupBox_3);
         pushButtonAddEducation->setObjectName(QStringLiteral("pushButtonAddEducation"));
-        pushButtonAddEducation->setStyleSheet(QStringLiteral("background-color: rgb(159, 255, 144);"));
+        pushButtonAddEducation->setStyleSheet(QStringLiteral("background-color: rgb(87, 170, 94);"));
 
         horizontalLayout_5->addWidget(pushButtonAddEducation);
 
         pushButtonEditEducation = new QPushButton(groupBox_3);
         pushButtonEditEducation->setObjectName(QStringLiteral("pushButtonEditEducation"));
+        pushButtonEditEducation->setStyleSheet(QStringLiteral("background-color: rgb(252, 255, 212);"));
 
         horizontalLayout_5->addWidget(pushButtonEditEducation);
 
         pushButtonDeleteEducation = new QPushButton(groupBox_3);
         pushButtonDeleteEducation->setObjectName(QStringLiteral("pushButtonDeleteEducation"));
+        pushButtonDeleteEducation->setStyleSheet(QStringLiteral("background-color: rgb(255, 90, 57);"));
 
         horizontalLayout_5->addWidget(pushButtonDeleteEducation);
 
@@ -655,7 +692,7 @@ public:
         label_22->setObjectName(QStringLiteral("label_22"));
         label_22->setMinimumSize(QSize(0, 50));
         label_22->setFont(font2);
-        label_22->setStyleSheet(QStringLiteral("background-color: rgb(85, 170, 255);"));
+        label_22->setStyleSheet(QStringLiteral("background-color: rgb(255, 170, 0);"));
         label_22->setFrameShadow(QFrame::Raised);
         label_22->setTextFormat(Qt::PlainText);
 
@@ -667,6 +704,28 @@ public:
         gridLayout_8->setSpacing(6);
         gridLayout_8->setContentsMargins(11, 11, 11, 11);
         gridLayout_8->setObjectName(QStringLiteral("gridLayout_8"));
+        pushButtonAddSkill = new QPushButton(groupBox_4);
+        pushButtonAddSkill->setObjectName(QStringLiteral("pushButtonAddSkill"));
+        pushButtonAddSkill->setStyleSheet(QStringLiteral("background-color: rgb(87, 170, 94);"));
+
+        gridLayout_8->addWidget(pushButtonAddSkill, 0, 0, 1, 1);
+
+        pushButtonEditSkill = new QPushButton(groupBox_4);
+        pushButtonEditSkill->setObjectName(QStringLiteral("pushButtonEditSkill"));
+        pushButtonEditSkill->setStyleSheet(QStringLiteral("background-color: rgb(252, 255, 212);"));
+
+        gridLayout_8->addWidget(pushButtonEditSkill, 0, 1, 1, 1);
+
+        pushButtonDeleteSkill = new QPushButton(groupBox_4);
+        pushButtonDeleteSkill->setObjectName(QStringLiteral("pushButtonDeleteSkill"));
+        pushButtonDeleteSkill->setStyleSheet(QStringLiteral("background-color: rgb(255, 90, 57);"));
+
+        gridLayout_8->addWidget(pushButtonDeleteSkill, 0, 2, 1, 1);
+
+        horizontalSpacer_4 = new QSpacerItem(382, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        gridLayout_8->addItem(horizontalSpacer_4, 0, 3, 1, 1);
+
         tableWidgetSkills = new QTableWidget(groupBox_4);
         if (tableWidgetSkills->columnCount() < 4)
             tableWidgetSkills->setColumnCount(4);
@@ -686,7 +745,7 @@ public:
         tableWidgetSkills->setAlternatingRowColors(true);
         tableWidgetSkills->setSelectionMode(QAbstractItemView::SingleSelection);
 
-        gridLayout_8->addWidget(tableWidgetSkills, 0, 0, 1, 1);
+        gridLayout_8->addWidget(tableWidgetSkills, 1, 0, 1, 4);
 
 
         gridLayout_9->addWidget(groupBox_4, 1, 0, 1, 1);
@@ -697,28 +756,6 @@ public:
         verticalSpacer_5 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
         verticalLayout_11->addItem(verticalSpacer_5);
-
-        pushButtonAddSkill = new QPushButton(tab_4);
-        pushButtonAddSkill->setObjectName(QStringLiteral("pushButtonAddSkill"));
-        pushButtonAddSkill->setStyleSheet(QStringLiteral("background-color: rgb(159, 255, 144);"));
-
-        verticalLayout_11->addWidget(pushButtonAddSkill);
-
-        pushButtonEditSkill = new QPushButton(tab_4);
-        pushButtonEditSkill->setObjectName(QStringLiteral("pushButtonEditSkill"));
-        pushButtonEditSkill->setStyleSheet(QStringLiteral("background-color: rgb(159, 255, 144);"));
-
-        verticalLayout_11->addWidget(pushButtonEditSkill);
-
-        pushButtonDeleteSkill = new QPushButton(tab_4);
-        pushButtonDeleteSkill->setObjectName(QStringLiteral("pushButtonDeleteSkill"));
-        pushButtonDeleteSkill->setStyleSheet(QStringLiteral("background-color: rgb(255, 90, 57);"));
-
-        verticalLayout_11->addWidget(pushButtonDeleteSkill);
-
-        verticalSpacer_4 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
-
-        verticalLayout_11->addItem(verticalSpacer_4);
 
         pushButtonAdditionalSkils = new QPushButton(tab_4);
         pushButtonAdditionalSkils->setObjectName(QStringLiteral("pushButtonAdditionalSkils"));
@@ -746,7 +783,7 @@ public:
         label_24->setObjectName(QStringLiteral("label_24"));
         label_24->setMinimumSize(QSize(0, 50));
         label_24->setFont(font2);
-        label_24->setStyleSheet(QStringLiteral("background-color: rgb(85, 170, 255);"));
+        label_24->setStyleSheet(QStringLiteral("background-color: rgb(255, 170, 0);"));
         label_24->setFrameShadow(QFrame::Raised);
         label_24->setTextFormat(Qt::PlainText);
 
@@ -888,32 +925,7 @@ public:
 
         tabWidgetMain->addTab(tab_5, QString());
 
-        gridLayout_3->addWidget(tabWidgetMain, 0, 1, 5, 1);
-
-        lineEditSearchResume = new QLineEdit(centralWidget);
-        lineEditSearchResume->setObjectName(QStringLiteral("lineEditSearchResume"));
-        lineEditSearchResume->setMinimumSize(QSize(30, 25));
-        lineEditSearchResume->setMaximumSize(QSize(200, 16777215));
-
-        gridLayout_3->addWidget(lineEditSearchResume, 1, 0, 1, 1);
-
-        label_16 = new QLabel(centralWidget);
-        label_16->setObjectName(QStringLiteral("label_16"));
-        label_16->setMinimumSize(QSize(30, 0));
-        label_16->setFont(font);
-
-        gridLayout_3->addWidget(label_16, 2, 0, 1, 1);
-
-        listWidgetResumeNames = new QListWidget(centralWidget);
-        listWidgetResumeNames->setObjectName(QStringLiteral("listWidgetResumeNames"));
-        listWidgetResumeNames->setMaximumSize(QSize(200, 16777215));
-
-        gridLayout_3->addWidget(listWidgetResumeNames, 3, 0, 1, 1);
-
-        pushButtonDeleteResume = new QPushButton(centralWidget);
-        pushButtonDeleteResume->setObjectName(QStringLiteral("pushButtonDeleteResume"));
-
-        gridLayout_3->addWidget(pushButtonDeleteResume, 4, 0, 1, 1);
+        gridLayout_3->addWidget(tabWidgetMain, 0, 1, 8, 1);
 
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
@@ -929,7 +941,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabWidgetMain->setCurrentIndex(4);
+        tabWidgetMain->setCurrentIndex(3);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -937,7 +949,10 @@ public:
 
     void retranslateUi(QMainWindow *MainWindow)
     {
-        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "ResumManager", Q_NULLPTR));
+        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "ResumeManager", Q_NULLPTR));
+        label_16->setText(QApplication::translate("MainWindow", "Existing Resume(s)", Q_NULLPTR));
+        pushButtonDeleteResume->setText(QApplication::translate("MainWindow", "Delete Resume", Q_NULLPTR));
+        pushButtonCreateNewResume->setText(QApplication::translate("MainWindow", "Create New Resume", Q_NULLPTR));
         label_26->setText(QApplication::translate("MainWindow", "Search", Q_NULLPTR));
 #ifndef QT_NO_WHATSTHIS
         tabWidgetMain->setWhatsThis(QString());
@@ -1043,6 +1058,9 @@ public:
         tabWidgetMain->setTabText(tabWidgetMain->indexOf(tab_3), QApplication::translate("MainWindow", "Education", Q_NULLPTR));
         label_22->setText(QApplication::translate("MainWindow", "Add Technical skills", Q_NULLPTR));
         groupBox_4->setTitle(QString());
+        pushButtonAddSkill->setText(QApplication::translate("MainWindow", "Add", Q_NULLPTR));
+        pushButtonEditSkill->setText(QApplication::translate("MainWindow", "Edit", Q_NULLPTR));
+        pushButtonDeleteSkill->setText(QApplication::translate("MainWindow", "Delete", Q_NULLPTR));
         QTableWidgetItem *___qtablewidgetitem14 = tableWidgetSkills->horizontalHeaderItem(0);
         ___qtablewidgetitem14->setText(QApplication::translate("MainWindow", "Tech_skills_pk", Q_NULLPTR));
         QTableWidgetItem *___qtablewidgetitem15 = tableWidgetSkills->horizontalHeaderItem(1);
@@ -1051,9 +1069,6 @@ public:
         ___qtablewidgetitem16->setText(QApplication::translate("MainWindow", "Proficiency", Q_NULLPTR));
         QTableWidgetItem *___qtablewidgetitem17 = tableWidgetSkills->horizontalHeaderItem(3);
         ___qtablewidgetitem17->setText(QApplication::translate("MainWindow", "Years/Used", Q_NULLPTR));
-        pushButtonAddSkill->setText(QApplication::translate("MainWindow", "Add", Q_NULLPTR));
-        pushButtonEditSkill->setText(QApplication::translate("MainWindow", "Edit", Q_NULLPTR));
-        pushButtonDeleteSkill->setText(QApplication::translate("MainWindow", "Delete", Q_NULLPTR));
         pushButtonAdditionalSkils->setText(QApplication::translate("MainWindow", "--> Additional Details", Q_NULLPTR));
         pushButtonBackEducation->setText(QApplication::translate("MainWindow", "<-- Back", Q_NULLPTR));
         tabWidgetMain->setTabText(tabWidgetMain->indexOf(tab_4), QApplication::translate("MainWindow", "Technical Skills", Q_NULLPTR));
@@ -1072,8 +1087,6 @@ public:
         pushButtonBrowse->setText(QApplication::translate("MainWindow", "Browse", Q_NULLPTR));
         pushButtonExportAsPDF->setText(QApplication::translate("MainWindow", "Export as PDF", Q_NULLPTR));
         tabWidgetMain->setTabText(tabWidgetMain->indexOf(tab_5), QApplication::translate("MainWindow", "Additional Details", Q_NULLPTR));
-        label_16->setText(QApplication::translate("MainWindow", "Existing Resume(s)", Q_NULLPTR));
-        pushButtonDeleteResume->setText(QApplication::translate("MainWindow", "Delete Resume", Q_NULLPTR));
     } // retranslateUi
 
 };

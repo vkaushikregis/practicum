@@ -18,6 +18,7 @@ public:
     bool getTechnicalSkillsFromDB(int resume_fk,ResumeManagerBase &resuObj,std::string &msg);
 
     bool saveResumeInformationInDB(const ResumeManagerBase &resuObj,std::string &msg);
+    bool deleteResumeFromDB(int resume_name_pk,std::string &msg);
 private:
     DatabaseCommunicator();
     static DatabaseCommunicator *_instance;
