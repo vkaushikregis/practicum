@@ -317,35 +317,35 @@ void MainWindow::getSelectedResumeDataFromDB()
             while (ui->tableWidgetEducation->rowCount() > 0)
                  ui->tableWidgetEducation->removeRow(0);
 
-           for(int count = 0; count <.mEducationDetailsList.size(); count++)
+           for(int count = 0; count <mResumeManagerBaseObj.mEducationDetailsList.size(); count++)
            {
                ui->tableWidgetEducation->insertRow( ui->tableWidgetEducation->rowCount());
-               ui->tableWidgetEducation->setItem( ui->tableWidgetEducation->rowCount() - 1, EDU_PK, new QTableWidgetItem((QString::number(.mEducationDetailsList[count].mEducation_details_pk))));
-               ui->tableWidgetEducation->setItem( ui->tableWidgetEducation->rowCount() - 1, COLLEGE_NAME, new QTableWidgetItem(QString::fromUtf8(.mEducationDetailsList[count].mCollege_name.c_str())));
-               ui->tableWidgetEducation->setItem( ui->tableWidgetEducation->rowCount() - 1, FROM_DATE_C, new QTableWidgetItem(QString::fromUtf8(.mEducationDetailsList[count].mFrom_date.c_str())));
-               ui->tableWidgetEducation->setItem( ui->tableWidgetEducation->rowCount() - 1, TO_DATE_C, new QTableWidgetItem(QString::fromUtf8(.mEducationDetailsList[count].mTo_date.c_str())));
-               if(.mEducationDetailsList[count].mStill_pursuing)
+               ui->tableWidgetEducation->setItem( ui->tableWidgetEducation->rowCount() - 1, EDU_PK, new QTableWidgetItem((QString::number(mResumeManagerBaseObj.mEducationDetailsList[count].mEducation_details_pk))));
+               ui->tableWidgetEducation->setItem( ui->tableWidgetEducation->rowCount() - 1, COLLEGE_NAME, new QTableWidgetItem(QString::fromUtf8(mResumeManagerBaseObj.mEducationDetailsList[count].mCollege_name.c_str())));
+               ui->tableWidgetEducation->setItem( ui->tableWidgetEducation->rowCount() - 1, FROM_DATE_C, new QTableWidgetItem(QString::fromUtf8(mResumeManagerBaseObj.mEducationDetailsList[count].mFrom_date.c_str())));
+               ui->tableWidgetEducation->setItem( ui->tableWidgetEducation->rowCount() - 1, TO_DATE_C, new QTableWidgetItem(QString::fromUtf8(mResumeManagerBaseObj.mEducationDetailsList[count].mTo_date.c_str())));
+               if(mResumeManagerBaseObj.mEducationDetailsList[count].mStill_pursuing)
                    ui->tableWidgetEducation->setItem( ui->tableWidgetEducation->rowCount() - 1, IS_CURR_C, new QTableWidgetItem(("Yes")));
                else
                    ui->tableWidgetEducation->setItem( ui->tableWidgetEducation->rowCount() - 1, IS_CURR_C, new QTableWidgetItem(("No")));
 
-               ui->tableWidgetEducation->setItem( ui->tableWidgetEducation->rowCount() - 1, FIELD, new QTableWidgetItem(QString::fromUtf8(.mEducationDetailsList[count].mField.c_str())));
-               ui->tableWidgetEducation->setItem( ui->tableWidgetEducation->rowCount() - 1, GPA, new QTableWidgetItem((QString::number(.mEducationDetailsList[count].mGPA))));
+               ui->tableWidgetEducation->setItem( ui->tableWidgetEducation->rowCount() - 1, FIELD, new QTableWidgetItem(QString::fromUtf8(mResumeManagerBaseObj.mEducationDetailsList[count].mField.c_str())));
+               ui->tableWidgetEducation->setItem( ui->tableWidgetEducation->rowCount() - 1, GPA, new QTableWidgetItem((QString::number(mResumeManagerBaseObj.mEducationDetailsList[count].mGPA))));
 
 
            }
         }
 
-        bool statusTechSkills = DatabaseCommunicator::Instance()->getTechnicalSkillsFromDB(resuObj.mResume_pk,,message);
+        bool statusTechSkills = DatabaseCommunicator::Instance()->getTechnicalSkillsFromDB(resuObj.mResume_pk,mResumeManagerBaseObj,message);
         if(statusTechSkills)
         {
             while (ui->tableWidgetSkills->rowCount() > 0)
                  ui->tableWidgetSkills->removeRow(0);
 
-            for(int count = 0; count <.mTechSkillsList.size(); count++)
+            for(int count = 0; count <mResumeManagerBaseObj.mTechSkillsList.size(); count++)
             {
                 ui->tableWidgetSkills->insertRow( ui->tableWidgetSkills->rowCount());
-                ui->tableWidgetSkills->setItem( ui->tableWidgetSkills->rowCount() - 1, TECH_PK, new QTableWidgetItem((QString::number(.mTechSkillsList[count].mTech_skills_pk))));
+                ui->tableWidgetSkills->setItem( ui->tableWidgetSkills->rowCount() - 1, TECH_PK, new QTableWidgetItem((QString::number(mResumeManagerBaseObj.mTechSkillsList[count].mTech_skills_pk))));
                 ui->tableWidgetSkills->setItem( ui->tableWidgetSkills->rowCount() - 1, SKILL_NAME, new QTableWidgetItem(QString::fromUtf8(mResumeManagerBaseObj.mTechSkillsList[count].mSkill_name.c_str())));
                 ui->tableWidgetSkills->setItem( ui->tableWidgetSkills->rowCount() - 1, PROFICIENCY, new QTableWidgetItem(QString::fromUtf8(mResumeManagerBaseObj.mTechSkillsList[count].mProficiency.c_str())));
                 ui->tableWidgetSkills->setItem( ui->tableWidgetSkills->rowCount() - 1, YEARS_USED, new QTableWidgetItem((QString::number(mResumeManagerBaseObj.mTechSkillsList[count].mYears_used))));
