@@ -5,7 +5,8 @@
 #include <string>
 #include <vector>
 #include <iostream>
-
+#include <QApplication>
+#include <QtCore>
 extern bool isDatabaseConnected;
 typedef enum
     {
@@ -94,5 +95,6 @@ struct ResumeNames
 };
 extern std::vector<ResumeNames> gResumeNamesList;
 extern std::vector<std::string> gProficiencyLevelList;
+QString cssTable();
 
 #endif // PRODUCTDATA_H

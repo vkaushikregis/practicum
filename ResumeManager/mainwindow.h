@@ -31,9 +31,12 @@ private:
     void fillEducationDetailsList(std::vector<EducationDetails> &tempEducationDetailsList);
     void fillTechSkillsList(std::vector<TechnicalSkills> &tempTechSkillsList);
     void fillProficiencyList();
-
+    void enableDisableGroupbBox(bool flag);
+    bool isInEditModeFlag ;
+    std::string currentResume;
 private slots:
     void createNewResume();
+    void EditCurrentResume();
     void setTabWidgetIndex();    
     void validateFirstTabInputs();
     void validateSecondTabInputs();

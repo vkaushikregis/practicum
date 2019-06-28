@@ -212,6 +212,152 @@ bool DatabaseCommunicator::getExistingResumesFromDB(std::string &msg)
       return true;
    }
 
+    bool DatabaseCommunicator::updateResumeInDB(const ResumeManagerBase &resuObj,std::string &msg)
+    {
+        db.transaction(); // Starts a transaction
+
+        //IMPORTANT: check that every insert is a success otherwise rollback
+
+
+        if(db.open())
+        {
+             QSqlQuery qry;
+
+             qry.prepare("UPDATE resumemanager.resumename SET resume_name = :resume_name_val where resume_name_pk = :resume_pk_val ");
+             qry.bindValue(":resume_name_val",QString::fromUtf8(resuObj.mResume_name.c_str()));
+             qry.bindValue(":resume_pk_val",(resuObj.mResume_pk));
+
+             if( !qry.exec() )
+             {
+                 qDebug() << qry.lastError().text();
+                 msg = qry.lastError().text().toStdString();
+                 QSqlDatabase::database().rollback();
+                 return false;
+             }
+             else
+                 qDebug( "Updated resume name!" );
+
+             int resume_name_pk = qry.lastInsertId().toInt();
+
+             // second insert into personal_details table
+             QSqlQuery qPer;
+             qPer.prepare("INSERT INTO resumemanager.personal_details (first_name,last_name,mobile,email,resume_name_fk,additional_info) VALUES(:first_name,:last_name,:mobile,:email,:resume_fk,:additonal_info)");
+             qPer.bindValue(":first_name", QString::fromUtf8(resuObj.mPersonalDetails.mFirst_name.c_str()));
+             qPer.bindValue(":last_name",  QString::fromUtf8(resuObj.mPersonalDetails.mLast_name.c_str()));
+             qPer.bindValue(":mobile", QString::fromUtf8(resuObj.mPersonalDetails.mMobile.c_str()));
+             qPer.bindValue(":email",  QString::fromUtf8(resuObj.mPersonalDetails.mEmail.c_str()));
+             qPer.bindValue(":resume_fk", resume_name_pk);
+             qPer.bindValue(":additonal_info",  QString::fromUtf8(resuObj.mPersonalDetails.mAdditional_information.c_str()));
+
+             if( !qPer.exec() )
+             {
+                 qDebug() << qPer.lastError().text();
+                 msg = qPer.lastError().text().toStdString();
+                 QSqlDatabase::database().rollback();
+                 return false;
+             }
+             else
+                 qDebug( "Inserted into personal details!" );
+
+
+             // third insert into address table
+             QSqlQuery qAdd;
+             qAdd.prepare("INSERT INTO resumemanager.address (streetaddress,city,state,zip,resume_name_fk) VALUES(:streetadress,:city,:state,:zip,:resume_fk)");
+             qAdd.bindValue(":streetadress",  QString::fromUtf8(resuObj.mAddress.mStreet_address.c_str()));
+             qAdd.bindValue(":city",  QString::fromUtf8(resuObj.mAddress.mCity.c_str()));
+             qAdd.bindValue(":state",  QString::fromUtf8(resuObj.mAddress.mState.c_str()));
+             qAdd.bindValue(":zip", resuObj.mAddress.mZip);
+             qAdd.bindValue(":resume_fk", resume_name_pk);
+
+             if( !qAdd.exec() )
+             {
+                 qDebug() << qAdd.lastError().text();
+                 msg = qAdd.lastError().text().toStdString();
+                 QSqlDatabase::database().rollback();
+                 return false;
+             }
+             else
+                 qDebug( "Inserted into address details!" );
+
+             //insert data into work experience table
+             for(int count =0; count < resuObj.mWorkExList.size(); count++)
+             {
+                 QSqlQuery q;
+                 q.prepare("INSERT INTO resumemanager.work_experience (company_name,from_date,to_date,job_description,resume_name_fk,currently_pursuing,title) VALUES(:company_name,:from_date,:to_date,:jd,:resume_fk,:current_job, :title)");
+                 q.bindValue(":company_name",  QString::fromUtf8(resuObj.mWorkExList[count].mCompany_name.c_str()));
+                 q.bindValue(":from_date",  QString::fromUtf8(resuObj.mWorkExList[count].mFrom_date.c_str()));
+                 q.bindValue(":to_date",  QString::fromUtf8(resuObj.mWorkExList[count].mTo_date.c_str()));
+                 q.bindValue(":jd",  QString::fromUtf8(resuObj.mWorkExList[count].mJob_description.c_str()));
+                 q.bindValue(":resume_fk", resume_name_pk);
+                 q.bindValue(":current_job", resuObj.mWorkExList[count].mCurrent);
+                 q.bindValue(":title", QString::fromUtf8(resuObj.mWorkExList[count].mTitle.c_str()));
+
+                 if( !q.exec() )
+                 {
+                     qDebug() << q.lastError().text();
+                     msg = q.lastError().text().toStdString();
+                     QSqlDatabase::database().rollback();
+                     break;
+                     return false;
+                 }
+                 else
+                     qDebug( "Inserted into work experience table !" );
+             }
+
+             //insert into education_details table
+             for(int count =0; count < resuObj.mEducationDetailsList.size(); count++)
+             {
+                 QSqlQuery q;
+                 q.prepare("INSERT INTO resumemanager.education_details (college_name,from_date,to_date,still_pursuing,field,gpa,resume_name_fk) VALUES(:college_name,:from_date,:to_date,:isCurrent,:field,:GPA,:resume_fk)");
+                 q.bindValue(":college_name",  QString::fromUtf8(resuObj.mEducationDetailsList[count].mCollege_name.c_str()));
+                 q.bindValue(":from_date",  QString::fromUtf8(resuObj.mEducationDetailsList[count].mFrom_date.c_str()));
+                 q.bindValue(":to_date",  QString::fromUtf8(resuObj.mEducationDetailsList[count].mTo_date.c_str()));
+                 q.bindValue(":isCurrent", resuObj.mEducationDetailsList[count].mStill_pursuing);
+                 q.bindValue(":field",  QString::fromUtf8(resuObj.mEducationDetailsList[count].mField.c_str()));
+                 q.bindValue(":GPA",  resuObj.mEducationDetailsList[count].mGPA);
+                 q.bindValue(":resume_fk", resume_name_pk);
+
+                 if( !q.exec() )
+                 {
+                     qDebug() << q.lastError().text();
+                     msg = q.lastError().text().toStdString();
+                     QSqlDatabase::database().rollback();
+                     break;
+                     return false;
+                 }
+                 else
+                     qDebug( "Inserted into education details table !" );
+             }
+
+             //insert into technical details table
+             for(int count =0; count < resuObj.mTechSkillsList.size(); count++)
+             {
+                 QSqlQuery q;
+                 q.prepare("INSERT INTO resumemanager.technical_skilss (skill_name,proficiency,years_used,resume_name_fk) VALUES(:skill_name,:proficiency,:years_used,:resume_fk)");
+                 q.bindValue(":skill_name",  QString::fromUtf8(resuObj.mTechSkillsList[count].mSkill_name.c_str()));
+                 q.bindValue(":proficiency",  QString::fromUtf8(resuObj.mTechSkillsList[count].mProficiency.c_str()));
+                 q.bindValue(":years_used",  resuObj.mTechSkillsList[count].mYears_used);
+                 q.bindValue(":resume_fk", resume_name_pk);
+
+                 if( !q.exec() )
+                 {
+                     qDebug() << q.lastError().text();
+                     msg = q.lastError().text().toStdString();
+                     QSqlDatabase::database().rollback();
+                     break;
+                     return false;
+                 }
+                 else
+                     qDebug( "Inserted into Technical Skills table !" );
+             }
+        }
+
+        msg= "Resume is saved in Database successfully.";
+        db.commit(); // Commits transaction
+
+        return true;
+    }
+
    bool DatabaseCommunicator::saveResumeInformationInDB(const ResumeManagerBase &resuObj,std::string &msg)
    {
        db.transaction(); // Starts a transaction

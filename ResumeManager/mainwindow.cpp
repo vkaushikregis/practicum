@@ -29,6 +29,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->zipLineEdit->setValidator( new QIntValidator(this));
 
     connect(ui->pushButtonCreateNewResume,SIGNAL(clicked(bool)),this,SLOT(createNewResume()));
+    connect(ui->pushButtonEditResume,SIGNAL(clicked(bool)),this,SLOT(EditCurrentResume()));
 
 
     //Navigating tab widgets signal connection
@@ -81,11 +82,36 @@ MainWindow::MainWindow(QWidget *parent) :
      //connectToDatabase();
      fillProficiencyList();
      displayExistingResumesInDB();
+     //ui->groupBoxResumeDetails->setEnabled(false);
+     enableDisableGroupbBox(false);
+     isInEditModeFlag = false;
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::enableDisableGroupbBox(bool flag)
+{
+    ui->groupBoxPersonalDetails->setEnabled(flag);
+    ui->groupBoxWorkEx->setEnabled(flag);
+    ui->groupBoxEducation->setEnabled(flag);
+    ui->groupBoxTechSkills->setEnabled(flag);
+    ui->groupBoxAddDetails->setEnabled(flag);
+
+    isInEditModeFlag = flag;
+}
+
+void MainWindow::EditCurrentResume()
+{
+    std::string selecteResume;
+    if(ui->listWidgetResumeNames->currentItem())
+    {
+        selecteResume = ui->listWidgetResumeNames->currentItem()->text().toStdString();
+    }
+    currentResume = selecteResume;
+    enableDisableGroupbBox(true);
 }
 
 void MainWindow::createNewResume()
@@ -114,6 +140,9 @@ void MainWindow::createNewResume()
      ui->lineEditResumeName->setText("");
 
 
+      enableDisableGroupbBox(true);
+
+      //ui->lineEditResumeName->setText("new_resume");
 }
 
 void MainWindow::fillProficiencyList()
@@ -207,6 +236,11 @@ void MainWindow::displayExistingResumesInDB()
        ui->listWidgetResumeNames->clear();
        for(int count =0; count <gResumeNamesList.size(); count++)
             ui->listWidgetResumeNames->addItem(QString::fromUtf8(gResumeNamesList[count].mResume_name.c_str()));
+
+       if(gResumeNamesList.size() >0)
+              enableDisableGroupbBox(false);
+       else
+              enableDisableGroupbBox(true);
     }
     else
     {
@@ -216,12 +250,19 @@ void MainWindow::displayExistingResumesInDB()
 
 void MainWindow::getSelectedResumeDataFromDB()
 {
+    if(isInEditModeFlag)
+    {
+        QMessageBox::critical(NULL, tr("Resume Switch"), tr("Resume : %1 is in edit mode, save it first before switching.").arg(currentResume.c_str()));
+        return;
+    }
     std::string message;
     mResumeManagerBaseObj = {};//resetting structure
 
     ResumeNames resuObj =findResumePK();
     mResumeManagerBaseObj.mResume_pk = resuObj.mResume_pk;
     mResumeManagerBaseObj.mResume_name = resuObj.mResume_name;
+
+    ui->lineEditResumeName->setText(QString::fromUtf8(mResumeManagerBaseObj.mResume_name.c_str()));
 
     if(resuObj.mResume_pk !=-1)
     {
@@ -276,35 +317,35 @@ void MainWindow::getSelectedResumeDataFromDB()
             while (ui->tableWidgetEducation->rowCount() > 0)
                  ui->tableWidgetEducation->removeRow(0);
 
-           for(int count = 0; count <mResumeManagerBaseObj.mEducationDetailsList.size(); count++)
+           for(int count = 0; count <.mEducationDetailsList.size(); count++)
            {
                ui->tableWidgetEducation->insertRow( ui->tableWidgetEducation->rowCount());
-               ui->tableWidgetEducation->setItem( ui->tableWidgetEducation->rowCount() - 1, EDU_PK, new QTableWidgetItem((QString::number(mResumeManagerBaseObj.mEducationDetailsList[count].mEducation_details_pk))));
-               ui->tableWidgetEducation->setItem( ui->tableWidgetEducation->rowCount() - 1, COLLEGE_NAME, new QTableWidgetItem(QString::fromUtf8(mResumeManagerBaseObj.mEducationDetailsList[count].mCollege_name.c_str())));
-               ui->tableWidgetEducation->setItem( ui->tableWidgetEducation->rowCount() - 1, FROM_DATE_C, new QTableWidgetItem(QString::fromUtf8(mResumeManagerBaseObj.mEducationDetailsList[count].mFrom_date.c_str())));
-               ui->tableWidgetEducation->setItem( ui->tableWidgetEducation->rowCount() - 1, TO_DATE_C, new QTableWidgetItem(QString::fromUtf8(mResumeManagerBaseObj.mEducationDetailsList[count].mTo_date.c_str())));
-               if(mResumeManagerBaseObj.mEducationDetailsList[count].mStill_pursuing)
+               ui->tableWidgetEducation->setItem( ui->tableWidgetEducation->rowCount() - 1, EDU_PK, new QTableWidgetItem((QString::number(.mEducationDetailsList[count].mEducation_details_pk))));
+               ui->tableWidgetEducation->setItem( ui->tableWidgetEducation->rowCount() - 1, COLLEGE_NAME, new QTableWidgetItem(QString::fromUtf8(.mEducationDetailsList[count].mCollege_name.c_str())));
+               ui->tableWidgetEducation->setItem( ui->tableWidgetEducation->rowCount() - 1, FROM_DATE_C, new QTableWidgetItem(QString::fromUtf8(.mEducationDetailsList[count].mFrom_date.c_str())));
+               ui->tableWidgetEducation->setItem( ui->tableWidgetEducation->rowCount() - 1, TO_DATE_C, new QTableWidgetItem(QString::fromUtf8(.mEducationDetailsList[count].mTo_date.c_str())));
+               if(.mEducationDetailsList[count].mStill_pursuing)
                    ui->tableWidgetEducation->setItem( ui->tableWidgetEducation->rowCount() - 1, IS_CURR_C, new QTableWidgetItem(("Yes")));
                else
                    ui->tableWidgetEducation->setItem( ui->tableWidgetEducation->rowCount() - 1, IS_CURR_C, new QTableWidgetItem(("No")));
 
-               ui->tableWidgetEducation->setItem( ui->tableWidgetEducation->rowCount() - 1, FIELD, new QTableWidgetItem(QString::fromUtf8(mResumeManagerBaseObj.mEducationDetailsList[count].mField.c_str())));
-               ui->tableWidgetEducation->setItem( ui->tableWidgetEducation->rowCount() - 1, GPA, new QTableWidgetItem((QString::number(mResumeManagerBaseObj.mEducationDetailsList[count].mGPA))));
+               ui->tableWidgetEducation->setItem( ui->tableWidgetEducation->rowCount() - 1, FIELD, new QTableWidgetItem(QString::fromUtf8(.mEducationDetailsList[count].mField.c_str())));
+               ui->tableWidgetEducation->setItem( ui->tableWidgetEducation->rowCount() - 1, GPA, new QTableWidgetItem((QString::number(.mEducationDetailsList[count].mGPA))));
 
 
            }
         }
 
-        bool statusTechSkills = DatabaseCommunicator::Instance()->getTechnicalSkillsFromDB(resuObj.mResume_pk,mResumeManagerBaseObj,message);
+        bool statusTechSkills = DatabaseCommunicator::Instance()->getTechnicalSkillsFromDB(resuObj.mResume_pk,,message);
         if(statusTechSkills)
         {
             while (ui->tableWidgetSkills->rowCount() > 0)
                  ui->tableWidgetSkills->removeRow(0);
 
-            for(int count = 0; count <mResumeManagerBaseObj.mTechSkillsList.size(); count++)
+            for(int count = 0; count <.mTechSkillsList.size(); count++)
             {
                 ui->tableWidgetSkills->insertRow( ui->tableWidgetSkills->rowCount());
-                ui->tableWidgetSkills->setItem( ui->tableWidgetSkills->rowCount() - 1, TECH_PK, new QTableWidgetItem((QString::number(mResumeManagerBaseObj.mTechSkillsList[count].mTech_skills_pk))));
+                ui->tableWidgetSkills->setItem( ui->tableWidgetSkills->rowCount() - 1, TECH_PK, new QTableWidgetItem((QString::number(.mTechSkillsList[count].mTech_skills_pk))));
                 ui->tableWidgetSkills->setItem( ui->tableWidgetSkills->rowCount() - 1, SKILL_NAME, new QTableWidgetItem(QString::fromUtf8(mResumeManagerBaseObj.mTechSkillsList[count].mSkill_name.c_str())));
                 ui->tableWidgetSkills->setItem( ui->tableWidgetSkills->rowCount() - 1, PROFICIENCY, new QTableWidgetItem(QString::fromUtf8(mResumeManagerBaseObj.mTechSkillsList[count].mProficiency.c_str())));
                 ui->tableWidgetSkills->setItem( ui->tableWidgetSkills->rowCount() - 1, YEARS_USED, new QTableWidgetItem((QString::number(mResumeManagerBaseObj.mTechSkillsList[count].mYears_used))));
@@ -853,19 +894,38 @@ void MainWindow::saveResumeDetailsInDB()
         mResumeManagerBaseObj.mTechSkillsList = tempTechSkillsList;
 
         std::string message;
-        bool status= DatabaseCommunicator::Instance()->saveResumeInformationInDB(mResumeManagerBaseObj,message);
-        if(status)
+        if(isInEditModeFlag)
         {
-            QMessageBox::information(NULL, QObject::tr("Save Resume"), tr(message.c_str()));
+            bool status= DatabaseCommunicator::Instance()->updateResumeInDB(mResumeManagerBaseObj,message);
+            if(status)
+            {
+                QMessageBox::information(NULL, QObject::tr("Update Resume"), tr(message.c_str()));
+            }
+            else
+            {
+                 QMessageBox::critical(NULL, QObject::tr("Update Resume"), tr(message.c_str()));
+            }
         }
         else
         {
-             QMessageBox::critical(NULL, QObject::tr("Save Resume"), tr(message.c_str()));
+            bool status= DatabaseCommunicator::Instance()->saveResumeInformationInDB(mResumeManagerBaseObj,message);
+            if(status)
+            {
+                QMessageBox::information(NULL, QObject::tr("Save Resume"), tr(message.c_str()));
+            }
+            else
+            {
+                 QMessageBox::critical(NULL, QObject::tr("Save Resume"), tr(message.c_str()));
+            }
         }
+
+
 
     }
 
     displayExistingResumesInDB();
+
+    isInEditModeFlag = false;
 }
 void MainWindow::fillEducationDetailsList(std::vector<EducationDetails> &tempEducationDetailsList)
 {
@@ -953,6 +1013,9 @@ void MainWindow::exportAsPDF()
         return;
     }
 
+    QFile file("default.css");
+    file.open(QFile::ReadOnly | QFile::Text);
+    QString styleSheet = QLatin1String(file.readAll());
     std::stringstream professional_ex ;
 
     professional_ex<< "<h2 id="//professional-experience">Professional Experience</h2>"
@@ -1030,6 +1093,11 @@ void MainWindow::exportAsPDF()
 
     QString body =
             "<body class="//ma0 ">"
+            "<STYLE TYPE="//text/css" MEDIA="screen, projection">"
+            "<!--"
+             "<link rel="//stylesheet" type="text/css" href="./default.css"  />"
+            "-->"
+            "</STYLE>"
                 "<div class="//grid-layout-1">"
                     "<main class="//main" role="main" id="mainContent">"
                       "<h1 >"
@@ -1075,13 +1143,18 @@ void MainWindow::exportAsPDF()
     QString final =body;
 
 
+    //setStyleSheet(styleSheet);
+
     QTextDocument document;
+//document.setDefaultStyleSheet(styleSheet);
+    //document.addResource( QTextDocument::StyleSheetResource, QUrl( "default.css" ), css );
     document.setHtml(final);
-    //document.setDefaultStyleSheet();
     QPrinter printer(QPrinter::PrinterResolution);
     printer.setOutputFormat(QPrinter::PdfFormat);
     printer.setPaperSize(QPrinter::A4);
-    printer.setOutputFileName(ui->lineEditDirectoryPath->text()+"\\test.pdf");
+    printer.setOutputFileName(ui->lineEditDirectoryPath->text()+"\\" + ui->lineEditResumeName->text() +".pdf");
     printer.setPageMargins(QMarginsF(15, 15, 15, 15));
     document.print(&printer);
+
+    QMessageBox::information(NULL, QObject::tr("Export Resume"), tr("Resume has been successfully saved at location  %1\\%2.pdf").arg(ui->lineEditDirectoryPath->text().toStdString().c_str()).arg( ui->lineEditResumeName->text().toStdString().c_str()));
 }
