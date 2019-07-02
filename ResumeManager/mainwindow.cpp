@@ -457,6 +457,28 @@ void MainWindow::validateSecondTabInputs()
 {
     setTabWidgetIndex();
 }
+
+bool MainWindow::checkIfTechSkillAlreadyPresent(QString skill_name)
+{
+     bool isPresent = false;
+
+    for( int row = 0; row < ui->tableWidgetSkills->rowCount(); ++row )
+    {
+        if(( ui->tableWidgetSkills->item(row,SKILL_NAME)->text() == skill_name))
+        {
+            isPresent = true;
+            break;
+        }
+    }
+
+    if(isPresent)
+    {
+        QMessageBox::warning(NULL, tr("Adding Technical Skills"), tr("Skill name: %1 is already present , can not be added twice.").arg(skill_name.toStdString().c_str()));
+        return isPresent;
+    }
+
+    return isPresent;
+}
 void MainWindow::addNewTechSkillsClicked()
 {
     if (sender()->objectName() == "pushButtonAddSkill")
@@ -470,6 +492,10 @@ void MainWindow::addNewTechSkillsClicked()
 
         int res = techSkillsWindow.exec();
         if (res == QDialog::Rejected)
+            return;
+
+
+        if(checkIfTechSkillAlreadyPresent(techSkillsWindow.getSkillName()))
             return;
 
         ui->tableWidgetSkills->insertRow( ui->tableWidgetSkills->rowCount());
@@ -513,6 +539,9 @@ void MainWindow::addNewTechSkillsClicked()
 
         int res = techSkillsWindow.exec();
         if (res == QDialog::Rejected)
+            return;
+
+        if(checkIfTechSkillAlreadyPresent(techSkillsWindow.getSkillName()))
             return;
 
         ui->tableWidgetSkills->setItem(row, TECH_PK, new QTableWidgetItem((QString::number(-1))));
@@ -567,7 +596,27 @@ void MainWindow::deleteTechSkillsDeleteClicked()
         return;
     }
 }
+bool MainWindow::checkIfWorkCompanyAlreadyPresent(QString company_name)
+{
+     bool isPresent = false;
 
+    for( int row = 0; row < ui->tableWidgetWorkEx->rowCount(); ++row )
+    {
+        if(( ui->tableWidgetSkills->item(row,COMPANY_NAME)->text() == company_name))
+        {
+            isPresent = true;
+            break;
+        }
+    }
+
+    if(isPresent)
+    {
+        QMessageBox::warning(NULL, tr("Adding Work Experience"), tr("Company name: %1 is already present , can not be added twice.").arg(company_name.toStdString().c_str()));
+        return isPresent;
+    }
+
+    return isPresent;
+}
 void MainWindow::addNewWorkExClicked()
 {
     if (sender()->objectName() == "pushButtonAddWorkEx")
@@ -586,6 +635,9 @@ void MainWindow::addNewWorkExClicked()
 
         int res = workExWindow.exec();
         if (res == QDialog::Rejected)
+            return;
+
+        if(checkIfWorkCompanyAlreadyPresent(workExWindow.getCompanyName()))
             return;
 
         ui->tableWidgetWorkEx->insertRow( ui->tableWidgetWorkEx->rowCount());
@@ -653,6 +705,9 @@ void MainWindow::addNewWorkExClicked()
         if (res == QDialog::Rejected)
             return;
 
+        if(checkIfWorkCompanyAlreadyPresent(workExWindow.getCompanyName()))
+            return;
+
         ui->tableWidgetWorkEx->setItem(row, WORK_EX_PK, new QTableWidgetItem((QString::number(-1))));
         ui->tableWidgetWorkEx->setItem( row, COMPANY_NAME, new QTableWidgetItem((workExWindow.getCompanyName())));
         ui->tableWidgetWorkEx->setItem( row, FROM_DATE_W, new QTableWidgetItem((workExWindow.getFromDate())));
@@ -712,6 +767,27 @@ void MainWindow::deleteWorkExOnDeleteClicked()
     {
         return;
     }
+}
+bool MainWindow::checkIfCollegeAlreadyPresent(QString college_name)
+{
+   bool isPresent = false;
+
+   for( int row = 0; row < ui->tableWidgetEducation->rowCount(); ++row )
+   {
+       if(( ui->tableWidgetSkills->item(row,COLLEGE_NAME)->text() == college_name))
+       {
+           isPresent = true;
+           break;
+       }
+   }
+
+   if(isPresent)
+   {
+       QMessageBox::warning(NULL, tr("Adding College Information"), tr("College name: %1 is already present , can not be added twice.").arg(college_name.toStdString().c_str()));
+       return isPresent;
+   }
+
+   return isPresent;
 }
 
 void MainWindow::addNewCollegeClicked()

@@ -32,6 +32,9 @@ private:
     void fillTechSkillsList(std::vector<TechnicalSkills> &tempTechSkillsList);
     void fillProficiencyList();
     void enableDisableGroupbBox(bool flag);
+    bool checkIfTechSkillAlreadyPresent(QString skill_name);
+    bool checkIfWorkCompanyAlreadyPresent(QString company_name);
+    bool checkIfCollegeAlreadyPresent(QString college_name);
     bool isInEditModeFlag ;
     std::string currentResume;
 private slots:
