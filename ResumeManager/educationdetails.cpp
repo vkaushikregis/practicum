@@ -1,6 +1,6 @@
 #include "educationdetails.h"
 #include "ui_educationdetails.h"
-
+#include <QtWidgets/QMessageBox>
 educationDetails::educationDetails(std::string functionality,QDialog *parent) :
     QDialog(parent),
     ui(new Ui::educationDetails)
@@ -83,6 +83,34 @@ void educationDetails::setGPA(QString gpa)
 
 void educationDetails::OnButtonAccepted()
 {
+    if(ui->lineEditCollegeName->text().toStdString().empty())
+    {
+        QMessageBox::critical(NULL, tr("Education Details"), tr("College Name is not filled, it is a mandatory field"));
+        return;
+    }
+    else if (ui->lineEditFromDateCol->text().toStdString().empty())
+    {
+        QMessageBox::critical(NULL, tr("Education Details"), tr("From date is not filled, it is a mandatory field"));
+        return;
+    }
+    else if(!ui->checkBoxCurrPursuing->isChecked())
+    {
+        if (ui->lineEditToDateColl->text().toStdString().empty())
+        {
+             QMessageBox::critical(NULL, tr("Education Details"), tr("To Date is not filled, fill this field if not currently pursuing"));
+             return;
+        }
+    }
+    else if (ui->lineEditCollegeField->text().toStdString().empty())
+    {
+        QMessageBox::critical(NULL, tr("Education Details"), tr("Major/Minor is not filled, it is a mandatory field"));
+        return;
+    }
+    else if (ui->lineEditGPA->text().toStdString().empty())
+    {
+        QMessageBox::critical(NULL, tr("Education Details"), tr("GPA is not filled, it is a mandatory field"));
+        return;
+    }
     accept();
 }
 

@@ -219,25 +219,53 @@ bool DatabaseCommunicator::getExistingResumesFromDB(std::string &msg)
         //IMPORTANT: check that every insert is a success otherwise rollback
 
 
+
         if(db.open())
         {
-             QSqlQuery qry;
+            QSqlQuery qry;
 
-             qry.prepare("UPDATE resumemanager.resumename SET resume_name = :resume_name_val where resume_name_pk = :resume_pk_val ");
-             qry.bindValue(":resume_name_val",QString::fromUtf8(resuObj.mResume_name.c_str()));
-             qry.bindValue(":resume_pk_val",(resuObj.mResume_pk));
+            qry.prepare("DELETE FROM resumemanager.resumename WHERE resume_name_pk = ?");
+            qry.addBindValue(resuObj.mResume_pk);
 
-             if( !qry.exec() )
-             {
-                 qDebug() << qry.lastError().text();
-                 msg = qry.lastError().text().toStdString();
-                 QSqlDatabase::database().rollback();
-                 return false;
-             }
-             else
-                 qDebug( "Updated resume name!" );
+            if( !qry.exec() )
+            {
+                qDebug() << qry.lastError().text();
+                msg = qry.lastError().text().toStdString();
+                QSqlDatabase::database().rollback();
+                return false;
+            }
+            else
+            {
+                qDebug( "Inserted into resume name!" );
+                msg= "Resume succesfully deleted from database.";
+            }
+        }
+
+
+
+        if(db.open())
+        {
+            QSqlQuery qry;
+
+            qry.prepare("INSERT INTO resumemanager.resumename (resume_name) VALUES(:resume_name_val)");
+            qry.bindValue(":resume_name_val",QString::fromUtf8(resuObj.mResume_name.c_str()));
+
+            if( !qry.exec() )
+            {
+                qDebug() << qry.lastError().text();
+                msg = qry.lastError().text().toStdString();
+                QSqlDatabase::database().rollback();
+                return false;
+            }
+            else
+                qDebug( "Inserted into resume name!" );
 
              int resume_name_pk = qry.lastInsertId().toInt();
+
+             //need to delete all data to resume_pk and insert again
+
+             //int resume_name_pk = qry.lastInsertId().toInt();
+             qDebug() <<"resume_name_pk"<< resume_name_pk;
 
              // second insert into personal_details table
              QSqlQuery qPer;
@@ -352,7 +380,7 @@ bool DatabaseCommunicator::getExistingResumesFromDB(std::string &msg)
              }
         }
 
-        msg= "Resume is saved in Database successfully.";
+        msg= "Resume is Updated in Database successfully.";
         db.commit(); // Commits transaction
 
         return true;

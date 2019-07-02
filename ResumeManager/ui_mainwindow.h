@@ -62,8 +62,8 @@ public:
     QLineEdit *lineEditDirectoryPath;
     QPushButton *pushButtonBrowse;
     QPushButton *pushButtonExportAsPDF;
-    QRadioButton *radioButton_2;
-    QRadioButton *radioButton;
+    QRadioButton *radioButtonTemp2;
+    QRadioButton *radioButtonTemp1;
     QVBoxLayout *verticalLayout_11;
     QSpacerItem *verticalSpacer;
     QGroupBox *groupBox_8;
@@ -173,7 +173,7 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QStringLiteral("MainWindow"));
-        MainWindow->resize(1080, 699);
+        MainWindow->resize(1080, 701);
         MainWindow->setMaximumSize(QSize(16777215, 16777215));
         QIcon icon;
         icon.addFile(QStringLiteral("../../ImagesForResumeBuilderApp/document.png"), QSize(), QIcon::Normal, QIcon::Off);
@@ -340,15 +340,15 @@ public:
 
         gridLayout_12->addLayout(horizontalLayout_10, 1, 0, 1, 2);
 
-        radioButton_2 = new QRadioButton(groupBox_7);
-        radioButton_2->setObjectName(QStringLiteral("radioButton_2"));
+        radioButtonTemp2 = new QRadioButton(groupBox_7);
+        radioButtonTemp2->setObjectName(QStringLiteral("radioButtonTemp2"));
 
-        gridLayout_12->addWidget(radioButton_2, 0, 1, 1, 1);
+        gridLayout_12->addWidget(radioButtonTemp2, 0, 1, 1, 1);
 
-        radioButton = new QRadioButton(groupBox_7);
-        radioButton->setObjectName(QStringLiteral("radioButton"));
+        radioButtonTemp1 = new QRadioButton(groupBox_7);
+        radioButtonTemp1->setObjectName(QStringLiteral("radioButtonTemp1"));
 
-        gridLayout_12->addWidget(radioButton, 0, 0, 1, 1);
+        gridLayout_12->addWidget(radioButtonTemp1, 0, 0, 1, 1);
 
 
         verticalLayout_12->addWidget(groupBox_7);
@@ -1051,7 +1051,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabWidgetMain->setCurrentIndex(0);
+        tabWidgetMain->setCurrentIndex(2);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -1070,8 +1070,8 @@ public:
         label_11->setText(QApplication::translate("MainWindow", "Directory path      ", Q_NULLPTR));
         pushButtonBrowse->setText(QApplication::translate("MainWindow", "Browse", Q_NULLPTR));
         pushButtonExportAsPDF->setText(QApplication::translate("MainWindow", "Export as PDF", Q_NULLPTR));
-        radioButton_2->setText(QApplication::translate("MainWindow", "Template 2", Q_NULLPTR));
-        radioButton->setText(QApplication::translate("MainWindow", "Template 1", Q_NULLPTR));
+        radioButtonTemp2->setText(QApplication::translate("MainWindow", "Template 2", Q_NULLPTR));
+        radioButtonTemp1->setText(QApplication::translate("MainWindow", "Template 1", Q_NULLPTR));
         groupBox_8->setTitle(QString());
         pushButtonEditResume->setText(QApplication::translate("MainWindow", "EDIT", Q_NULLPTR));
         pushButtonSaveInDB->setText(QApplication::translate("MainWindow", "Save in DB", Q_NULLPTR));

@@ -78,6 +78,8 @@ MainWindow::MainWindow(QWidget *parent) :
      connect(ui->pushButtonBrowse, SIGNAL(clicked()), this, SLOT(browseSlot()));
 
      connect(ui->pushButtonDeleteResume,SIGNAL(clicked()), this, SLOT(deleteExistingResume()));
+     connect(ui->radioButtonTemp1, SIGNAL(clicked(bool)), this, SLOT(setResumeTemplate()));
+     connect(ui->radioButtonTemp2, SIGNAL(clicked(bool)), this, SLOT(setResumeTemplate()));
 
      //connectToDatabase();
      fillProficiencyList();
@@ -85,6 +87,7 @@ MainWindow::MainWindow(QWidget *parent) :
      //ui->groupBoxResumeDetails->setEnabled(false);
      enableDisableGroupbBox(false);
      isInEditModeFlag = false;
+     ui->radioButtonTemp1->setChecked(true);
 }
 
 MainWindow::~MainWindow()
@@ -923,9 +926,10 @@ void MainWindow::saveResumeDetailsInDB()
 
     }
 
+    isInEditModeFlag = false;
     displayExistingResumesInDB();
 
-    isInEditModeFlag = false;
+
 }
 void MainWindow::fillEducationDetailsList(std::vector<EducationDetails> &tempEducationDetailsList)
 {
@@ -1004,6 +1008,15 @@ void MainWindow::fillWorkExDetailsList(std::vector<WorkExperience> &tempWorkExLi
         ui->lineEditDirectoryPath->setText(dir);
  }
 
+ QString MainWindow::setResumeTemplate()
+ {
+
+     QString body;
+
+     return body;
+
+ }
+
 void MainWindow::exportAsPDF()
 {
     QDir dir;
@@ -1023,21 +1036,38 @@ void MainWindow::exportAsPDF()
     for (int rowNum = 0; rowNum < ui->tableWidgetWorkEx->rowCount(); rowNum++)
     {
 
-        professional_ex << "<h6><em>" +
-                            ui->tableWidgetWorkEx->item(rowNum, FROM_DATE_W)->text().toStdString()
-                           + "- " + ui->tableWidgetWorkEx->item(rowNum, TO_DATE_W)->text().toStdString()
-                           + "</em></h6>"
-                           + "<h3>"
-                           + ui->tableWidgetWorkEx->item(rowNum, COMPANY_NAME)->text().toStdString()
-                           +"-"
-                           + ui->tableWidgetWorkEx->item(rowNum, TITLE)->text().toStdString()
-                           + "</h3>"
-                           + "<p>"
-                           + ui->tableWidgetWorkEx->item(rowNum, JD)->text().toStdString()
-                             + "</p>"
-                           ;
-
-
+        if(ui->tableWidgetWorkEx->item(rowNum, IS_CURR_W)->text() == "Yes")
+        {
+            professional_ex << "<h6><em>" +
+                                ui->tableWidgetWorkEx->item(rowNum, FROM_DATE_W)->text().toStdString()
+                               + "- " + "Curently Working"
+                               + "</em></h6>"
+                               + "<h3>"
+                               + ui->tableWidgetWorkEx->item(rowNum, COMPANY_NAME)->text().toStdString()
+                               +"-"
+                               + ui->tableWidgetWorkEx->item(rowNum, TITLE)->text().toStdString()
+                               + "</h3>"
+                               + "<p>"
+                               + ui->tableWidgetWorkEx->item(rowNum, JD)->text().toStdString()
+                                 + "</p>"
+                               ;
+        }
+        else if (ui->tableWidgetWorkEx->item(rowNum, IS_CURR_W)->text() == "No")
+        {
+            professional_ex << "<h6><em>" +
+                                ui->tableWidgetWorkEx->item(rowNum, FROM_DATE_W)->text().toStdString()
+                               + "- " + ui->tableWidgetWorkEx->item(rowNum, TO_DATE_W)->text().toStdString()
+                               + "</em></h6>"
+                               + "<h3>"
+                               + ui->tableWidgetWorkEx->item(rowNum, COMPANY_NAME)->text().toStdString()
+                               +"-"
+                               + ui->tableWidgetWorkEx->item(rowNum, TITLE)->text().toStdString()
+                               + "</h3>"
+                               + "<p>"
+                               + ui->tableWidgetWorkEx->item(rowNum, JD)->text().toStdString()
+                                 + "</p>"
+                               ;
+        }
       }
 
 
@@ -1047,20 +1077,38 @@ void MainWindow::exportAsPDF()
                       ;
     for (int rowNum = 0; rowNum < ui->tableWidgetEducation->rowCount(); rowNum++)
     {
-
-        education_ex << "<h6><em>" +
-                            ui->tableWidgetEducation->item(rowNum, FROM_DATE_C)->text().toStdString()
-                           + "- " + ui->tableWidgetEducation->item(rowNum, TO_DATE_C)->text().toStdString()
-                           + "</em></h6>"
-                           + "<h3>"
-                           + ui->tableWidgetEducation->item(rowNum, COLLEGE_NAME)->text().toStdString()
-                           + "</h3>"
-                           + "<p>"
-                           + ui->tableWidgetEducation->item(rowNum, FIELD)->text().toStdString()
-                           + " - GPA "
-                           + ui->tableWidgetEducation->item(rowNum, GPA)->text().toStdString()
-                             + "</p>"
-                           ;
+        if( ui->tableWidgetEducation->item(rowNum, IS_CURR_C)->text() == "Yes")
+        {
+            education_ex << "<h6><em>" +
+                                ui->tableWidgetEducation->item(rowNum, FROM_DATE_C)->text().toStdString()
+                               + "- " + "Currently Pursuing"
+                               + "</em></h6>"
+                               + "<h3>"
+                               + ui->tableWidgetEducation->item(rowNum, COLLEGE_NAME)->text().toStdString()
+                               + "</h3>"
+                               + "<p>"
+                               + ui->tableWidgetEducation->item(rowNum, FIELD)->text().toStdString()
+                               + " - GPA "
+                               + ui->tableWidgetEducation->item(rowNum, GPA)->text().toStdString()
+                                 + "</p>"
+                               ;
+        }
+        else if( ui->tableWidgetEducation->item(rowNum, IS_CURR_C)->text() == "No")
+        {
+            education_ex << "<h6><em>" +
+                                ui->tableWidgetEducation->item(rowNum, FROM_DATE_C)->text().toStdString()
+                               + "- " + ui->tableWidgetEducation->item(rowNum, TO_DATE_C)->text().toStdString()
+                               + "</em></h6>"
+                               + "<h3>"
+                               + ui->tableWidgetEducation->item(rowNum, COLLEGE_NAME)->text().toStdString()
+                               + "</h3>"
+                               + "<p>"
+                               + ui->tableWidgetEducation->item(rowNum, FIELD)->text().toStdString()
+                               + " - GPA "
+                               + ui->tableWidgetEducation->item(rowNum, GPA)->text().toStdString()
+                                 + "</p>"
+                               ;
+        }
 
       }
 
@@ -1138,15 +1186,12 @@ void MainWindow::exportAsPDF()
              +"  </div>"
 
           +" </body>"
-                                               ;
+          ;
 
     QString final =body;
 
-
-    //setStyleSheet(styleSheet);
-
     QTextDocument document;
-//document.setDefaultStyleSheet(styleSheet);
+    //document.setDefaultStyleSheet(styleSheet);
     //document.addResource( QTextDocument::StyleSheetResource, QUrl( "default.css" ), css );
     document.setHtml(final);
     QPrinter printer(QPrinter::PrinterResolution);
