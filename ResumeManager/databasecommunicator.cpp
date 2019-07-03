@@ -218,8 +218,6 @@ bool DatabaseCommunicator::getExistingResumesFromDB(std::string &msg)
 
         //IMPORTANT: check that every insert is a success otherwise rollback
 
-
-
         if(db.open())
         {
             QSqlQuery qry;

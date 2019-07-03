@@ -7,6 +7,7 @@
 #include <vector>
 #include <algorithm>
 #include <QtWidgets/QMessageBox>
+#include <QtWidgets/QDateEdit>
 
 workExperienceDetails::workExperienceDetails( std::string functionality,QDialog *parent) :
     QDialog(parent),
@@ -16,7 +17,20 @@ workExperienceDetails::workExperienceDetails( std::string functionality,QDialog 
     function = functionality;
 
     connect(ui->pushButtonWorkExOK, SIGNAL(clicked()), this, SLOT(OnButtonAccepted()));
-    connect(ui->pushButtonWorkExCancel, SIGNAL(clicked()), this, SLOT(OnButtonRejected()));
+    connect(ui->pushButtonWorkExCancel, SIGNAL(clicked()), this, SLOT(OnButtonRejected()));    
+}
+bool workExperienceDetails::eventFilter(QObject *object, QEvent *event)
+{
+    if (event->type() == QEvent::FocusIn)
+    {
+        if (object == ui->FromWorkExLineEdit)
+        {
+            de = new QDateEdit(this);
+            de->setCalendarPopup(true);
+            de->show();
+        }
+    }
+    return false;
 }
 
 workExperienceDetails::~workExperienceDetails()

@@ -31,7 +31,6 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->pushButtonCreateNewResume,SIGNAL(clicked(bool)),this,SLOT(createNewResume()));
     connect(ui->pushButtonEditResume,SIGNAL(clicked(bool)),this,SLOT(EditCurrentResume()));
 
-
     //Navigating tab widgets signal connection
     connect(ui->pushButtonBackPersonal,SIGNAL(clicked(bool)),this,SLOT(setTabWidgetIndex()));
     connect(ui->pushButtonBackWork,SIGNAL(clicked(bool)),this,SLOT(setTabWidgetIndex()));
@@ -46,17 +45,17 @@ MainWindow::MainWindow(QWidget *parent) :
 
      connect(ui->listWidgetResumeNames, SIGNAL(itemSelectionChanged()), this, SLOT(getSelectedResumeDataFromDB()));
 
-     //open ediot widnows for Work experience
+     //open edit widnows for Work experience
      connect(ui->pushButtonAddWorkEx, SIGNAL(clicked()),this, SLOT(addNewWorkExClicked()));
      connect(ui->pushButtonEditWorkEx, SIGNAL(clicked()),this, SLOT(addNewWorkExClicked()));
      connect(ui->pushButtonDeleteWorkEx, SIGNAL(clicked()),this, SLOT(deleteWorkExOnDeleteClicked()));
 
-     //open ediot widnows for Education
+     //open edit widnows for Education
      connect(ui->pushButtonAddEducation, SIGNAL(clicked()),this, SLOT(addNewCollegeClicked()));
      connect(ui->pushButtonEditEducation, SIGNAL(clicked()),this, SLOT(addNewCollegeClicked()));
      connect(ui->pushButtonDeleteEducation, SIGNAL(clicked()),this, SLOT(deleteCollegeOnDeleteClicked()));
 
-     //open ediot widnows for Tech skills
+     //open edit widnows for Tech skills
      connect(ui->pushButtonAddSkill, SIGNAL(clicked()),this, SLOT(addNewTechSkillsClicked()));
      connect(ui->pushButtonEditSkill, SIGNAL(clicked()),this, SLOT(addNewTechSkillsClicked()));
      connect(ui->pushButtonDeleteSkill, SIGNAL(clicked()),this, SLOT(deleteTechSkillsDeleteClicked()));
@@ -81,10 +80,8 @@ MainWindow::MainWindow(QWidget *parent) :
      connect(ui->radioButtonTemp1, SIGNAL(clicked(bool)), this, SLOT(setResumeTemplate()));
      connect(ui->radioButtonTemp2, SIGNAL(clicked(bool)), this, SLOT(setResumeTemplate()));
 
-     //connectToDatabase();
      fillProficiencyList();
-     displayExistingResumesInDB();
-     //ui->groupBoxResumeDetails->setEnabled(false);
+     displayExistingResumesInDB();     
      enableDisableGroupbBox(false);
      isInEditModeFlag = false;
      ui->radioButtonTemp1->setChecked(true);
@@ -144,8 +141,6 @@ void MainWindow::createNewResume()
 
 
       enableDisableGroupbBox(true);
-
-      //ui->lineEditResumeName->setText("new_resume");
 }
 
 void MainWindow::fillProficiencyList()
@@ -1192,17 +1187,13 @@ void MainWindow::fillWorkExDetailsList(std::vector<WorkExperience> &tempWorkExLi
 
            }
          technical<< "</ul> ";
+
           body =
-                 "<body class="//ma0 ">"
-                 "<STYLE TYPE="//text/css" MEDIA="screen, projection">"
-                 "<!--"
-                  "<link rel="//stylesheet" type="text/css" href="./default.css"  />"
-                 "-->"
-                 "</STYLE>"
+                 "<body class="//ma0 ">"                
                      "<div class="//grid-layout-1">"
                          "<main class="//main" role="main" id="mainContent">"
                            "<h1 >"
-                            + ui->firstNameLineEdit->text() + " " + ui->lastNameLineEdit->text()+ "</h1>"
+                            + ui->firstNameLineEdit->text() + " " + ui->lastNameLineEdit->text()+ "<hr />"
                             " <p> "
                              + ui->textEditAdditionalSkills->toPlainText() +
                            + "</p>"
@@ -1244,7 +1235,118 @@ void MainWindow::fillWorkExDetailsList(std::vector<WorkExperience> &tempWorkExLi
      }
      else if ((sender()->objectName() == "radioButtonTemp2") || (ui->radioButtonTemp2->isChecked()))
      {
+         std::stringstream professional_ex ;
+                           ;
+         for (int rowNum = 0; rowNum < ui->tableWidgetWorkEx->rowCount(); rowNum++)
+         {
+             if(ui->tableWidgetWorkEx->item(rowNum, IS_CURR_W)->text() == "Yes")
+             {
+                 professional_ex << "<h4><br />"
+                 + ui->tableWidgetWorkEx->item(rowNum, COMPANY_NAME)->text().toStdString() + " - " +  ui->tableWidgetWorkEx->item(rowNum, TITLE)->text().toStdString()
+                 + "</h4>"
+                 "<h3>"
+                 + ui->tableWidgetWorkEx->item(rowNum, FROM_DATE_W)->text().toStdString() + " - " +  "Curently Working"
+                 "</h3>"
+                 "<hr />"
+                 "<p>"
+                 + ui->tableWidgetWorkEx->item(rowNum, JD)->text().toStdString()
+                 + "</p>"
+                 ;
+             }
+             else if (ui->tableWidgetWorkEx->item(rowNum, IS_CURR_W)->text() == "No")
+             {
+                 professional_ex << "<h4><br />"
+                 + ui->tableWidgetWorkEx->item(rowNum, COMPANY_NAME)->text().toStdString() + " - " +  ui->tableWidgetWorkEx->item(rowNum, TITLE)->text().toStdString()
+                 + "</h4>"
+                 "<h3>"
+                 + ui->tableWidgetWorkEx->item(rowNum, FROM_DATE_W)->text().toStdString() + " - " +  ui->tableWidgetWorkEx->item(rowNum, TO_DATE_W)->text().toStdString()
+                 +"</h3>"
+                 "<hr />"
+                 "<p>"
+                 + ui->tableWidgetWorkEx->item(rowNum, JD)->text().toStdString()
+                 + "</p>"
+                 ;
+             }
+         }
 
+         std::stringstream education_ex ;
+                        ;
+         for (int rowNum = 0; rowNum < ui->tableWidgetEducation->rowCount(); rowNum++)
+         {
+             if( ui->tableWidgetEducation->item(rowNum, IS_CURR_C)->text() == "Yes")
+             {
+                education_ex <<  "<h3>"
+                 + ui->tableWidgetEducation->item(rowNum, COLLEGE_NAME)->text().toStdString()
+                 +"</h3>"
+                 "<p>" + ui->tableWidgetEducation->item(rowNum, FROM_DATE_C)->text().toStdString() + " - " +   "Currently Pursuing" +  "</p>"
+                 "<hr />"
+                 "<p>" + ui->tableWidgetEducation->item(rowNum, FIELD)->text().toStdString() +  " - GPA:" +  ui->tableWidgetEducation->item(rowNum, GPA)->text().toStdString() + "</p>"
+                 ;
+
+             }
+             else if( ui->tableWidgetEducation->item(rowNum, IS_CURR_C)->text() == "No")
+             {
+                 education_ex <<  "<h3>"
+                  + ui->tableWidgetEducation->item(rowNum, COLLEGE_NAME)->text().toStdString()
+                  +"</h3>"
+                  "<p>" + ui->tableWidgetEducation->item(rowNum, FROM_DATE_C)->text().toStdString() + " - " +   ui->tableWidgetEducation->item(rowNum, TO_DATE_C)->text().toStdString() +  "</p>"
+                  "<hr />"
+                  "<p>" + ui->tableWidgetEducation->item(rowNum, FIELD)->text().toStdString() +  " - GPA:" +  ui->tableWidgetEducation->item(rowNum, GPA)->text().toStdString() + "</p>"
+                  ;
+             }
+
+         }
+
+         std::stringstream technical ;
+         technical << "<ul>";
+         for (int rowNum = 0; rowNum < ui->tableWidgetSkills->rowCount(); rowNum++)
+         {
+
+             technical <<    " <li>"
+                             + ui->tableWidgetSkills->item(rowNum, SKILL_NAME)->text().toStdString()
+                             + " - "
+                             + ui->tableWidgetSkills->item(rowNum, PROFICIENCY)->text().toStdString()
+                             + "</li>"
+                             ;
+
+
+
+         }
+         technical << "</ul>";
+
+         body =
+                "<body class="//ma0 ">"
+                 "<h2 class="" style="//text-align: center;">
+                 "<strong>"
+                 + ui->firstNameLineEdit->text() + " " + ui->lastNameLineEdit->text()+
+                 "</strong>"
+                 "</h2>"
+                 "<hr />"
+                 " <p> "
+                 + ui->textEditAdditionalSkills->toPlainText() +
+                 + "</p>"
+                 "<h2>Professional Background</h2>"
+                 + QString::fromStdString(professional_ex.str())
+                 + "<h2>Education</h2>"
+                 + QString::fromStdString(education_ex.str())
+                 + "<h2>Technical Skills</h2>"
+                 + QString::fromStdString(technical.str()) +
+                 "<h2>Contact Information</h2>"
+                 "<ul>"
+                 "<li><a>Email :"
+                 + ui->emailLineEdit->text()
+                 + "</a></li>"
+                 "<li>Mobile: "
+                 + ui->mobileLineEdit->text() +
+                 "</li>"
+                 "<li>Address: " +
+                 ui->addressLineEdit->text() + " " + ui->cityLineEdit->text() + " "+ ui->stateLineEdit ->text() + " " + ui->zipLineEdit->text()+
+                 "</li>"
+                 "</ul>"
+                 "<div>&nbsp;</div>"
+                 "<footer class="//&lt;/footer"></footer>"
+              +" </body>"
+              ;
      }
      return body;
  }
@@ -1262,18 +1364,13 @@ void MainWindow::exportAsPDF()
     file.open(QFile::ReadOnly | QFile::Text);
     QString styleSheet = QLatin1String(file.readAll());
 
-
-
-
-
     QString htmlHeader =
     "<link href="//https://fonts.googleapis.com/css?family=Montserrat:300,400i,500,800" rel="stylesheet"/>"+
     "<link href="//https://fonts.googleapis.com/css?family=Fira+Sans:200,400,400i,600,900" rel="stylesheet"/>"
     ;
 
-
-
     QString final = setResumeTemplate();
+    qDebug()<<"final_html" <<final;
 
     QTextDocument document;
     //document.setDefaultStyleSheet(styleSheet);

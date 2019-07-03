@@ -28,14 +28,14 @@ class Ui_workExperienceDetails
 {
 public:
     QGridLayout *gridLayout;
-    QPushButton *pushButtonWorkExOK;
     QPushButton *pushButtonWorkExCancel;
+    QPushButton *pushButtonWorkExOK;
     QLineEdit *FromWorkExLineEdit;
-    QLabel *label_13;
-    QLineEdit *toWorkExLineEdit;
-    QLabel *label_12;
     QCheckBox *checkBoxCurrentlyWorking;
     QLineEdit *titleLineEdit;
+    QLabel *label_12;
+    QLabel *label_13;
+    QLineEdit *toWorkExLineEdit;
     QLabel *label_14;
     QTextEdit *jobDescriptionTextEdit;
     QLabel *label_11;
@@ -49,15 +49,15 @@ public:
         workExperienceDetails->resize(682, 317);
         gridLayout = new QGridLayout(workExperienceDetails);
         gridLayout->setObjectName(QStringLiteral("gridLayout"));
-        pushButtonWorkExOK = new QPushButton(workExperienceDetails);
-        pushButtonWorkExOK->setObjectName(QStringLiteral("pushButtonWorkExOK"));
-
-        gridLayout->addWidget(pushButtonWorkExOK, 8, 2, 1, 1);
-
         pushButtonWorkExCancel = new QPushButton(workExperienceDetails);
         pushButtonWorkExCancel->setObjectName(QStringLiteral("pushButtonWorkExCancel"));
 
         gridLayout->addWidget(pushButtonWorkExCancel, 8, 3, 1, 1);
+
+        pushButtonWorkExOK = new QPushButton(workExperienceDetails);
+        pushButtonWorkExOK->setObjectName(QStringLiteral("pushButtonWorkExOK"));
+
+        gridLayout->addWidget(pushButtonWorkExOK, 8, 2, 1, 1);
 
         FromWorkExLineEdit = new QLineEdit(workExperienceDetails);
         FromWorkExLineEdit->setObjectName(QStringLiteral("FromWorkExLineEdit"));
@@ -65,30 +65,12 @@ public:
 
         gridLayout->addWidget(FromWorkExLineEdit, 3, 0, 1, 1);
 
-        label_13 = new QLabel(workExperienceDetails);
-        label_13->setObjectName(QStringLiteral("label_13"));
+        checkBoxCurrentlyWorking = new QCheckBox(workExperienceDetails);
+        checkBoxCurrentlyWorking->setObjectName(QStringLiteral("checkBoxCurrentlyWorking"));
         QFont font;
         font.setPointSize(8);
         font.setBold(true);
         font.setWeight(75);
-        label_13->setFont(font);
-
-        gridLayout->addWidget(label_13, 4, 0, 1, 1);
-
-        toWorkExLineEdit = new QLineEdit(workExperienceDetails);
-        toWorkExLineEdit->setObjectName(QStringLiteral("toWorkExLineEdit"));
-        toWorkExLineEdit->setMinimumSize(QSize(85, 30));
-
-        gridLayout->addWidget(toWorkExLineEdit, 3, 1, 1, 1);
-
-        label_12 = new QLabel(workExperienceDetails);
-        label_12->setObjectName(QStringLiteral("label_12"));
-        label_12->setFont(font);
-
-        gridLayout->addWidget(label_12, 2, 1, 1, 1);
-
-        checkBoxCurrentlyWorking = new QCheckBox(workExperienceDetails);
-        checkBoxCurrentlyWorking->setObjectName(QStringLiteral("checkBoxCurrentlyWorking"));
         checkBoxCurrentlyWorking->setFont(font);
 
         gridLayout->addWidget(checkBoxCurrentlyWorking, 3, 2, 1, 2);
@@ -98,6 +80,24 @@ public:
         titleLineEdit->setMinimumSize(QSize(0, 30));
 
         gridLayout->addWidget(titleLineEdit, 5, 0, 1, 4);
+
+        label_12 = new QLabel(workExperienceDetails);
+        label_12->setObjectName(QStringLiteral("label_12"));
+        label_12->setFont(font);
+
+        gridLayout->addWidget(label_12, 2, 1, 1, 1);
+
+        label_13 = new QLabel(workExperienceDetails);
+        label_13->setObjectName(QStringLiteral("label_13"));
+        label_13->setFont(font);
+
+        gridLayout->addWidget(label_13, 4, 0, 1, 1);
+
+        toWorkExLineEdit = new QLineEdit(workExperienceDetails);
+        toWorkExLineEdit->setObjectName(QStringLiteral("toWorkExLineEdit"));
+        toWorkExLineEdit->setMinimumSize(QSize(85, 30));
+
+        gridLayout->addWidget(toWorkExLineEdit, 3, 1, 1, 1);
 
         label_14 = new QLabel(workExperienceDetails);
         label_14->setObjectName(QStringLiteral("label_14"));
@@ -143,14 +143,14 @@ public:
     void retranslateUi(QWidget *workExperienceDetails)
     {
         workExperienceDetails->setWindowTitle(QApplication::translate("workExperienceDetails", "Form", Q_NULLPTR));
-        pushButtonWorkExOK->setText(QApplication::translate("workExperienceDetails", "OK", Q_NULLPTR));
         pushButtonWorkExCancel->setText(QApplication::translate("workExperienceDetails", "CANCEL", Q_NULLPTR));
+        pushButtonWorkExOK->setText(QApplication::translate("workExperienceDetails", "OK", Q_NULLPTR));
         FromWorkExLineEdit->setPlaceholderText(QApplication::translate("workExperienceDetails", "e.g. 01/01/2016", Q_NULLPTR));
-        label_13->setText(QApplication::translate("workExperienceDetails", "Title", Q_NULLPTR));
-        toWorkExLineEdit->setPlaceholderText(QApplication::translate("workExperienceDetails", "e.g. 01/01/2018", Q_NULLPTR));
-        label_12->setText(QApplication::translate("workExperienceDetails", "To", Q_NULLPTR));
         checkBoxCurrentlyWorking->setText(QApplication::translate("workExperienceDetails", "Currently working", Q_NULLPTR));
         titleLineEdit->setPlaceholderText(QApplication::translate("workExperienceDetails", "e.g : Software Engineer", Q_NULLPTR));
+        label_12->setText(QApplication::translate("workExperienceDetails", "To", Q_NULLPTR));
+        label_13->setText(QApplication::translate("workExperienceDetails", "Title", Q_NULLPTR));
+        toWorkExLineEdit->setPlaceholderText(QApplication::translate("workExperienceDetails", "e.g. 01/01/2018", Q_NULLPTR));
         label_14->setText(QApplication::translate("workExperienceDetails", "Job Description", Q_NULLPTR));
         jobDescriptionTextEdit->setPlaceholderText(QApplication::translate("workExperienceDetails", "e.g. Application Programming exeperience using C++/Linux", Q_NULLPTR));
         label_11->setText(QApplication::translate("workExperienceDetails", "From", Q_NULLPTR));

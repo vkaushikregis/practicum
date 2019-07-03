@@ -8,7 +8,7 @@
 #include <algorithm>
 #include <QtWidgets/QMessageBox>
 #include <QtWidgets/QItemDelegate>
-
+#include <QtWidgets/QDateEdit>
 namespace Ui {
 class workExperienceDetails;
 }
@@ -20,7 +20,8 @@ class workExperienceDetails : public QDialog
 public:
     explicit workExperienceDetails(std::string functionality,QDialog *parent = 0 );
     ~workExperienceDetails();
-
+    bool eventFilter(QObject *object, QEvent *event);
+    QDateEdit *de;
     //getters
     QString getCompanyName();
     QString getFromDate();

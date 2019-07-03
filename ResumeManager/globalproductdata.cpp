@@ -3,7 +3,6 @@
 #include <QApplication>
 #include <QtCore>
 
-
 std::vector<ResumeNames> gResumeNamesList = std::vector<ResumeNames>();
 bool isDatabaseConnected;
 std::vector<std::string> gProficiencyLevelList = std::vector<std::string>();
@@ -16,9 +15,8 @@ QString cssTable()
     a += "table.sample td {            border-width: 1px;            padding: 1px;            border-style: inset;            border-color: gray;            background-color: white;            -moz-border-radius: ;    }";
     a+="</style>";
     return a;*/
-QString a;
+    QString a;
     QStringList stringList;
-    //... (open the file for reading, etc.)
     QFile textFile("default.css");
     textFile.open(QFile::ReadOnly | QFile::Text);
     QTextStream textStream(&textFile);
@@ -31,5 +29,5 @@ QString a;
             stringList.append(line);
     }
 
-  return a;
+    return a;
 }

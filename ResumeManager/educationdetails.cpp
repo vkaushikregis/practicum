@@ -1,6 +1,7 @@
 #include "educationdetails.h"
 #include "ui_educationdetails.h"
 #include <QtWidgets/QMessageBox>
+
 educationDetails::educationDetails(std::string functionality,QDialog *parent) :
     QDialog(parent),
     ui(new Ui::educationDetails)
