@@ -12,6 +12,7 @@ Credits
 Icons are from various sources mashed up together:
 
 http://findicons.com/pack/2226/matte_basic
-Qt SDI example
+
+
 License
 I don't care what you do with it. However, it will be useful for resume management locally on your PC.
