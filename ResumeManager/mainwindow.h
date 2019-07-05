@@ -55,7 +55,8 @@ private slots:
     void saveResumeDetailsInDB();
     void filterReumeInListWidget();
     void deleteExistingResume();
-    QString setResumeTemplate();
+    QString returnResumeTemplateOne();
+    QString returnResumeTemplateTwo();
 };
 
 #endif // MAINWINDOW_H
