@@ -6,7 +6,7 @@ educationDetails::educationDetails(std::string functionality,QDialog *parent) :
     QDialog(parent),
     ui(new Ui::educationDetails)
 {
-    ui->setupUi(this);
+    ui->setupUi(this);    
     connect(ui->pushButtonOK, SIGNAL(clicked()), this, SLOT(OnButtonAccepted()));
     connect(ui->pushButtonCancel, SIGNAL(clicked()), this, SLOT(OnButtonRejected()));
 }
