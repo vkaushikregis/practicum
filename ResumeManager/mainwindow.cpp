@@ -437,8 +437,28 @@ bool MainWindow::validatePersonalDetailsAndAddress()
         QMessageBox::critical(NULL, tr("Personal Details"), tr("Email is not filled, it is a mandatory field"));
         return false;
     }
+    else if(!validaEmail(ui->emailLineEdit->text()))
+    {
+        QMessageBox::critical(NULL, tr("email Address"), tr("Email address does not look like a correct email, please fill the correct email address."));
+        return false;
+    }
 
     return true;
+}
+bool MainWindow::validaEmail(QString email)
+{
+    bool status = true;
+
+    qDebug() << email;
+
+    QRegularExpression regex("^[0-9a-zA-Z]+([0-9a-zA-Z]*[-._+])*[0-9a-zA-Z]+@[0-9a-zA-Z]+([-.][0-9a-zA-Z]+)*([0-9a-zA-Z]*[.])[a-zA-Z]{2,6}$");
+
+    if(!regex.match(email).hasMatch())
+    {
+        status = false;
+    }
+
+    return status;
 }
 
 void MainWindow::validateFirstTabInputs()
@@ -993,8 +1013,6 @@ void MainWindow::saveResumeDetailsInDB()
                  QMessageBox::critical(NULL, QObject::tr("Save Resume"), tr(message.c_str()));
             }
         }
-
-
 
     }
 

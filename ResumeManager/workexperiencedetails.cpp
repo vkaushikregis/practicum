@@ -134,6 +134,23 @@ void workExperienceDetails::OnButtonAccepted()
         return;
     }
 
+    QString date_string_from = ui->FromWorkExLineEdit->text();
+    QDate DateFrom = QDate::fromString(date_string_from,"dd/MM/yyyy");
+
+    if(!DateFrom.isValid())
+    {
+        QMessageBox::critical(NULL, tr("From Date Details"), tr("From date entered is not a valid date, please enter the valid date in format dd/MM/yyyy"));
+        return;
+    }
+
+    QString date_string_to = ui->toWorkExLineEdit->text();
+    QDate DateTo = QDate::fromString(date_string_to,"dd/MM/yyyy");
+
+    if(!DateTo.isValid())
+    {
+        QMessageBox::critical(NULL, tr("To Date Details"), tr("To date entered is not a valid date, please enter the valid date in format dd/MM/yyyy"));
+        return;
+    }
     accept();
 }
 

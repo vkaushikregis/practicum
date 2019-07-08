@@ -35,6 +35,7 @@ private:
     bool checkIfTechSkillAlreadyPresent(QString skill_name);
     bool checkIfWorkCompanyAlreadyPresent(QString company_name);
     bool checkIfCollegeAlreadyPresent(QString college_name);
+    bool validaEmail(QString email);
     bool isInEditModeFlag ;
     std::string currentResume;
 private slots:
