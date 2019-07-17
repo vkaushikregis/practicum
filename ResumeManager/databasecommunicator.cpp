@@ -18,12 +18,20 @@ DatabaseCommunicator::DatabaseCommunicator()
     databaseName = "resumemanager";
     hostName = "127.0.0.1";
 
+    /*db = QSqlDatabase::addDatabase("QODBC3");
+    userName = "sql9298899";
+    password = "afmpATLRJk";
+    databaseName = "sql9298899";
+    hostName = "sql9.freesqldatabase.com";*/
+
     //create database connection here
     db = QSqlDatabase::addDatabase("QMYSQL");
     db.setHostName(hostName);
     db.setUserName(userName);
     db.setPassword(password);
     db.setDatabaseName(databaseName);
+    //db.setPort(3306);
+   // db.setConnectOptions("SQL_ATTR_ODBC_VERSION=SQL_OV_ODBC3");
     db.open();
 
     if (db.open())
@@ -33,6 +41,7 @@ DatabaseCommunicator::DatabaseCommunicator()
     else
     {
         isDatabaseConnected = false;
+         DBconnectionerror= db.lastError().text();
         return ;
     }
 }

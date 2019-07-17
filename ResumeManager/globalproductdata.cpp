@@ -5,6 +5,7 @@
 
 std::vector<ResumeNames> gResumeNamesList = std::vector<ResumeNames>();
 bool isDatabaseConnected;
+QString DBconnectionerror;
 std::vector<std::string> gProficiencyLevelList = std::vector<std::string>();
 QString cssTable()
 {

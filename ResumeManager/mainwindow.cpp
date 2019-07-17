@@ -251,8 +251,18 @@ void MainWindow::getSelectedResumeDataFromDB()
 {
     if(isInEditModeFlag)
     {
-        QMessageBox::critical(NULL, tr("Resume Switch"), tr("Resume : %1 is in edit mode, save it first before switching.").arg(currentResume.c_str()));
-        return;
+        int r = QMessageBox::warning(this, tr("Resume: %1").arg(currentResume.c_str()), tr("is in edit mode, do you still want to navigate to another resume.?"),
+                    QMessageBox::Yes | QMessageBox::Default,
+                    QMessageBox::No,
+                    QMessageBox::Cancel | QMessageBox::Escape);
+        if(r == QMessageBox::Yes)
+        {
+              enableDisableGroupbBox(false);
+        }
+        else if (r == QMessageBox::No)
+        {
+            return;
+        }
     }
     std::string message;
     mResumeManagerBaseObj = {};//resetting structure

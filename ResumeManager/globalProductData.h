@@ -8,6 +8,7 @@
 #include <QApplication>
 #include <QtCore>
 extern bool isDatabaseConnected;
+extern QString DBconnectionerror;
 typedef enum
     {
         WORK_EX_PK,COMPANY_NAME,FROM_DATE_W,TO_DATE_W,IS_CURR_W,TITLE,JD
