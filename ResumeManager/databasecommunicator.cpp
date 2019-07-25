@@ -13,35 +13,175 @@ DatabaseCommunicator::DatabaseCommunicator()
 {
     isDatabaseConnected = false;
 
-    userName = "root";
-    password = "root";
-    databaseName = "resumemanager";
-    hostName = "127.0.0.1";
+    QString filename = "resume_database.sql";
+    QFile file(filename);
 
-    /*db = QSqlDatabase::addDatabase("QODBC3");
-    userName = "sql9298899";
-    password = "afmpATLRJk";
-    databaseName = "sql9298899";
-    hostName = "sql9.freesqldatabase.com";*/
-
-    //create database connection here
-    db = QSqlDatabase::addDatabase("QMYSQL");
-    db.setHostName(hostName);
-    db.setUserName(userName);
-    db.setPassword(password);
-    db.setDatabaseName(databaseName);
-    //db.setPort(3306);
-   // db.setConnectOptions("SQL_ATTR_ODBC_VERSION=SQL_OV_ODBC3");
-    db.open();
+    db = QSqlDatabase::addDatabase("QSQLITE");
+    db.setHostName("localhost");
+    db.setDatabaseName(filename);
 
     if (db.open())
     {
+        QSqlQuery usersTableQuery;
+
+        QString pragmaQry = "PRAGMA foreign_keys = ON;";
+        QString pragmaQry1 ="PRAGMA ignore_check_constraints = ON;";
+        QString pragmaQry2 ="PRAGMA journal_mode = WAL;";
+        QString pragmaQry3 ="PRAGMA synchronous = NORMAL;";
+
+        //-----------Creating RESUM NAME TABLE------------------------
+        QString resuemaenameTableQueryStr =
+                 "CREATE TABLE IF NOT EXISTS resumename ("
+                    "Resume_name_pk INTEGER PRIMARY KEY AUTOINCREMENT,"
+                    "resume_name TEXT NOT NULL"
+                    ");";
+
+
+        QString uniqIndRN1 =
+        "CREATE UNIQUE INDEX IF NOT EXISTS resumename_ResumeName_pk_UNIQUE ON resumename (`Resume_name_pk`);";
+        ;
+
+        QString uniqIndRN2 =
+        "CREATE UNIQUE INDEX IF NOT EXISTS resumename_resume_name_UNIQUE ON resumename (`resume_name`);";
+        ;
+
+        //-----------Creating Address TABLE------------------------
+        QString addressQuery =
+                "CREATE TABLE IF NOT EXISTS address ("
+                "address_pk INTEGER PRIMARY KEY AUTOINCREMENT,"
+                "streetaddress TEXT NOT NULL,"
+                "city TEXT NOT NULL,"
+                "state TEXT NOT NULL,"
+                "zip INTEGER NOT NULL,"
+                "resume_name_fk INTEGER NOT NULL,"
+                "FOREIGN KEY (resume_name_fk) REFERENCES resumename (Resume_name_pk) ON DELETE CASCADE ON UPDATE CASCADE"
+                ");";
+
+        QString addIndex =
+        "CREATE INDEX  IF NOT EXISTS address_resume_name_fork_idx ON address (resume_name_fk)";
+
+
+        //-----------Creating education_details TABLE------------------------
+
+        QString eduQuery =
+                "CREATE TABLE  IF NOT EXISTS education_details ("
+                "education_details_pk INTEGER PRIMARY KEY AUTOINCREMENT,"
+                "college_name TEXT NOT NULL,"
+                "from_date TEXT NOT NULL,"
+                "to_date TEXT DEFAULT NULL,"
+                "still_pursuing INTEGER NOT NULL,"
+                "field TEXT NOT NULL,"
+                "GPA double NOT NULL,"
+                "resume_name_fk INTEGER NOT NULL,"
+                "FOREIGN KEY (resume_name_fk) REFERENCES resumename (Resume_name_pk) ON DELETE CASCADE ON UPDATE CASCADE"
+                ");";
+
+        QString eduIndex1 =
+        "CREATE UNIQUE INDEX  IF NOT EXISTS education_details_education_details_pk_UNIQUE ON education_details (education_details_pk)";
+        QString eduIndex2 =
+        "CREATE INDEX  IF NOT EXISTS education_details_resum_edu_fk_idx ON education_details (resume_name_fk)";
+
+
+        //-----------Creating personal_details TABLE------------------------
+        QString pdQuery =
+                "CREATE TABLE IF NOT EXISTS personal_details ("
+                "personal_details_pk INTEGER PRIMARY KEY AUTOINCREMENT,"
+                "first_name TEXT NOT NULL,"
+                "last_name TEXT NOT NULL,"
+                "mobile TEXT NOT NULL,"
+                "email TEXT NOT NULL,"
+                "resume_name_fk INTEGER NOT NULL,"
+                "additional_info TEXT DEFAULT NULL,"
+                "FOREIGN KEY (resume_name_fk) REFERENCES resumename (Resume_name_pk) ON DELETE CASCADE ON UPDATE CASCADE"
+                ");";
+
+        QString pdIndex1 =
+        "CREATE UNIQUE INDEX  IF NOT EXISTS personal_details_personal_details_pk_UNIQUE ON personal_details (personal_details_pk);";
+        QString pdIndex2 =
+        "CREATE INDEX  IF NOT EXISTS `personal_details_resume_name_fk_idx` ON `personal_details` (resume_name_fk);";
+
+        //-----------Creating technical_skilss TABLE------------------------
+        QString techSkillQuery =
+                "CREATE TABLE IF NOT EXISTS `technical_skilss` ("
+                "`technical_skills_pk` INTEGER PRIMARY KEY AUTOINCREMENT,"
+                "`skill_name` TEXT NOT NULL,"
+                "`proficiency` TEXT NOT NULL,"
+                "`years_used` INTEGER NOT NULL,"
+                "`resume_name_fk` INTEGER NOT NULL,"
+                "FOREIGN KEY (`resume_name_fk`) REFERENCES `resumename` (`Resume_name_pk`) ON DELETE CASCADE ON UPDATE CASCADE"
+                ");";
+
+        QString techSkillIndex1 =
+        "CREATE UNIQUE INDEX  IF NOT EXISTS `technical_skilss_technical_skills_UNIQUE` ON `technical_skilss` (`technical_skills_pk`);";
+        QString techSkillIndex2 =
+        "CREATE INDEX  IF NOT EXISTS  `technical_skilss_tech_resume_fk_idx` ON `technical_skilss` (`resume_name_fk`);";
+
+
+        //-----------Creating work_experience TABLE------------------------
+        QString workExQuery =
+                "CREATE TABLE IF NOT EXISTS `work_experience` ("
+                "`work_ex_pk` INTEGER PRIMARY KEY AUTOINCREMENT,"
+                "`company_name` TEXT NOT NULL,"
+                "`from_date` TEXT NOT NULL,"
+                "`to_date` TEXT DEFAULT NULL,"
+                "`job_description` TEXT DEFAULT NULL,"
+                "`resume_name_fk` INTEGER NOT NULL,"
+                "`currently_pursuing` INTEGER NOT NULL,"
+                "`title` TEXT NOT NULL,"
+                "FOREIGN KEY (`resume_name_fk`) REFERENCES `resumename` (`Resume_name_pk`) ON DELETE CASCADE ON UPDATE CASCADE"
+                ")";
+
+        QString workExIndex1 =
+        "CREATE INDEX IF NOT EXISTS `work_experience_resume_fk_idx` ON `work_experience` (`resume_name_fk`)";
+
+        if((usersTableQuery.exec(pragmaQry))  && (usersTableQuery.exec(pragmaQry1)) &&(usersTableQuery.exec(pragmaQry2)) &&(usersTableQuery.exec(pragmaQry3))    )
+        {
+            qDebug() << "foreign keys are enabled";
+        }
+
+        if((usersTableQuery.exec(resuemaenameTableQueryStr)) &&(usersTableQuery.exec(uniqIndRN1)) && (usersTableQuery.exec(uniqIndRN2)) )
+        {
+            qDebug() << "Create resumename table OK";
+
+        }
+
+        if((usersTableQuery.exec(addressQuery)) &&(usersTableQuery.exec(addIndex)) )
+        {
+            qDebug() << "Create address table OK";
+
+        }
+
+        if((usersTableQuery.exec(eduQuery)) &&(usersTableQuery.exec(eduIndex1)) &&(usersTableQuery.exec(eduIndex2)) )
+        {
+            qDebug() << "Create Education qualification table OK";
+
+        }
+        if((usersTableQuery.exec(pdQuery)) &&(usersTableQuery.exec(pdIndex1)) &&(usersTableQuery.exec(pdIndex2)) )
+        {
+            qDebug() << "Create personal_details table OK";
+
+        }
+        if((usersTableQuery.exec(techSkillQuery)) &&(usersTableQuery.exec(techSkillIndex1)) &&(usersTableQuery.exec(techSkillIndex2)) )
+        {
+            qDebug() << "Create technical_skilss table OK";
+
+        }
+        if((usersTableQuery.exec(workExQuery)) &&(usersTableQuery.exec(workExIndex1)) )
+        {
+            qDebug() << "Create work_experience table OK";
+
+        }
+
+        else
+        {
+            qDebug() << usersTableQuery.lastError().text();
+        }
         isDatabaseConnected = true;
     }
     else
     {
         isDatabaseConnected = false;
-         DBconnectionerror= db.lastError().text();
+        DBconnectionerror= db.lastError().text();
         return ;
     }
 }
@@ -63,7 +203,7 @@ bool DatabaseCommunicator::getExistingResumesFromDB(std::string &msg)
     if(db.open())
     {
         QSqlQuery query;
-        query.exec("SELECT resume_name_pk,resume_name FROM resumemanager.resumename");
+        query.exec("SELECT resume_name_pk,resume_name FROM resumename");
         if(!query.exec())
         {
             msg = "There are no resumes in the database currently";
@@ -85,7 +225,7 @@ bool DatabaseCommunicator::getExistingResumesFromDB(std::string &msg)
       if(db.open())
       {
           QSqlQuery query;
-          QString preparedStmt = "SELECT personal_details_pk,first_name,last_name,mobile,email,resume_name_fk,additional_info FROM resumemanager.personal_details where resume_name_fk =" + QString::number(resume_fk);
+          QString preparedStmt = "SELECT personal_details_pk,first_name,last_name,mobile,email,resume_name_fk,additional_info FROM personal_details where resume_name_fk =" + QString::number(resume_fk);
           query.exec(preparedStmt);
           if(!query.exec())
           {
@@ -111,7 +251,7 @@ bool DatabaseCommunicator::getExistingResumesFromDB(std::string &msg)
       if(db.open())
       {
           QSqlQuery query;
-          QString preparedStmt = "SELECT address_pk,streetaddress,city,state,zip,resume_name_fk FROM resumemanager.address where resume_name_fk =" + QString::number(resume_fk);
+          QString preparedStmt = "SELECT address_pk,streetaddress,city,state,zip,resume_name_fk FROM address where resume_name_fk =" + QString::number(resume_fk);
           query.exec(preparedStmt);
           if(!query.exec())
           {
@@ -137,7 +277,7 @@ bool DatabaseCommunicator::getExistingResumesFromDB(std::string &msg)
        if(db.open())
        {
            QSqlQuery query;
-           QString preparedStmt = "SELECT education_details_pk,college_name,from_date,to_date,still_pursuing,field,GPA,resume_name_fk FROM resumemanager.education_details where resume_name_fk =" + QString::number(resume_fk);
+           QString preparedStmt = "SELECT education_details_pk,college_name,from_date,to_date,still_pursuing,field,GPA,resume_name_fk FROM education_details where resume_name_fk =" + QString::number(resume_fk);
            query.exec(preparedStmt);
            if(!query.exec())
            {
@@ -168,7 +308,7 @@ bool DatabaseCommunicator::getExistingResumesFromDB(std::string &msg)
        if(db.open())
        {
            QSqlQuery query;
-           QString preparedStmt = "SELECT work_ex_pk,company_name,from_date,to_date,job_description,currently_pursuing,title,resume_name_fk FROM resumemanager.work_experience where resume_name_fk =" + QString::number(resume_fk);
+           QString preparedStmt = "SELECT work_ex_pk,company_name,from_date,to_date,job_description,currently_pursuing,title,resume_name_fk FROM work_experience where resume_name_fk =" + QString::number(resume_fk);
            query.exec(preparedStmt);
            if(!query.exec())
            {
@@ -198,7 +338,7 @@ bool DatabaseCommunicator::getExistingResumesFromDB(std::string &msg)
        if(db.open())
        {
            QSqlQuery query;
-           QString preparedStmt = "SELECT technical_skills_pk,skill_name,proficiency,years_used,resume_name_fk FROM resumemanager.technical_skilss where resume_name_fk =" + QString::number(resume_fk);
+           QString preparedStmt = "SELECT technical_skills_pk,skill_name,proficiency,years_used,resume_name_fk FROM technical_skilss where resume_name_fk =" + QString::number(resume_fk);
            query.exec(preparedStmt);
            if(!query.exec())
            {
@@ -231,7 +371,7 @@ bool DatabaseCommunicator::getExistingResumesFromDB(std::string &msg)
         {
             QSqlQuery qry;
 
-            qry.prepare("DELETE FROM resumemanager.resumename WHERE resume_name_pk = ?");
+            qry.prepare("DELETE FROM resumename WHERE resume_name_pk = ?");
             qry.addBindValue(resuObj.mResume_pk);
 
             if( !qry.exec() )
@@ -254,7 +394,7 @@ bool DatabaseCommunicator::getExistingResumesFromDB(std::string &msg)
         {
             QSqlQuery qry;
 
-            qry.prepare("INSERT INTO resumemanager.resumename (resume_name) VALUES(:resume_name_val)");
+            qry.prepare("INSERT INTO resumename (resume_name) VALUES(:resume_name_val)");
             qry.bindValue(":resume_name_val",QString::fromUtf8(resuObj.mResume_name.c_str()));
 
             if( !qry.exec() )
@@ -276,7 +416,7 @@ bool DatabaseCommunicator::getExistingResumesFromDB(std::string &msg)
 
              // second insert into personal_details table
              QSqlQuery qPer;
-             qPer.prepare("INSERT INTO resumemanager.personal_details (first_name,last_name,mobile,email,resume_name_fk,additional_info) VALUES(:first_name,:last_name,:mobile,:email,:resume_fk,:additonal_info)");
+             qPer.prepare("INSERT INTO personal_details (first_name,last_name,mobile,email,resume_name_fk,additional_info) VALUES(:first_name,:last_name,:mobile,:email,:resume_fk,:additonal_info)");
              qPer.bindValue(":first_name", QString::fromUtf8(resuObj.mPersonalDetails.mFirst_name.c_str()));
              qPer.bindValue(":last_name",  QString::fromUtf8(resuObj.mPersonalDetails.mLast_name.c_str()));
              qPer.bindValue(":mobile", QString::fromUtf8(resuObj.mPersonalDetails.mMobile.c_str()));
@@ -297,7 +437,7 @@ bool DatabaseCommunicator::getExistingResumesFromDB(std::string &msg)
 
              // third insert into address table
              QSqlQuery qAdd;
-             qAdd.prepare("INSERT INTO resumemanager.address (streetaddress,city,state,zip,resume_name_fk) VALUES(:streetadress,:city,:state,:zip,:resume_fk)");
+             qAdd.prepare("INSERT INTO address (streetaddress,city,state,zip,resume_name_fk) VALUES(:streetadress,:city,:state,:zip,:resume_fk)");
              qAdd.bindValue(":streetadress",  QString::fromUtf8(resuObj.mAddress.mStreet_address.c_str()));
              qAdd.bindValue(":city",  QString::fromUtf8(resuObj.mAddress.mCity.c_str()));
              qAdd.bindValue(":state",  QString::fromUtf8(resuObj.mAddress.mState.c_str()));
@@ -318,7 +458,7 @@ bool DatabaseCommunicator::getExistingResumesFromDB(std::string &msg)
              for(int count =0; count < resuObj.mWorkExList.size(); count++)
              {
                  QSqlQuery q;
-                 q.prepare("INSERT INTO resumemanager.work_experience (company_name,from_date,to_date,job_description,resume_name_fk,currently_pursuing,title) VALUES(:company_name,:from_date,:to_date,:jd,:resume_fk,:current_job, :title)");
+                 q.prepare("INSERT INTO work_experience (company_name,from_date,to_date,job_description,resume_name_fk,currently_pursuing,title) VALUES(:company_name,:from_date,:to_date,:jd,:resume_fk,:current_job, :title)");
                  q.bindValue(":company_name",  QString::fromUtf8(resuObj.mWorkExList[count].mCompany_name.c_str()));
                  q.bindValue(":from_date",  QString::fromUtf8(resuObj.mWorkExList[count].mFrom_date.c_str()));
                  q.bindValue(":to_date",  QString::fromUtf8(resuObj.mWorkExList[count].mTo_date.c_str()));
@@ -343,7 +483,7 @@ bool DatabaseCommunicator::getExistingResumesFromDB(std::string &msg)
              for(int count =0; count < resuObj.mEducationDetailsList.size(); count++)
              {
                  QSqlQuery q;
-                 q.prepare("INSERT INTO resumemanager.education_details (college_name,from_date,to_date,still_pursuing,field,gpa,resume_name_fk) VALUES(:college_name,:from_date,:to_date,:isCurrent,:field,:GPA,:resume_fk)");
+                 q.prepare("INSERT INTO education_details (college_name,from_date,to_date,still_pursuing,field,gpa,resume_name_fk) VALUES(:college_name,:from_date,:to_date,:isCurrent,:field,:GPA,:resume_fk)");
                  q.bindValue(":college_name",  QString::fromUtf8(resuObj.mEducationDetailsList[count].mCollege_name.c_str()));
                  q.bindValue(":from_date",  QString::fromUtf8(resuObj.mEducationDetailsList[count].mFrom_date.c_str()));
                  q.bindValue(":to_date",  QString::fromUtf8(resuObj.mEducationDetailsList[count].mTo_date.c_str()));
@@ -368,7 +508,7 @@ bool DatabaseCommunicator::getExistingResumesFromDB(std::string &msg)
              for(int count =0; count < resuObj.mTechSkillsList.size(); count++)
              {
                  QSqlQuery q;
-                 q.prepare("INSERT INTO resumemanager.technical_skilss (skill_name,proficiency,years_used,resume_name_fk) VALUES(:skill_name,:proficiency,:years_used,:resume_fk)");
+                 q.prepare("INSERT INTO technical_skilss (skill_name,proficiency,years_used,resume_name_fk) VALUES(:skill_name,:proficiency,:years_used,:resume_fk)");
                  q.bindValue(":skill_name",  QString::fromUtf8(resuObj.mTechSkillsList[count].mSkill_name.c_str()));
                  q.bindValue(":proficiency",  QString::fromUtf8(resuObj.mTechSkillsList[count].mProficiency.c_str()));
                  q.bindValue(":years_used",  resuObj.mTechSkillsList[count].mYears_used);
@@ -403,7 +543,7 @@ bool DatabaseCommunicator::getExistingResumesFromDB(std::string &msg)
        {
             QSqlQuery qry;
 
-            qry.prepare("INSERT INTO resumemanager.resumename (resume_name) VALUES(:resume_name_val)");
+            qry.prepare("INSERT INTO resumename (resume_name) VALUES(:resume_name_val)");
             qry.bindValue(":resume_name_val",QString::fromUtf8(resuObj.mResume_name.c_str()));
 
             if( !qry.exec() )
@@ -420,7 +560,7 @@ bool DatabaseCommunicator::getExistingResumesFromDB(std::string &msg)
 
             // second insert into personal_details table
             QSqlQuery qPer;
-            qPer.prepare("INSERT INTO resumemanager.personal_details (first_name,last_name,mobile,email,resume_name_fk,additional_info) VALUES(:first_name,:last_name,:mobile,:email,:resume_fk,:additonal_info)");
+            qPer.prepare("INSERT INTO personal_details (first_name,last_name,mobile,email,resume_name_fk,additional_info) VALUES(:first_name,:last_name,:mobile,:email,:resume_fk,:additonal_info)");
             qPer.bindValue(":first_name", QString::fromUtf8(resuObj.mPersonalDetails.mFirst_name.c_str()));
             qPer.bindValue(":last_name",  QString::fromUtf8(resuObj.mPersonalDetails.mLast_name.c_str()));
             qPer.bindValue(":mobile", QString::fromUtf8(resuObj.mPersonalDetails.mMobile.c_str()));
@@ -441,7 +581,7 @@ bool DatabaseCommunicator::getExistingResumesFromDB(std::string &msg)
 
             // third insert into address table
             QSqlQuery qAdd;
-            qAdd.prepare("INSERT INTO resumemanager.address (streetaddress,city,state,zip,resume_name_fk) VALUES(:streetadress,:city,:state,:zip,:resume_fk)");
+            qAdd.prepare("INSERT INTO address (streetaddress,city,state,zip,resume_name_fk) VALUES(:streetadress,:city,:state,:zip,:resume_fk)");
             qAdd.bindValue(":streetadress",  QString::fromUtf8(resuObj.mAddress.mStreet_address.c_str()));
             qAdd.bindValue(":city",  QString::fromUtf8(resuObj.mAddress.mCity.c_str()));
             qAdd.bindValue(":state",  QString::fromUtf8(resuObj.mAddress.mState.c_str()));
@@ -462,7 +602,7 @@ bool DatabaseCommunicator::getExistingResumesFromDB(std::string &msg)
             for(int count =0; count < resuObj.mWorkExList.size(); count++)
             {
                 QSqlQuery q;
-                q.prepare("INSERT INTO resumemanager.work_experience (company_name,from_date,to_date,job_description,resume_name_fk,currently_pursuing,title) VALUES(:company_name,:from_date,:to_date,:jd,:resume_fk,:current_job, :title)");
+                q.prepare("INSERT INTO work_experience (company_name,from_date,to_date,job_description,resume_name_fk,currently_pursuing,title) VALUES(:company_name,:from_date,:to_date,:jd,:resume_fk,:current_job, :title)");
                 q.bindValue(":company_name",  QString::fromUtf8(resuObj.mWorkExList[count].mCompany_name.c_str()));
                 q.bindValue(":from_date",  QString::fromUtf8(resuObj.mWorkExList[count].mFrom_date.c_str()));
                 q.bindValue(":to_date",  QString::fromUtf8(resuObj.mWorkExList[count].mTo_date.c_str()));
@@ -487,7 +627,7 @@ bool DatabaseCommunicator::getExistingResumesFromDB(std::string &msg)
             for(int count =0; count < resuObj.mEducationDetailsList.size(); count++)
             {
                 QSqlQuery q;
-                q.prepare("INSERT INTO resumemanager.education_details (college_name,from_date,to_date,still_pursuing,field,gpa,resume_name_fk) VALUES(:college_name,:from_date,:to_date,:isCurrent,:field,:GPA,:resume_fk)");
+                q.prepare("INSERT INTO education_details (college_name,from_date,to_date,still_pursuing,field,gpa,resume_name_fk) VALUES(:college_name,:from_date,:to_date,:isCurrent,:field,:GPA,:resume_fk)");
                 q.bindValue(":college_name",  QString::fromUtf8(resuObj.mEducationDetailsList[count].mCollege_name.c_str()));
                 q.bindValue(":from_date",  QString::fromUtf8(resuObj.mEducationDetailsList[count].mFrom_date.c_str()));
                 q.bindValue(":to_date",  QString::fromUtf8(resuObj.mEducationDetailsList[count].mTo_date.c_str()));
@@ -512,7 +652,7 @@ bool DatabaseCommunicator::getExistingResumesFromDB(std::string &msg)
             for(int count =0; count < resuObj.mTechSkillsList.size(); count++)
             {
                 QSqlQuery q;
-                q.prepare("INSERT INTO resumemanager.technical_skilss (skill_name,proficiency,years_used,resume_name_fk) VALUES(:skill_name,:proficiency,:years_used,:resume_fk)");
+                q.prepare("INSERT INTO technical_skilss (skill_name,proficiency,years_used,resume_name_fk) VALUES(:skill_name,:proficiency,:years_used,:resume_fk)");
                 q.bindValue(":skill_name",  QString::fromUtf8(resuObj.mTechSkillsList[count].mSkill_name.c_str()));
                 q.bindValue(":proficiency",  QString::fromUtf8(resuObj.mTechSkillsList[count].mProficiency.c_str()));
                 q.bindValue(":years_used",  resuObj.mTechSkillsList[count].mYears_used);
@@ -545,7 +685,7 @@ bool DatabaseCommunicator::getExistingResumesFromDB(std::string &msg)
        {
            QSqlQuery qry;
 
-           qry.prepare("DELETE FROM resumemanager.resumename WHERE resume_name_pk = ?");
+           qry.prepare("DELETE FROM resumename WHERE resume_name_pk = ?");
            qry.addBindValue(resume_name_pk);
 
            if( !qry.exec() )
@@ -557,7 +697,7 @@ bool DatabaseCommunicator::getExistingResumesFromDB(std::string &msg)
            }
            else
            {
-               qDebug( "Inserted into resume name!" );
+               qDebug()<<"resume successfully deleted";
                msg= "Resume succesfully deleted from database.";
            }
        }

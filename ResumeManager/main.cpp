@@ -10,7 +10,7 @@ int main(int argc, char *argv[])
     DatabaseCommunicator::Instance();
     if(!isDatabaseConnected)
     {
-        QMessageBox::critical(NULL, QObject::tr("Database Connection"), QObject::tr("Database not connected,Exiting!").arg(DBconnectionerror));
+        QMessageBox::critical(NULL, QObject::tr("Database Connection 1"), QObject::tr("Database not connected,Exiting!").arg(DBconnectionerror));
         return 1;
     }
     MainWindow w;

@@ -105,54 +105,62 @@ void workExperienceDetails::setJobDescription(QString jobDescription)
 
 void workExperienceDetails::OnButtonAccepted()
 {
-    if(ui->companyLineEdit->text().toStdString().empty())
-    {
-        QMessageBox::critical(NULL, tr("Work Experience"), tr("Company Name is not filled, it is a mandatory field"));
+    if(!checkInputFields())
         return;
-    }
-    else if (ui->FromWorkExLineEdit->text().toStdString().empty())
-    {
-        QMessageBox::critical(NULL, tr("Work Experience"), tr("From date is not filled, it is a mandatory field"));
-        return;
-    }
-    else if(!ui->checkBoxCurrentlyWorking->isChecked())
-    {
-        if (ui->toWorkExLineEdit->text().toStdString().empty())
-        {
-             QMessageBox::critical(NULL, tr("Work Experience"), tr("To Date is not filled, fill this field if it is not a current job"));
-             return;
-        }
-    }
-    else if (ui->titleLineEdit->text().toStdString().empty())
-    {
-        QMessageBox::critical(NULL, tr("Work Experience"), tr("Title is not filled, it is a mandatory field"));
-        return;
-    }
-    else if (ui->jobDescriptionTextEdit->toPlainText().toStdString().empty())
-    {
-        QMessageBox::critical(NULL, tr("Work Experience"), tr("Job Description is not filled, it is a mandatory field"));
-        return;
-    }
 
-    QString date_string_from = ui->FromWorkExLineEdit->text();
-    QDate DateFrom = QDate::fromString(date_string_from,"dd/MM/yyyy");
-
-    if(!DateFrom.isValid())
-    {
-        QMessageBox::critical(NULL, tr("From Date Details"), tr("From date entered is not a valid date, please enter the valid date in format dd/MM/yyyy"));
-        return;
-    }
-
-    QString date_string_to = ui->toWorkExLineEdit->text();
-    QDate DateTo = QDate::fromString(date_string_to,"dd/MM/yyyy");
-
-    if(!DateTo.isValid())
-    {
-        QMessageBox::critical(NULL, tr("To Date Details"), tr("To date entered is not a valid date, please enter the valid date in format dd/MM/yyyy"));
-        return;
-    }
     accept();
 }
+ bool workExperienceDetails::checkInputFields()
+ {
+     if(ui->companyLineEdit->text().toStdString().empty())
+     {
+         QMessageBox::critical(NULL, tr("Work Experience"), tr("Company Name is not filled, it is a mandatory field"));
+         return false;
+     }
+     else if (ui->FromWorkExLineEdit->text().toStdString().empty())
+     {
+         QMessageBox::critical(NULL, tr("Work Experience"), tr("From date is not filled, it is a mandatory field"));
+         return false;
+     }
+     else if(!ui->checkBoxCurrentlyWorking->isChecked())
+     {
+         if (ui->toWorkExLineEdit->text().toStdString().empty())
+         {
+              QMessageBox::critical(NULL, tr("Work Experience"), tr("To Date is not filled, fill this field if it is not a current job"));
+              return false;
+         }
+     }
+     else if (ui->titleLineEdit->text().toStdString().empty())
+     {
+         QMessageBox::critical(NULL, tr("Work Experience"), tr("Title is not filled, it is a mandatory field"));
+         return false;
+     }
+     else if (ui->jobDescriptionTextEdit->toPlainText().toStdString().empty())
+     {
+         QMessageBox::critical(NULL, tr("Work Experience"), tr("Job Description is not filled, it is a mandatory field"));
+         return false;
+     }
+
+     QString date_string_from = ui->FromWorkExLineEdit->text();
+     QDate DateFrom = QDate::fromString(date_string_from,"dd/MM/yyyy");
+
+     if(!DateFrom.isValid())
+     {
+         QMessageBox::critical(NULL, tr("From Date Details"), tr("From date entered is not a valid date, please enter the valid date in format dd/MM/yyyy"));
+         return false;
+     }
+
+     QString date_string_to = ui->toWorkExLineEdit->text();
+     QDate DateTo = QDate::fromString(date_string_to,"dd/MM/yyyy");
+
+     if(!DateTo.isValid())
+     {
+         QMessageBox::critical(NULL, tr("To Date Details"), tr("To date entered is not a valid date, please enter the valid date in format dd/MM/yyyy"));
+         return false;
+     }
+
+     return true;
+ }
 
 void workExperienceDetails::OnButtonRejected()
 {

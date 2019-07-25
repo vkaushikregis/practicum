@@ -84,55 +84,62 @@ void educationDetails::setGPA(QString gpa)
 
 void educationDetails::OnButtonAccepted()
 {
-    if(ui->lineEditCollegeName->text().toStdString().empty())
-    {
-        QMessageBox::critical(NULL, tr("Education Details"), tr("College Name is not filled, it is a mandatory field"));
+    if(!checkInputFields())
         return;
-    }
-    else if (ui->lineEditFromDateCol->text().toStdString().empty())
-    {
-        QMessageBox::critical(NULL, tr("Education Details"), tr("From date is not filled, it is a mandatory field"));
-        return;
-    }
-    else if(!ui->checkBoxCurrPursuing->isChecked())
-    {
-        if (ui->lineEditToDateColl->text().toStdString().empty())
-        {
-             QMessageBox::critical(NULL, tr("Education Details"), tr("To Date is not filled, fill this field if not currently pursuing"));
-             return;
-        }
-    }
-    else if (ui->lineEditCollegeField->text().toStdString().empty())
-    {
-        QMessageBox::critical(NULL, tr("Education Details"), tr("Major/Minor is not filled, it is a mandatory field"));
-        return;
-    }
-    else if (ui->lineEditGPA->text().toStdString().empty())
-    {
-        QMessageBox::critical(NULL, tr("Education Details"), tr("GPA is not filled, it is a mandatory field"));
-        return;
-    }
-
-    QString date_string_from = ui->lineEditFromDateCol->text();
-    QDate DateFrom = QDate::fromString(date_string_from,"dd/MM/yyyy");
-
-    if(!DateFrom.isValid())
-    {
-        QMessageBox::critical(NULL, tr("From Date Details"), tr("From date entered is not a valid date, please enter the valid date in format dd/MM/yyyy"));
-        return;
-    }
-
-    QString date_string_to = ui->lineEditToDateColl->text();
-    QDate DateTo = QDate::fromString(date_string_to,"dd/MM/yyyy");
-
-    if(!DateTo.isValid())
-    {
-        QMessageBox::critical(NULL, tr("To Date Details"), tr("To date entered is not a valid date, please enter the valid date in format dd/MM/yyyy"));
-        return;
-    }
 
     accept();
 }
+ bool educationDetails::checkInputFields()
+ {
+     if(ui->lineEditCollegeName->text().toStdString().empty())
+     {
+         QMessageBox::critical(NULL, tr("Education Details"), tr("College Name is not filled, it is a mandatory field"));
+         return false;
+     }
+     else if (ui->lineEditFromDateCol->text().toStdString().empty())
+     {
+         QMessageBox::critical(NULL, tr("Education Details"), tr("From date is not filled, it is a mandatory field"));
+         return false;
+     }
+     else if(!ui->checkBoxCurrPursuing->isChecked())
+     {
+         if (ui->lineEditToDateColl->text().toStdString().empty())
+         {
+              QMessageBox::critical(NULL, tr("Education Details"), tr("To Date is not filled, fill this field if not currently pursuing"));
+              return false;
+         }
+     }
+     else if (ui->lineEditCollegeField->text().toStdString().empty())
+     {
+         QMessageBox::critical(NULL, tr("Education Details"), tr("Major/Minor is not filled, it is a mandatory field"));
+         return false;
+     }
+     else if (ui->lineEditGPA->text().toStdString().empty())
+     {
+         QMessageBox::critical(NULL, tr("Education Details"), tr("GPA is not filled, it is a mandatory field"));
+         return false;
+     }
+
+     QString date_string_from = ui->lineEditFromDateCol->text();
+     QDate DateFrom = QDate::fromString(date_string_from,"dd/MM/yyyy");
+
+     if(!DateFrom.isValid())
+     {
+         QMessageBox::critical(NULL, tr("From Date Details"), tr("From date entered is not a valid date, please enter the valid date in format dd/MM/yyyy"));
+         return false;
+     }
+
+     QString date_string_to = ui->lineEditToDateColl->text();
+     QDate DateTo = QDate::fromString(date_string_to,"dd/MM/yyyy");
+
+     if(!DateTo.isValid())
+     {
+         QMessageBox::critical(NULL, tr("To Date Details"), tr("To date entered is not a valid date, please enter the valid date in format dd/MM/yyyy"));
+         return false;
+     }
+
+     return true;
+ }
 
 void educationDetails::OnButtonRejected()
 {

@@ -54,17 +54,26 @@ void technicalSkills::setYearsUsed(int years_used)
 
 void technicalSkills::OnButtonAccepted()
 {
+    if(!checkInputFields())
+        return;
+
+    accept();
+}
+
+bool technicalSkills::checkInputFields()
+{
     if(ui->lineEditSkillName->text().toStdString().empty())
     {
         QMessageBox::critical(NULL, tr("Technical Skills"), tr("Skill Name is not filled, it is a mandatory field"));
-        return;
+        return false;
     }
     else if (ui->lineEditYearsUsed->text().toStdString().empty())
     {
         QMessageBox::critical(NULL, tr("Technical Skills"), tr("Years Used is not filled, it is a mandatory field"));
-        return;
+        return false;
     }
-    accept();
+
+    return true;
 }
 
 void technicalSkills::OnButtonRejected()

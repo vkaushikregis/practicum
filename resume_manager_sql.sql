@@ -1,3 +1,5 @@
+CREATE DATABASE `resumemanager` /*!40100 DEFAULT CHARACTER SET latin1 */;
+
 CREATE TABLE `resumename` (
   `Resume_name_pk` int(11) NOT NULL AUTO_INCREMENT,
   `resume_name` varchar(100) NOT NULL,

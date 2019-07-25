@@ -25,7 +25,8 @@ HEADERS  += mainwindow.h \
     globalproductdata.h \
     educationdetails.h \
     workexperiencedetails.h \
-    technicalskills.h
+    technicalskills.h \
+    basedata.h
 
 FORMS    += mainwindow.ui \
     educationdetails.ui \
