@@ -117,6 +117,7 @@ void MainWindow::EditCurrentResume()
 
 void MainWindow::createNewResume()
 {
+     mResumeManagerBaseObj = {};//resetting structure
      ui->listWidgetResumeNames->clearSelection();
 
      ui->firstNameLineEdit->setText("");
@@ -142,7 +143,7 @@ void MainWindow::createNewResume()
 
 
       enableDisableGroupbBox(true);
-      mResumeManagerBaseObj = {};//resetting structure
+
 }
 
 void MainWindow::fillProficiencyList()
@@ -664,8 +665,8 @@ void MainWindow::addNewWorkExClicked()
         if (res == QDialog::Rejected)
             return;
 
-        if(checkIfWorkCompanyAlreadyPresent(workExWindow.getCompanyName()))
-            return;
+       // if(checkIfWorkCompanyAlreadyPresent(workExWindow.getCompanyName()))
+            //return;
 
         ui->tableWidgetWorkEx->insertRow( ui->tableWidgetWorkEx->rowCount());
         ui->tableWidgetWorkEx->setItem( ui->tableWidgetWorkEx->rowCount() - 1, WORK_EX_PK, new QTableWidgetItem((QString::number(-1))));
@@ -691,6 +692,7 @@ void MainWindow::addNewWorkExClicked()
 
     if (sender()->objectName() == "pushButtonEditWorkEx")
     {
+        qDebug()<<"in dedit work ex mode";
         if (ui->tableWidgetWorkEx->selectedItems().size() <= 0)
         {
             QMessageBox::warning(NULL, tr("Edit Work Experience"), tr("Select a row to edit."));
@@ -700,53 +702,59 @@ void MainWindow::addNewWorkExClicked()
         if (row < 0)
             return;
 
-        workExperienceDetails workExWindow("Edit");
-        workExWindow.setWindowTitle("Edit Work Experience for row:" + QString::number(ui->tableWidgetWorkEx->currentRow() + 1));
+        workExperienceDetails workExWindowEdit("Edit");
+        workExWindowEdit.setWindowTitle("Edit Work Experience for row:" + QString::number(ui->tableWidgetWorkEx->currentRow() + 1));
 
 
         if (ui->tableWidgetWorkEx->item(row, COMPANY_NAME))
-            workExWindow.setCompanyName( ui->tableWidgetWorkEx->item(row, COMPANY_NAME)->text());
+            workExWindowEdit.setCompanyName( ui->tableWidgetWorkEx->item(row, COMPANY_NAME)->text());
 
         if (ui->tableWidgetWorkEx->item(row, FROM_DATE_W))
-            workExWindow.setFromDate( ui->tableWidgetWorkEx->item(row, FROM_DATE_W)->text());
+            workExWindowEdit.setFromDate( ui->tableWidgetWorkEx->item(row, FROM_DATE_W)->text());
 
         if (ui->tableWidgetWorkEx->item(row, TO_DATE_W))
-            workExWindow.setToDate( ui->tableWidgetWorkEx->item(row, TO_DATE_W)->text());
+            workExWindowEdit.setToDate( ui->tableWidgetWorkEx->item(row, TO_DATE_W)->text());
 
         if (ui->tableWidgetWorkEx->item(row, IS_CURR_W))
         {
             if(ui->tableWidgetWorkEx->item(row, IS_CURR_W)->text() == "Yes")
-                workExWindow.setCurrentJob(1);
+                workExWindowEdit.setCurrentJob(1);
             else
-                workExWindow.setCurrentJob(0);
+                workExWindowEdit.setCurrentJob(0);
         }
 
 
         if (ui->tableWidgetWorkEx->item(row, TITLE))
-            workExWindow.setTitle( ui->tableWidgetWorkEx->item(row, TITLE)->text());
+            workExWindowEdit.setTitle( ui->tableWidgetWorkEx->item(row, TITLE)->text());
 
         if (ui->tableWidgetWorkEx->item(row, JD))
-            workExWindow.setJobDescription( ui->tableWidgetWorkEx->item(row, JD)->text());
+            workExWindowEdit.setJobDescription( ui->tableWidgetWorkEx->item(row, JD)->text());
 
-        int res = workExWindow.exec();
-        if (res == QDialog::Rejected)
+        int result = workExWindowEdit.exec();
+        qDebug()<<"after accept";
+        //QString company_name = workExWindowEdit.getCompanyName();
+        if (result == QDialog::Rejected)
             return;
 
-        if(checkIfWorkCompanyAlreadyPresent(workExWindow.getCompanyName()))
-            return;
+        //if(checkIfWorkCompanyAlreadyPresent(company_name))
+          //  return;
+        qDebug()<<"after accept 2";
 
         ui->tableWidgetWorkEx->setItem(row, WORK_EX_PK, new QTableWidgetItem((QString::number(-1))));
-        ui->tableWidgetWorkEx->setItem( row, COMPANY_NAME, new QTableWidgetItem((workExWindow.getCompanyName())));
-        ui->tableWidgetWorkEx->setItem( row, FROM_DATE_W, new QTableWidgetItem((workExWindow.getFromDate())));
-        ui->tableWidgetWorkEx->setItem( row, TO_DATE_W, new QTableWidgetItem((workExWindow.getToDate())));
-        if(workExWindow.getCurrentJob())
-            ui->tableWidgetWorkEx->setItem(row, IS_CURR_W, new QTableWidgetItem(("Yes")));
+        ui->tableWidgetWorkEx->setItem( row, COMPANY_NAME, new QTableWidgetItem((workExWindowEdit.getCompanyName())));
+        ui->tableWidgetWorkEx->setItem( row, FROM_DATE_W, new QTableWidgetItem((workExWindowEdit.getFromDate())));
+        ui->tableWidgetWorkEx->setItem( row, TO_DATE_W, new QTableWidgetItem((workExWindowEdit.getToDate())));
+        if(workExWindowEdit.getCurrentJob())
+            ui->tableWidgetWorkEx->setItem(row, IS_CURR_W, new QTableWidgetItem("Yes"));
         else
-            ui->tableWidgetWorkEx->setItem( row, IS_CURR_W, new QTableWidgetItem(("No")));
+            ui->tableWidgetWorkEx->setItem( row, IS_CURR_W, new QTableWidgetItem("No"));
 
-        ui->tableWidgetWorkEx->setItem( row, TITLE, new QTableWidgetItem((workExWindow.getTitle())));
-        ui->tableWidgetWorkEx->setItem( row, JD, new QTableWidgetItem((workExWindow.getJobDescription())));
+        ui->tableWidgetWorkEx->setItem( row, TITLE, new QTableWidgetItem((workExWindowEdit.getTitle())));
+        ui->tableWidgetWorkEx->setItem( row, JD, new QTableWidgetItem((workExWindowEdit.getJobDescription())));
 
+
+
+        qDebug()<<"after accept 3";
         for (int count = 0; count <ui->tableWidgetWorkEx->columnCount(); count++)
         {
             if (ui->tableWidgetWorkEx->item(row, count))

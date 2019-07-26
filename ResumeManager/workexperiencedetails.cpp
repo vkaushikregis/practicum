@@ -7,31 +7,19 @@
 #include <vector>
 #include <algorithm>
 #include <QtWidgets/QMessageBox>
-#include <QtWidgets/QDateEdit>
+
 
 workExperienceDetails::workExperienceDetails( std::string functionality,QDialog *parent) :
     QDialog(parent),
     ui(new Ui::workExperienceDetails)
 {
     ui->setupUi(this);
-    function = functionality;
+   // function = functionality;
 
-    connect(ui->pushButtonWorkExOK, SIGNAL(clicked()), this, SLOT(OnButtonAccepted()));
-    connect(ui->pushButtonWorkExCancel, SIGNAL(clicked()), this, SLOT(OnButtonRejected()));    
+    connect(ui->pushButtonWorkExOK, SIGNAL(clicked()), this, SLOT(OnButtonWAccepted()));
+    connect(ui->pushButtonWorkExCancel, SIGNAL(clicked()), this, SLOT(OnButtonWRejected()));
 }
-bool workExperienceDetails::eventFilter(QObject *object, QEvent *event)
-{
-    if (event->type() == QEvent::FocusIn)
-    {
-        if (object == ui->FromWorkExLineEdit)
-        {
-            de = new QDateEdit(this);
-            de->setCalendarPopup(true);
-            de->show();
-        }
-    }
-    return false;
-}
+
 
 workExperienceDetails::~workExperienceDetails()
 {
@@ -103,10 +91,11 @@ void workExperienceDetails::setJobDescription(QString jobDescription)
     ui->jobDescriptionTextEdit->setPlainText(jobDescription);
 }
 
-void workExperienceDetails::OnButtonAccepted()
+void workExperienceDetails::OnButtonWAccepted()
 {
-    if(!checkInputFields())
-        return;
+    qDebug()<<"testing ";
+  // if(!checkInputFields())
+       // return;
 
     accept();
 }
@@ -144,7 +133,7 @@ void workExperienceDetails::OnButtonAccepted()
      QString date_string_from = ui->FromWorkExLineEdit->text();
      QDate DateFrom = QDate::fromString(date_string_from,"dd/MM/yyyy");
 
-     if(!DateFrom.isValid())
+    /* if(!DateFrom.isValid())
      {
          QMessageBox::critical(NULL, tr("From Date Details"), tr("From date entered is not a valid date, please enter the valid date in format dd/MM/yyyy"));
          return false;
@@ -153,16 +142,17 @@ void workExperienceDetails::OnButtonAccepted()
      QString date_string_to = ui->toWorkExLineEdit->text();
      QDate DateTo = QDate::fromString(date_string_to,"dd/MM/yyyy");
 
+    // if(!ui->checkBoxCurrentlyWorking->isChecked())
      if(!DateTo.isValid())
      {
          QMessageBox::critical(NULL, tr("To Date Details"), tr("To date entered is not a valid date, please enter the valid date in format dd/MM/yyyy"));
          return false;
-     }
+     }*/
 
      return true;
  }
 
-void workExperienceDetails::OnButtonRejected()
+void workExperienceDetails::OnButtonWRejected()
 {
     reject();
 }

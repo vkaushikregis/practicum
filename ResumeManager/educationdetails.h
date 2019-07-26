@@ -2,7 +2,7 @@
 #define EDUCATIONDETAILS_H
 
 #include <QDialog>
-#include <basedata.h>
+#include "basedata.h"
 namespace Ui {
 class educationDetails;
 }

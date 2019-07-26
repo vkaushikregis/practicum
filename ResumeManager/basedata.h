@@ -1,7 +1,7 @@
 #ifndef BASEDATA_H
 #define BASEDATA_H
 
-#include <globalProductData.h>
+//#include <globalProductData.h>
 class BaseData
 {
 
@@ -14,17 +14,5 @@ public:
 
 };
 
-class ResumeBuilderFactory
-{
 
-public:
-    ResumeBuilderFactory()
-    {
-        //empty constructor
-    };
-    virtual void fillWorkExDetailsList(std::vector<WorkExperience> &tempWorkExList) = 0;
-    virtual void fillEducationDetailsList(std::vector<EducationDetails> &tempEducationDetailsList) = 0;
-    virtual void fillTechSkillsList(std::vector<TechnicalSkills> &tempTechSkillsList) = 0 ;
-
-};
 #endif // BASEDATA_H

@@ -7,9 +7,8 @@
 #include <vector>
 #include <algorithm>
 #include <QtWidgets/QMessageBox>
-#include <QtWidgets/QItemDelegate>
-#include <QtWidgets/QDateEdit>
-#include <basedata.h>
+#include "basedata.h"
+
 namespace Ui {
 class workExperienceDetails;
 }
@@ -21,9 +20,7 @@ class workExperienceDetails : public QDialog, public BaseData
 public:
     explicit workExperienceDetails(std::string functionality,QDialog *parent = 0 );
     ~workExperienceDetails();
-    bool checkInputFields();
-    bool eventFilter(QObject *object, QEvent *event);
-    QDateEdit *de;
+    bool checkInputFields();   
     //getters
     QString getCompanyName();
     QString getFromDate();
@@ -42,11 +39,11 @@ public:
 
 private:
     Ui::workExperienceDetails *ui;
-    std::string function;
+    //std::string function;
 
 private slots:
-    void OnButtonAccepted();
-    void OnButtonRejected();
+    void OnButtonWAccepted();
+    void OnButtonWRejected();
 };
 
 #endif // WORKEXPERIENCEDETAILS_H
