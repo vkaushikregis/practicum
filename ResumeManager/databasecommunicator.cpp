@@ -13,7 +13,7 @@ DatabaseCommunicator::DatabaseCommunicator()
 {
     isDatabaseConnected = false;
 
-    QString filename = "resume_database.sql";
+    QString filename = "resume_database.sqlite";
     QFile file(filename);
 
     db = QSqlDatabase::addDatabase("QSQLITE");

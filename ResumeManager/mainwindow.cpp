@@ -142,6 +142,7 @@ void MainWindow::createNewResume()
 
 
       enableDisableGroupbBox(true);
+      mResumeManagerBaseObj = {};//resetting structure
 }
 
 void MainWindow::fillProficiencyList()
