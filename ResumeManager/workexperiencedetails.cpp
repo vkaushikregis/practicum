@@ -94,8 +94,8 @@ void workExperienceDetails::setJobDescription(QString jobDescription)
 void workExperienceDetails::OnButtonWAccepted()
 {
     qDebug()<<"testing ";
-  // if(!checkInputFields())
-       // return;
+   if(!checkInputFields())
+        return;
 
     accept();
 }
@@ -133,7 +133,7 @@ void workExperienceDetails::OnButtonWAccepted()
      QString date_string_from = ui->FromWorkExLineEdit->text();
      QDate DateFrom = QDate::fromString(date_string_from,"dd/MM/yyyy");
 
-    /* if(!DateFrom.isValid())
+     if(!DateFrom.isValid())
      {
          QMessageBox::critical(NULL, tr("From Date Details"), tr("From date entered is not a valid date, please enter the valid date in format dd/MM/yyyy"));
          return false;
@@ -142,12 +142,14 @@ void workExperienceDetails::OnButtonWAccepted()
      QString date_string_to = ui->toWorkExLineEdit->text();
      QDate DateTo = QDate::fromString(date_string_to,"dd/MM/yyyy");
 
-    // if(!ui->checkBoxCurrentlyWorking->isChecked())
-     if(!DateTo.isValid())
+     if(!ui->checkBoxCurrentlyWorking->isChecked())
      {
-         QMessageBox::critical(NULL, tr("To Date Details"), tr("To date entered is not a valid date, please enter the valid date in format dd/MM/yyyy"));
-         return false;
-     }*/
+         if((!DateTo.isValid()) || (date_string_to.toStdString().empty()))
+         {
+             QMessageBox::critical(NULL, tr("To Date Details"), tr("To date entered is not a valid date, please enter the valid date in format dd/MM/yyyy"));
+             return false;
+         }
+     }
 
      return true;
  }

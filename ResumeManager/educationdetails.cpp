@@ -132,11 +132,14 @@ void educationDetails::OnButtonAccepted()
      QString date_string_to = ui->lineEditToDateColl->text();
      QDate DateTo = QDate::fromString(date_string_to,"dd/MM/yyyy");
 
-     //if(!ui->checkBoxCurrPursuing->isChecked())
-     if(!DateTo.isValid())
+     if(!ui->checkBoxCurrPursuing->isChecked())
      {
-         QMessageBox::critical(NULL, tr("To Date Details"), tr("To date entered is not a valid date, please enter the valid date in format dd/MM/yyyy"));
-         return false;
+        if((!DateTo.isValid()) || (date_string_to.toStdString().empty()))
+         {
+             QMessageBox::critical(NULL, tr("To Date Details"), tr("To date entered is not a valid date, please enter the valid date in format dd/MM/yyyy"));
+             return false;
+         }
+
      }
 
      return true;
