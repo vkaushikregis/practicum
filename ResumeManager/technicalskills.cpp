@@ -2,6 +2,7 @@
 #include "ui_technicalskills.h"
 #include <QtWidgets/QMessageBox>
 #include "globalproductdata.h"
+
 technicalSkills::technicalSkills(std::string functionality,QDialog *parent) :
     QDialog(parent),
     ui(new Ui::technicalSkills)
@@ -13,6 +14,8 @@ technicalSkills::technicalSkills(std::string functionality,QDialog *parent) :
 
     for(int count =0; count< gProficiencyLevelList.size(); count++)
         ui->comboBoxProficiency->addItem(QString::fromUtf8(gProficiencyLevelList[count].c_str()));
+
+    //setWindowOpacity(0.9);
 }
 
 technicalSkills::~technicalSkills()

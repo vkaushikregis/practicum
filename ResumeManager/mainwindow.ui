@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1080</width>
-    <height>701</height>
+    <height>704</height>
    </rect>
   </property>
   <property name="maximumSize">
@@ -24,9 +24,7 @@
     <normaloff>../../ImagesForResumeBuilderApp/document.png</normaloff>../../ImagesForResumeBuilderApp/document.png</iconset>
   </property>
   <property name="styleSheet">
-   <string notr="true">background-color: rgb(255, 255, 255);
-border-top-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(255, 178, 102, 255), stop:0.55 rgba(235, 148, 61, 255), stop:0.98 rgba(0, 0, 0, 255), stop:1 rgba(0, 0, 0, 0));
-</string>
+   <string notr="true">background-color: rgb(238, 254, 255);</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout_15">
@@ -439,7 +437,7 @@ border-top-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgb
               <enum>QFrame::Raised</enum>
              </property>
              <property name="text">
-              <string>Welcome to ResuManager. Take a step towards your bright future!</string>
+              <string>Welcome to Resume Manager. Take a step towards your bright future!</string>
              </property>
              <property name="textFormat">
               <enum>Qt::PlainText</enum>
@@ -592,7 +590,7 @@ border-top-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgb
                    <enum>QLineEdit::Normal</enum>
                   </property>
                   <property name="placeholderText">
-                   <string>e.g. Altamira Place Apt#205</string>
+                   <string>e.g. Altamira Placeap888</string>
                   </property>
                  </widget>
                 </item>
@@ -714,7 +712,7 @@ border-top-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgb
                      <enum>QLineEdit::Normal</enum>
                     </property>
                     <property name="placeholderText">
-                     <string>e.g. 32719</string>
+                     <string>e.g. 88556</string>
                     </property>
                    </widget>
                   </item>
@@ -756,7 +754,7 @@ border-top-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgb
                    <enum>QLineEdit::Normal</enum>
                   </property>
                   <property name="placeholderText">
-                   <string>e.g. 858-610-8419</string>
+                   <string>e.g. 406-890-1222</string>
                   </property>
                  </widget>
                 </item>
@@ -796,7 +794,7 @@ border-top-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgb
                    <enum>QLineEdit::Normal</enum>
                   </property>
                   <property name="placeholderText">
-                   <string>e.g. vishal_kaushik@yahoo.com</string>
+                   <string>e.g. xxxx_yyyy@yahoo.com</string>
                   </property>
                  </widget>
                 </item>
@@ -1508,7 +1506,7 @@ border-top-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgb
          </widget>
          <widget class="QWidget" name="tab_5">
           <attribute name="title">
-           <string>Additional Details</string>
+           <string>Professional Summary</string>
           </attribute>
           <layout class="QGridLayout" name="gridLayout_13">
            <item row="1" column="0" colspan="2">
@@ -1534,7 +1532,7 @@ border-top-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgb
                 <item>
                  <widget class="QTextEdit" name="textEditAdditionalSkills">
                   <property name="placeholderText">
-                   <string>e.g 11 years of software development expereince</string>
+                   <string>e.g 11 years of software development experience</string>
                   </property>
                  </widget>
                 </item>
@@ -1564,7 +1562,7 @@ border-top-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgb
               <enum>QFrame::Raised</enum>
              </property>
              <property name="text">
-              <string>Add Additional Information that can be relevant </string>
+              <string>Add Professional Summary Information that can be relevant </string>
              </property>
              <property name="textFormat">
               <enum>Qt::PlainText</enum>

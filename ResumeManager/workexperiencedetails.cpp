@@ -9,6 +9,7 @@
 #include <QtWidgets/QMessageBox>
 
 
+
 workExperienceDetails::workExperienceDetails( std::string functionality,QDialog *parent) :
     QDialog(parent),
     ui(new Ui::workExperienceDetails)
@@ -18,6 +19,8 @@ workExperienceDetails::workExperienceDetails( std::string functionality,QDialog 
 
     connect(ui->pushButtonWorkExOK, SIGNAL(clicked()), this, SLOT(OnButtonWAccepted()));
     connect(ui->pushButtonWorkExCancel, SIGNAL(clicked()), this, SLOT(OnButtonWRejected()));
+
+    //setWindowOpacity(0.9);
 }
 
 

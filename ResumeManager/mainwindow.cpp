@@ -86,6 +86,7 @@ MainWindow::MainWindow(QWidget *parent) :
      enableDisableGroupbBox(false);
      isInEditModeFlag = false;
      ui->radioButtonTemp1->setChecked(true);
+     //setWindowOpacity(0.9);
 }
 
 MainWindow::~MainWindow()
@@ -569,8 +570,6 @@ void MainWindow::addNewTechSkillsClicked()
         if (res == QDialog::Rejected)
             return;
 
-        if(checkIfTechSkillAlreadyPresent(techSkillsWindow.getSkillName()))
-            return;
 
         ui->tableWidgetSkills->setItem(row, TECH_PK, new QTableWidgetItem((QString::number(-1))));
         ui->tableWidgetSkills->setItem( row, SKILL_NAME, new QTableWidgetItem((techSkillsWindow.getSkillName())));
@@ -994,7 +993,7 @@ void MainWindow::saveResumeDetailsInDB()
 
         //filling Education details
         std::vector<EducationDetails> tempEducationDetailsList;
-        fillEducationDetailsList(tempEducationDetailsList);
+        fillEducationDetailsList(tempEducationDetailsList);        
         mResumeManagerBaseObj.mEducationDetailsList = tempEducationDetailsList;
 
         //filling Work experience details
@@ -1007,6 +1006,51 @@ void MainWindow::saveResumeDetailsInDB()
         fillTechSkillsList(tempTechSkillsList);
         mResumeManagerBaseObj.mTechSkillsList = tempTechSkillsList;
 
+        if(tempWorkExList.size() == 0)
+        {
+            int r = QMessageBox::warning(this, tr("Work Experience Details are not empty: %1"), tr("Do you want to save the resume in DB without filling work experience.?"),
+                                         QMessageBox::Yes | QMessageBox::Default,
+                                         QMessageBox::No,
+                                         QMessageBox::Cancel | QMessageBox::Escape);
+            if(r == QMessageBox::Yes)
+            {
+                //continue;
+            }
+            else if (r == QMessageBox::No)
+            {
+                return;
+            }
+        }
+        if(tempEducationDetailsList.size() == 0)
+        {
+            int r = QMessageBox::warning(this, tr("Education Details are not empty: %1"), tr("Do you want to save the resume in DB without filling Education details.?"),
+                                         QMessageBox::Yes | QMessageBox::Default,
+                                         QMessageBox::No,
+                                         QMessageBox::Cancel | QMessageBox::Escape);
+            if(r == QMessageBox::Yes)
+            {
+                //continue;
+            }
+            else if (r == QMessageBox::No)
+            {
+                return;
+            }
+        }
+        if(tempTechSkillsList.size() == 0)
+        {
+            int r = QMessageBox::warning(this, tr("Technical skills are not empty: %1"), tr("Do you want to save the resume in DB without filling Technical Skills.?"),
+                                         QMessageBox::Yes | QMessageBox::Default,
+                                         QMessageBox::No,
+                                         QMessageBox::Cancel | QMessageBox::Escape);
+            if(r == QMessageBox::Yes)
+            {
+                //continue;
+            }
+            else if (r == QMessageBox::No)
+            {
+                return;
+            }
+        }
         std::string message;
         if(isInEditModeFlag)
         {

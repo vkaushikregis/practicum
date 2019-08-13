@@ -9,6 +9,7 @@ educationDetails::educationDetails(std::string functionality,QDialog *parent) :
     ui->setupUi(this);    
     connect(ui->pushButtonOK, SIGNAL(clicked()), this, SLOT(OnButtonAccepted()));
     connect(ui->pushButtonCancel, SIGNAL(clicked()), this, SLOT(OnButtonRejected()));
+    //setWindowOpacity(0.9);
 }
 
 educationDetails::~educationDetails()
